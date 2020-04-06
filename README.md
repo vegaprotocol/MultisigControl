@@ -6,11 +6,14 @@ Terminal 1:
 
 Terminal 2:
 
+`truffle migrate`
+
 `npm install`
 
 `node ecc_test.js`
 
 
 
-
 NOTE: start on `line 58`
+
+NOTHING TO DEPLOY YET
