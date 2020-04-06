@@ -54,6 +54,9 @@ MyContract.setProvider(provider);
 
 // Use Truffle as usual
 MyContract.deployed().then(async function(instance) {
+
+    //TODO: START HERE
+
     const EthWallet1 = Wallet.fromPrivateKey(key1);
     const EthWallet2 = Wallet.fromPrivateKey(key2);
     let wallet1 = EthWallet1.getAddressString();
