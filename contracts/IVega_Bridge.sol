@@ -18,6 +18,6 @@ contract IVega_Bridge {
     function set_multisig_control(address new_multisig_contract_address) public;
 
     // VIEWS /////////////////
-    function is_asset_whitelisted(address asset_source, uint256 asset_id) public view returns(uint256);
+    function is_asset_whitelisted(address asset_source, uint256 asset_id) public view returns(bool);
     function get_deposit_minimum(address asset_source, uint256 asset_id) public view returns(uint256);
 }

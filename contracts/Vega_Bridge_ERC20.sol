@@ -4,6 +4,7 @@ import "./Owned.sol";
 import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IVega_Bridge.sol";
+import "./MultisigControl.sol";
 
 contract Vega_Bridge_ERC20 is IVega_Bridge, Owned {
     //stops overflow
@@ -11,11 +12,27 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Owned {
 
     address multisig_control_address;
     mapping(address => bool) whitelisted_tokens;
-
     mapping(address => uint256) minimum_deposits;
+
+    /**********************ADMIN REMOVE BEFORE MAINNET*******************************/
+    function whitelist_asset_admin(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public onlyOwner {
+        require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(!whitelisted_tokens[asset_source], "asset already whitelisted");
+        whitelisted_tokens[asset_source] = true;
+        emit Asset_Whitelisted(asset_source, 0);
+    }
+    function blacklist_asset_admin(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public onlyOwner {
+        require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(whitelisted_tokens[asset_source], "asset not whitelisted");
+        whitelisted_tokens[asset_source] = false;
+        emit Asset_Blacklisted(asset_source, 0);
+    }
+    /**********************END ADMIN*******************************/
+
 
     function whitelist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(!whitelisted_tokens[asset_source], "asset already whitelisted");
         bytes memory msg = abi.encode(asset_source, nonce, 'whitelist_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, msg, nonce));
         whitelisted_tokens[asset_source] = true;
@@ -23,6 +40,7 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Owned {
     }
     function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(whitelisted_tokens[asset_source], "asset not whitelisted");
         bytes memory msg = abi.encode(asset_source, nonce, 'blacklist_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, msg, nonce));
         whitelisted_tokens[asset_source] = false;
@@ -30,6 +48,8 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Owned {
     }
     function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount) public{
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(whitelisted_tokens[asset_source], "asset not whitelisted");
+
         bytes memory msg = abi.encode(asset_source, minimum_amount, nonce, 'set_deposit_minimum');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, msg, nonce));
         minimum_deposits[asset_source] = minimum_amount;
@@ -37,18 +57,40 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Owned {
 
     }
     function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures) public {
-        
+        require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(whitelisted_tokens[asset_source], "asset not whitelisted");
+
+        bytes memory msg = abi.encode(msg.sender, asset_source, amount, nonce, 'withdraw_asset');
+        require(MultisigControl(multisig_control_address).verify_signatures(signatures, msg, nonce));
+
+        require(IERC20(asset_source).transfer(msg.sender, amount));
+
+        emit Asset_Withdrawn(msg.sender, asset_source, 0, amount);
     }
-    function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
+    function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public {
+        require(asset_id == 0, "only root asset (0) allowed for ERC20");
+        require(whitelisted_tokens[asset_source], "asset not whitelisted");
+        //User must run approve before deposit
+        require(amount >= minimum_deposits[asset_source]);
+        require(IERC20(token_address).transferFrom(msg.sender, address(this), amount));
+        emit Asset_Deposited(msg.sender, token_address, 0, amount, vega_public_key);
+    }
     function set_multisig_control(address new_multisig_contract_address) public onlyOwner {
         multisig_control_address = new_multisig_contract_address;
         emit Multisig_Control_Set(new_multisig_contract_address);
     }
 
     // VIEWS /////////////////
-    function is_asset_whitelisted(address asset_source, uint256 asset_id) public view returns(uint256);
-    function get_deposit_minimum(address asset_source, uint256 asset_id) public view returns(uint256);
-}
+    function is_asset_whitelisted(address asset_source, uint256 asset_id) public view returns(bool){
+        return whitelisted_tokens[asset_source] && asset_id == 0;
+    }
+    function get_deposit_minimum(address asset_source, uint256 asset_id) public view returns(uint256){
+        if(asset_id != 0){
+            return 0;
+        } else {
+            return minimum_deposits[asset_source];
+        }
+    }
 
 
 
