@@ -109,7 +109,6 @@ MyContract.deployed().then(async function(instance) {
 
     let sig_string = "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') +""+ sig.v.toString(16);
     var publicKey = ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s);
-
     var sender = ethUtil.publicToAddress(publicKey)
     console.log("recovered signer:");
     console.log(ethUtil.bufferToHex(sender))
