@@ -31,6 +31,7 @@ contract MultisigControl is Ownable {
 
 
     /*******************ADMIN(note: this only is needed in order to simplify initial onboarding of nodes, once ownership is surrendered these will no longer be available)*/
+    //REMOVE BEFORE FLIGHT
     event SignerAdded_Admin(address new_signer);
     event SignerRemoved_Admin(address old_signer);
     event ThresholdSet_Admin(uint16 new_threshold);
@@ -53,9 +54,12 @@ contract MultisigControl is Ownable {
     }
 
     /*********************END ADMIN*/
+
+
     //Sets threshold of signatures that must be met before function is executed. Emits 'ThresholdSet' event
-    //Threshold in thousandths
-    function set_threshold(uint8 new_threshold, uint nonce, bytes memory signatures) public{
+    //Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
+    // signatures are OK if they are >= threshold count of total valid signers
+    function set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures) public{
         bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
         //todo: add sanity check
@@ -87,7 +91,11 @@ contract MultisigControl is Ownable {
 
     //Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     //this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
-    //****************NOTE all messages signed MUST include the target bridge contract address*********************************
+    // message to hash to sign follows this pattern:
+    // abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);
+    // Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
+    // if function on bridge that then calls Multisig, then it's the address of that contract
+    // Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
         require(signatures.length % 65 == 0, "bad sig length");
         require(!used_nonces[nonce], "nonce already used");

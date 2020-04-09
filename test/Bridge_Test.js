@@ -26,6 +26,8 @@ let private_keys =
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
 function get_message_to_sign(param_types, params, nonce, function_name, sender){
+
+    //get_message_to_sign(["address"], [VUSD_TEST.address], nonce, "whitelist_asset", Vega_Bridge_ERC20.address);
     //generate nonce
 
     params.push(nonce);
