@@ -91,6 +91,9 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
             return minimum_deposits[asset_source];
         }
     }
+    function get_multisig_control_address() public view returns(address) {
+        return multisig_control_address;
+    }
 
 
 
