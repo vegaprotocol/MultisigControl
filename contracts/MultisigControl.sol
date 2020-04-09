@@ -27,14 +27,6 @@ contract MultisigControl is Ownable {
         return keccak256(get_msg_bytes(target));
     }
 
-    function do_math() public view returns (uint256) {
-        uint sigs = 1;
-        uint signers = 2;
-        uint th = 500;
-
-        return ((sigs * 1000)/ (signers ));
-
-    }
     /*************************/
 
 
