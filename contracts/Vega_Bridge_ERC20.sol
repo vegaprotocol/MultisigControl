@@ -60,7 +60,7 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(whitelisted_tokens[asset_source], "asset not whitelisted");
 
-        bytes memory message = abi.encode(msg.sender, asset_source, amount, nonce, 'withdraw_asset');
+        bytes memory message = abi.encode(msg.sender, asset_source, asset_id, amount, nonce, 'withdraw_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
 
         require(IERC20(asset_source).transfer(msg.sender, amount));
