@@ -13,9 +13,9 @@ contract MultisigControl is Ownable {
     mapping(address => bool) signers;
     mapping(uint => bool) used_nonces;
 
-    event SignerAdded(address new_signer);
-    event SignerRemoved(address old_signer);
-    event ThresholdSet(uint16 new_threshold);
+    event SignerAdded(address new_signer, uint256 nonce);
+    event SignerRemoved(address old_signer, uint256 nonce);
+    event ThresholdSet(uint16 new_threshold, uint256 nonce);
 
     /************************ SANDBOX *****/
     function get_msg_bytes(address target) public view returns (bytes memory) {
@@ -64,6 +64,7 @@ contract MultisigControl is Ownable {
         require(verify_signatures(signatures, message, nonce), "bad signatures");
         //todo: add sanity check
         threshold = new_threshold;
+        emit ThresholdSet(new_threshold, nonce);
     }
 
     //Adds new valid signer and adjusts signer count. Emits 'SignerAdded' event
@@ -74,7 +75,7 @@ contract MultisigControl is Ownable {
         //todo: add sanity check
         signers[new_signer] = true;
         signer_count++;
-        emit SignerAdded(new_signer);
+        emit SignerAdded(new_signer, nonce);
     }
 
     //Removes currently valid signer and adjust signer count. Emits 'SignerRemoved' event
@@ -85,6 +86,7 @@ contract MultisigControl is Ownable {
         //todo: add sanity check
         signers[old_signer] = false;
         signer_count--;
+        emit SignerRemoved(old_signer, nonce);
     }
 
     mapping(bytes32 => mapping(address => bool)) has_signed;
