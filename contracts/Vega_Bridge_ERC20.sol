@@ -33,7 +33,7 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
     function whitelist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(!whitelisted_tokens[asset_source], "asset already whitelisted");
-        bytes memory message = abi.encode(asset_source, nonce, 'whitelist_asset');
+        bytes memory message = abi.encode(asset_source, asset_id, nonce, 'whitelist_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
         whitelisted_tokens[asset_source] = true;
         emit Asset_Whitelisted(asset_source, 0);
@@ -41,7 +41,7 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
     function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(whitelisted_tokens[asset_source], "asset not whitelisted");
-        bytes memory message = abi.encode(asset_source, nonce, 'blacklist_asset');
+        bytes memory message = abi.encode(asset_source, asset_id, nonce, 'blacklist_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
         whitelisted_tokens[asset_source] = false;
         emit Asset_Blacklisted(asset_source, 0);
@@ -50,7 +50,7 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(whitelisted_tokens[asset_source], "asset not whitelisted");
 
-        bytes memory message = abi.encode(asset_source, minimum_amount, nonce, 'set_deposit_minimum');
+        bytes memory message = abi.encode(asset_source, asset_id, minimum_amount, nonce, 'set_deposit_minimum');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
         minimum_deposits[asset_source] = minimum_amount;
         emit Asset_Deposit_Minimum_Set(asset_source, 0, minimum_amount);
