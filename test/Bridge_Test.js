@@ -88,7 +88,7 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
 
         //whitelist token
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
-        let whitelist_message = get_message_to_sign(["address"], [VUSD_TEST.address], nonce, "whitelist_asset", Vega_Bridge_ERC20.address);
+        let whitelist_message = get_message_to_sign(["address", "uint256"], [VUSD_TEST.address, 0], nonce, "whitelist_asset", Vega_Bridge_ERC20.address);
         let message_hash = ethUtil.keccak256(whitelist_message);
         let signature = ethUtil.ecsign(message_hash, private_keys[accounts[0].toLowerCase()]);
         let signature_string = to_signature_string(signature);
