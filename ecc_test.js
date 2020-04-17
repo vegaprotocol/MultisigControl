@@ -130,9 +130,4 @@ MyContract.deployed().then(async function(instance) {
     console.log("Valid signer count:");
     console.log((await instance.get_valid_signer_count()).toString());
 
-    console.log("Math")
-    console.log((await  instance.do_math()).toString());
-
-
-
 })
