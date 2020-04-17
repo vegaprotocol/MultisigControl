@@ -17021,10 +17021,613 @@
       "links": {},
       "address": "0x3EA59801698c6820328597F26d29fC3EaAa17AcA",
       "transactionHash": "0x73aedbdebac26cffab13b812d468fc7bfb4795abe9f4ec7c80bd33662c511a52"
+    },
+    "1587060274175": {
+      "events": {
+        "0xd5764687dd3b88ce24532de5c4b031590287be475259b2aeffee1a61d0fd5c30": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Blacklisted",
+          "type": "event",
+          "signature": "0xd5764687dd3b88ce24532de5c4b031590287be475259b2aeffee1a61d0fd5c30"
+        },
+        "0x8bd6a2128f72cade235f8636548820a7baaf60321dded04c5222e1856e4900fd": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "new_minimum",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Deposit_Minimum_Set",
+          "type": "event",
+          "signature": "0x8bd6a2128f72cade235f8636548820a7baaf60321dded04c5222e1856e4900fd"
+        },
+        "0x301354586185da7c1b383fec6b86a4f2afcd693fee1d3a4b60de799db0715dce": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user_address",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "vega_public_key",
+              "type": "bytes32"
+            }
+          ],
+          "name": "Asset_Deposited",
+          "type": "event",
+          "signature": "0x301354586185da7c1b383fec6b86a4f2afcd693fee1d3a4b60de799db0715dce"
+        },
+        "0x432c9066b7e6e0f1e1e320357530c517700abdf1fe1db79510ed0240e8daec62": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Whitelisted",
+          "type": "event",
+          "signature": "0x432c9066b7e6e0f1e1e320357530c517700abdf1fe1db79510ed0240e8daec62"
+        },
+        "0x1d73f5f45122fcc00317f4af119d2a65f2dbaa07d7c023a0050b1fba5503365a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user_address",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Withdrawn",
+          "type": "event",
+          "signature": "0x1d73f5f45122fcc00317f4af119d2a65f2dbaa07d7c023a0050b1fba5503365a"
+        },
+        "0x1143e675ad794f5bd81a05b165b166be3a4e91f17d065f08809d88cefbd65406": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "multisig_control_source",
+              "type": "address"
+            }
+          ],
+          "name": "Multisig_Control_Set",
+          "type": "event",
+          "signature": "0x1143e675ad794f5bd81a05b165b166be3a4e91f17d065f08809d88cefbd65406"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0x3EA59801698c6820328597F26d29fC3EaAa17AcA",
+      "transactionHash": "0x73aedbdebac26cffab13b812d468fc7bfb4795abe9f4ec7c80bd33662c511a52"
+    },
+    "1587137911851": {
+      "events": {
+        "0xd5764687dd3b88ce24532de5c4b031590287be475259b2aeffee1a61d0fd5c30": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Blacklisted",
+          "type": "event",
+          "signature": "0xd5764687dd3b88ce24532de5c4b031590287be475259b2aeffee1a61d0fd5c30"
+        },
+        "0x8bd6a2128f72cade235f8636548820a7baaf60321dded04c5222e1856e4900fd": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "new_minimum",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Deposit_Minimum_Set",
+          "type": "event",
+          "signature": "0x8bd6a2128f72cade235f8636548820a7baaf60321dded04c5222e1856e4900fd"
+        },
+        "0x301354586185da7c1b383fec6b86a4f2afcd693fee1d3a4b60de799db0715dce": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user_address",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "vega_public_key",
+              "type": "bytes32"
+            }
+          ],
+          "name": "Asset_Deposited",
+          "type": "event",
+          "signature": "0x301354586185da7c1b383fec6b86a4f2afcd693fee1d3a4b60de799db0715dce"
+        },
+        "0x432c9066b7e6e0f1e1e320357530c517700abdf1fe1db79510ed0240e8daec62": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Whitelisted",
+          "type": "event",
+          "signature": "0x432c9066b7e6e0f1e1e320357530c517700abdf1fe1db79510ed0240e8daec62"
+        },
+        "0x1d73f5f45122fcc00317f4af119d2a65f2dbaa07d7c023a0050b1fba5503365a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user_address",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Withdrawn",
+          "type": "event",
+          "signature": "0x1d73f5f45122fcc00317f4af119d2a65f2dbaa07d7c023a0050b1fba5503365a"
+        },
+        "0x1143e675ad794f5bd81a05b165b166be3a4e91f17d065f08809d88cefbd65406": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "multisig_control_source",
+              "type": "address"
+            }
+          ],
+          "name": "Multisig_Control_Set",
+          "type": "event",
+          "signature": "0x1143e675ad794f5bd81a05b165b166be3a4e91f17d065f08809d88cefbd65406"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0x3EA59801698c6820328597F26d29fC3EaAa17AcA",
+      "transactionHash": "0x73aedbdebac26cffab13b812d468fc7bfb4795abe9f4ec7c80bd33662c511a52"
+    },
+    "1587138054874": {
+      "events": {
+        "0xd5764687dd3b88ce24532de5c4b031590287be475259b2aeffee1a61d0fd5c30": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Blacklisted",
+          "type": "event",
+          "signature": "0xd5764687dd3b88ce24532de5c4b031590287be475259b2aeffee1a61d0fd5c30"
+        },
+        "0x8bd6a2128f72cade235f8636548820a7baaf60321dded04c5222e1856e4900fd": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "new_minimum",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Deposit_Minimum_Set",
+          "type": "event",
+          "signature": "0x8bd6a2128f72cade235f8636548820a7baaf60321dded04c5222e1856e4900fd"
+        },
+        "0x301354586185da7c1b383fec6b86a4f2afcd693fee1d3a4b60de799db0715dce": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user_address",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "vega_public_key",
+              "type": "bytes32"
+            }
+          ],
+          "name": "Asset_Deposited",
+          "type": "event",
+          "signature": "0x301354586185da7c1b383fec6b86a4f2afcd693fee1d3a4b60de799db0715dce"
+        },
+        "0x432c9066b7e6e0f1e1e320357530c517700abdf1fe1db79510ed0240e8daec62": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Whitelisted",
+          "type": "event",
+          "signature": "0x432c9066b7e6e0f1e1e320357530c517700abdf1fe1db79510ed0240e8daec62"
+        },
+        "0x1d73f5f45122fcc00317f4af119d2a65f2dbaa07d7c023a0050b1fba5503365a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user_address",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "asset_source",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "asset_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "Asset_Withdrawn",
+          "type": "event",
+          "signature": "0x1d73f5f45122fcc00317f4af119d2a65f2dbaa07d7c023a0050b1fba5503365a"
+        },
+        "0x1143e675ad794f5bd81a05b165b166be3a4e91f17d065f08809d88cefbd65406": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "multisig_control_source",
+              "type": "address"
+            }
+          ],
+          "name": "Multisig_Control_Set",
+          "type": "event",
+          "signature": "0x1143e675ad794f5bd81a05b165b166be3a4e91f17d065f08809d88cefbd65406"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0x3EA59801698c6820328597F26d29fC3EaAa17AcA",
+      "transactionHash": "0x73aedbdebac26cffab13b812d468fc7bfb4795abe9f4ec7c80bd33662c511a52"
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2020-04-15T21:42:46.617Z",
+  "updatedAt": "2020-04-17T15:41:26.948Z",
   "devdoc": {
     "methods": {
       "isOwner()": {
