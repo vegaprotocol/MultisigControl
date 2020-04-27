@@ -1,7 +1,7 @@
 # Makefile
 
-IMAGE :=docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest
-CONTAINER :=multisigcontrol
+IMAGE := docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest
+CONTAINER := multisigcontrol
 
 .PHONY: default
 default: help
