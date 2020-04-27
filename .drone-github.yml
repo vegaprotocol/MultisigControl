@@ -1,0 +1,63 @@
+---
+
+kind: pipeline
+name: default
+type: docker
+
+platform:
+  arch: amd64
+  os: linux
+
+steps:
+  - name: publish_docker
+    image: registry.gitlab.com/vega-protocol/devops-infra/cipipeline-docker:stable
+    volumes:
+      - name: dockersock
+        path: /run/docker.sock
+    environment:
+      DOCKER_HOST: unix:///run/docker.sock
+      DOCKER_CONFIG_JSON:
+        from_secret: dockerconfig
+    commands:
+      - mkdir -p "$$HOME/.docker" ; echo "$$DOCKER_CONFIG_JSON" >"$$HOME/.docker/config.json" ; unset DOCKER_CONFIG_JSON
+      - make docker_push
+    depends_on: []
+    when:
+      ref:
+        - refs/heads/master
+
+  - name: deploy
+    image: registry.gitlab.com/vega-protocol/devops-infra/cipipeline:1.11.13
+    volumes: []
+    environment:
+      DEPLOY_SSH_PRIVKEY:
+        from_secret: DEPLOY_SSH_PRIVKEY
+      DEPLOY_SSH_KNOWNHOSTS:
+        from_secret: DEPLOY_SSH_KNOWNHOSTS
+    commands:
+      - eval "$(ssh-agent -s)" ; mkdir -p -m 0700 ~/.ssh
+      - if ! echo "$${DEPLOY_SSH_PRIVKEY}" | grep -q "BEGIN [A-Z]* PRIVATE KEY" ; then
+          echo "Need env var DEPLOY_SSH_PRIVKEY to have a private key" ; exit 1 ; fi
+      - if ! echo "$${DEPLOY_SSH_KNOWNHOSTS}" | grep -q ssh-rsa ; then
+          echo "Need env var DEPLOY_SSH_KNOWNHOSTS to have one or more host keys" ; exit 1 ; fi
+      - echo "$${DEPLOY_SSH_PRIVKEY}" >~/.ssh/id_rsa ; chmod 0600 ~/.ssh/id_rsa
+      - echo "$${DEPLOY_SSH_KNOWNHOSTS}" >~/.ssh/known_hosts ; chmod 0644 ~/.ssh/known_hosts
+      - unset DEPLOY_SSH_KNOWNHOSTS DEPLOY_SSH_PRIVKEY
+      - ssh multisigcontrol@rd.vega.xyz '
+          docker ps -q --filter name=multisigcontrol | xargs -r docker stop &&
+          docker ps -qa --filter name=multisigcontrol | xargs -r docker rm &&
+          docker pull docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest &&
+          docker run -d --name multisigcontrol -p 0.0.0.0:8545:8545 docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest'
+    depends_on:
+      - publish_docker
+    when:
+      ref:
+        - refs/heads/master
+
+volumes:
+  - name: dockersock
+    host:
+      path: /run/docker.sock
+
+image_pull_secrets:
+  - dockerconfig
