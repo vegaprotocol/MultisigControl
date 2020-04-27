@@ -1,0 +1,48 @@
+#!/bin/bash
+
+ganache_pidfile=/tmp/ganache.pid
+
+kill_proc() {
+	pidfile="$1"
+	pid="$(cat "$pidfile")"
+	echo -n "Killing $pid ($pidfile) ... "
+	while pgrep -F "$pidfile" 1>/dev/null ; do
+		echo -n ". "
+		kill "$pid" 1>/dev/null
+		sleep 1
+	done
+	echo "done."
+	rm -f "$pidfile"
+}
+
+graceful() {
+	sig="$1"
+	echo "Caught signal $sig"
+	kill_proc "$ganache_pidfile"
+	exit 0
+}
+
+# # #
+
+npm run ganache &
+echo "$!" >"$ganache_pidfile"
+
+while true ; do
+	echo "Waiting for ganachi to be ready..."
+	sleep 1
+	if curl -s -XPOST -d '{"method":"web3_clientVersion"}' http://127.0.0.1:8545/ | grep -q EthereumJS ; then
+		echo "ganache is ready."
+		break
+	fi
+done
+
+truffle migrate
+
+for sig in INT QUIT TERM ; do
+	trap "graceful $sig" "$sig"
+done
+
+echo "Waiting ..."
+while true ; do
+	sleep 1
+done
