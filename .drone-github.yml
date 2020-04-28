@@ -47,7 +47,8 @@ steps:
           docker pull docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest &&
           docker ps -q --filter name=multisigcontrol | xargs -r docker stop &&
           docker ps -qa --filter name=multisigcontrol | xargs -r docker rm &&
-          docker run -d --name multisigcontrol -p 0.0.0.0:8545:8545 docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest'
+          (docker network ls -q --filter name=axolotl | grep -q '^[0-9a-f]' || docker network create --driver bridge axolotl) &&
+          docker run -d --name multisigcontrol --net axolotl -p 0.0.0.0:8545:8545 docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest'
     depends_on:
       - publish_docker
     when:
