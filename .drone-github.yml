@@ -43,12 +43,7 @@ steps:
       - echo "$${DEPLOY_SSH_PRIVKEY}" >~/.ssh/id_rsa ; chmod 0600 ~/.ssh/id_rsa
       - echo "$${DEPLOY_SSH_KNOWNHOSTS}" >~/.ssh/known_hosts ; chmod 0644 ~/.ssh/known_hosts
       - unset DEPLOY_SSH_KNOWNHOSTS DEPLOY_SSH_PRIVKEY
-      - ssh dockerrunner@rd.vega.xyz '
-          docker pull docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest &&
-          docker ps -q --filter name=multisigcontrol | xargs -r docker stop &&
-          docker ps -qa --filter name=multisigcontrol | xargs -r docker rm &&
-          (docker network ls -q --filter name=axolotl | grep -q '^[0-9a-f]' || docker network create --driver bridge axolotl) &&
-          docker run -d --name multisigcontrol --net axolotl -p 0.0.0.0:8545:8545 docker.pkg.github.com/vegaprotocol/multisigcontrol/multisigcontrol:latest'
+      - ssh dockerrunner@rd.vega.xyz 'axolotl.sh restart_multisigcontrol'
     depends_on:
       - publish_docker
     when:
