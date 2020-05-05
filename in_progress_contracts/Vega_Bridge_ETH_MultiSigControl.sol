@@ -24,7 +24,7 @@ contract Vega_Bridge_ETH is IVega_Bridge, Ownable {
         require(false);
     }
 
-    function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public{
+    function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public {
         //unneeded for this asset must be implemented to meet interface requirement, does nothing
         require(false);
     }

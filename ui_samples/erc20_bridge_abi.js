@@ -110,7 +110,7 @@ erc20_bridge_abi = [
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "nonce",
+                "name": "vega_id",
                 "type": "uint256"
             }
         ],
@@ -168,6 +168,171 @@ erc20_bridge_abi = [
         "type": "event"
     },
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "isOwner",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "asset_source",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "asset_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "whitelist_asset_admin",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "asset_source",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "asset_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "blacklist_asset_admin",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "asset_source",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "asset_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "get_vega_id",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "vega_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "get_asset_source_and_asset_id",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             {
@@ -182,7 +347,7 @@ erc20_bridge_abi = [
             },
             {
                 "internalType": "uint256",
-                "name": "nonce",
+                "name": "vega_id",
                 "type": "uint256"
             },
             {
