@@ -10,7 +10,7 @@ platform:
 
 steps:
   - name: publish_docker
-    image: registry.gitlab.com/vega-protocol/devops-infra/cipipeline-docker:stable
+    image: docker.pkg.github.com/vegaprotocol/devops-infra/cipipeline-docker:18.09.7
     volumes:
       - name: dockersock
         path: /run/docker.sock
@@ -27,7 +27,7 @@ steps:
         - refs/heads/master
 
   - name: deploy
-    image: registry.gitlab.com/vega-protocol/devops-infra/cipipeline:1.11.13
+    image: docker.pkg.github.com/vegaprotocol/devops-infra/cipipeline:1.11.13
     volumes: []
     environment:
       DEPLOY_SSH_PRIVKEY:
