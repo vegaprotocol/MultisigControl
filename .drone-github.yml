@@ -43,7 +43,7 @@ steps:
       - echo "$${DEPLOY_SSH_PRIVKEY}" >~/.ssh/id_rsa ; chmod 0600 ~/.ssh/id_rsa
       - echo "$${DEPLOY_SSH_KNOWNHOSTS}" >~/.ssh/known_hosts ; chmod 0644 ~/.ssh/known_hosts
       - unset DEPLOY_SSH_KNOWNHOSTS DEPLOY_SSH_PRIVKEY
-      - ssh dockerrunner@rd.vega.xyz '~/bin/axolotl.sh restart_multisigcontrol'
+      - ssh dockerrunner@rd.vega.xyz '~/bin/axolotl.sh -R'
     depends_on:
       - publish_docker
     when:
