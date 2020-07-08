@@ -13,7 +13,7 @@ contract IVega_Bridge {
     function whitelist_asset(address asset_source, uint256 asset_id, uint256 vega_id, bytes memory signatures) public;
     function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
     function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
-    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures) public;
+    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
     function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
     function set_multisig_control(address new_multisig_contract_address) public;
 

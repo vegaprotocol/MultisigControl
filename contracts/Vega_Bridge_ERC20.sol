@@ -69,11 +69,12 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
         emit Asset_Deposit_Minimum_Set(asset_source, 0, minimum_amount, nonce);
 
     }
-    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures) public {
+    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(whitelisted_tokens[asset_source], "asset not whitelisted");
+        require(expiry > block.timestamp, "withdrawal has expired");
 
-        bytes memory message = abi.encode(asset_source, asset_id, amount, msg.sender,  nonce, 'withdraw_asset');
+        bytes memory message = abi.encode(asset_source, asset_id, amount, expiry, msg.sender,  nonce, 'withdraw_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
 
         require(IERC20(asset_source).transfer(msg.sender, amount), "token didn't transfer");

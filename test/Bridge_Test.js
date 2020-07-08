@@ -55,6 +55,9 @@ function recover_signer_address(sig, msgHash) {
 contract("Vega_Bridge_ERC20",  (accounts) => {
     it("should exist", async () => {
 
+        let signer_key = private_keys["0xb89a165ea8b619c14312db316baaa80d2a98b493"];
+
+
         let multisigControl_instance = await MultisigControl.deployed();
         let vega_bridge_erc20_instance = await Vega_Bridge_ERC20.deployed();
         let vusd_test_instance = await  VUSD_TEST.deployed();
@@ -90,7 +93,7 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
         let whitelist_message = get_message_to_sign(["address", "uint256"], [VUSD_TEST.address, 0], nonce, "whitelist_asset", Vega_Bridge_ERC20.address);
         let message_hash = ethUtil.keccak256(whitelist_message);
-        let signature = ethUtil.ecsign(message_hash, private_keys[accounts[0].toLowerCase()]);
+        let signature = ethUtil.ecsign(message_hash, signer_key);
         let signature_string = to_signature_string(signature);
 
         console.log("whitelisting...")
@@ -111,5 +114,45 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
         console.log("vega_public_key: " + log.args.vega_public_key);
         console.log()
         console.log()
+
+        //WITHDRAW
+        //create withdraw request
+        let withdraw_nonce = new ethUtil.BN(crypto.randomBytes(32));
+        let expiry = Math.floor(Date.now()/1000) + 60; // 1 min
+        let token_address = VUSD_TEST.address;
+        let token_amount = token_balance;
+        let bot_address = accounts[0];
+        let bridge_address = Vega_Bridge_ERC20.address;
+
+        console.log(["address", "uint256", "uint256", "uint256", "address"]);
+        console.log([token_address, 0, token_amount, expiry, bot_address])
+
+        let encoded = get_message_to_sign(
+            ["address", "uint256", "uint256", "uint256", "address"],
+            [token_address, 0, token_amount, expiry, bot_address],
+            withdraw_nonce, "withdraw_asset", bridge_address);
+
+        let msg_hash = ethUtil.keccak256(encoded);
+
+        let all_sigs = [];
+        let concat_string =  "0x";
+        for(let key_addr in private_keys){
+            let key = private_keys[key_addr]
+            let sig = ethUtil.ecsign(msg_hash,  key);
+            let sig_string = sig.r.toString('hex') + "" + sig.s.toString('hex') +""+ sig.v.toString(16);
+            concat_string = concat_string+ sig_string;
+            all_sigs.push("0x" + sig_string);
+        }
+
+        console.log("sig bundle");
+        console.log(concat_string);
+        //submit to withdrawal
+        let withdrawal_recipt = await  vega_bridge_erc20_instance.withdraw_asset(token_address, 0, token_amount, expiry, withdraw_nonce, concat_string);
+
+        console.log("Withdrawing...");
+        console.log("Withdraw complete.");
+        console.log(withdrawal_recipt)
+
     });
+
 })
