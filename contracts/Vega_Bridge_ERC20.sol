@@ -5,8 +5,9 @@ import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IVega_Bridge.sol";
 import "./MultisigControl.sol";
+import "./Killable.sol";
 
-contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable {
+contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable, Killable /*TODO Remove before Mainnet*/ {
     //stops overflow
     using SafeMath for uint256;
 
