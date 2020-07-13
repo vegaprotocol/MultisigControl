@@ -7,13 +7,14 @@
     "test": "test"
   },
   "dependencies": {
-    "ganache-cli": "^6.8.1",
+    "@truffle/hdwallet-provider": "^1.0.37",
     "elliptic": "^6.5.2",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "^6.2.0",
     "ethereumjs-wallet": "^0.6.3",
     "express": "^4.17.1",
+    "ganache-cli": "^6.8.1",
     "grpc-web": "^1.0.7",
     "keccak": "^3.0.0",
     "truffle": "^5.1.20",
