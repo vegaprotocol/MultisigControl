@@ -1,8 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "./Ownable.sol";
 
-contract MultisigControl is Ownable {
+contract IMultisigControl {
 
     /***************************EVENTS****************************/
     event SignerAdded(address new_signer);
