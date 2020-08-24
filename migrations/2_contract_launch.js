@@ -7,7 +7,7 @@ const VUSD_TEST = artifacts.require("VUSD_TEST");
 module.exports = async function(deployer) {
     await deployer.deploy(MultisigControl);
     await deployer.deploy(Vega_Bridge_ERC20);
-    await deployer.deploy(VUSD_TEST, "VUSD_TEST", "VUSD", 18, 1000000);
+   // await deployer.deploy(VUSD_TEST, "VUSD_TEST", "VUSD", 18, 1000000);
     
     //TODO: remove this to vote it in properly
     //NOTE this will break the test
