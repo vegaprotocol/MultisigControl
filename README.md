@@ -4,15 +4,14 @@ Terminal 1:
 
 `npm install`
 
-`npm run ganache`
+`ganache-cli -m "cherry manage trip absorb logic half number test shed logic purpose rifle"`
 
 Terminal 2:
 
-`npm run migrate`
+`truffle migrate`
 
 `node ecc_test.js`
 
-NOTE: start on `line 58`
 
 ## Run in Docker
 

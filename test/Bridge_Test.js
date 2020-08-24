@@ -23,6 +23,13 @@ let private_keys =
 
 
 
+
+
+
+
+// VEGA PUBLIC KEY TEST:
+//c89c6161e8fc1708303da1c0721704e79260561a385e775de178295029a189c6
+
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
 function get_message_to_sign(param_types, params, nonce, function_name, sender){
@@ -91,13 +98,13 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
 
         //whitelist token
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
-        let whitelist_message = get_message_to_sign(["address", "uint256"], [VUSD_TEST.address, 0], nonce, "whitelist_asset", Vega_Bridge_ERC20.address);
+        let whitelist_message = get_message_to_sign(["address", "uint256", "bytes32"], [VUSD_TEST.address, 0, "0x00"], nonce, "whitelist_asset", Vega_Bridge_ERC20.address);
         let message_hash = ethUtil.keccak256(whitelist_message);
         let signature = ethUtil.ecsign(message_hash, signer_key);
         let signature_string = to_signature_string(signature);
 
         console.log("whitelisting...")
-        await vega_bridge_erc20_instance.whitelist_asset(VUSD_TEST.address, 0, nonce, signature_string);
+        await vega_bridge_erc20_instance.whitelist_asset(VUSD_TEST.address, 0, "0x00", nonce, signature_string);
 
         //try to deposit token
 

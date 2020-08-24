@@ -16,41 +16,43 @@ contract Vega_Bridge_ERC20 is IVega_Bridge, Ownable, Killable /*TODO Remove befo
     mapping(address => uint256) minimum_deposits;
 
     /**********************ADMIN REMOVE BEFORE MAINNET*******************************/
-    function whitelist_asset_admin(address asset_source, uint256 asset_id) public onlyOwner {
+    function whitelist_asset_admin(address asset_source, uint256 asset_id, bytes32 vega_id) public onlyOwner {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(!whitelisted_tokens[asset_source], "asset already whitelisted");
         whitelisted_tokens[asset_source] = true;
-        emit Asset_Whitelisted(asset_source, 0, uint256(asset_source) + block.number);
+        vega_ids_to_source[vega_id] = asset_source;
+        asset_source_to_vega_id[asset_source] = vega_id;
+        emit Asset_Whitelisted(asset_source, 0, vega_id,  uint256(asset_source) + block.number);
     }
     function blacklist_asset_admin(address asset_source, uint256 asset_id) public onlyOwner {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(whitelisted_tokens[asset_source], "asset not whitelisted");
         whitelisted_tokens[asset_source] = false;
-        emit Asset_Blacklisted(asset_source, 0, uint256(asset_source) + block.number);
+        emit Asset_Blacklisted(asset_source, 0,  uint256(asset_source) + block.number);
     }
     /**********************END ADMIN*******************************/
 
     //vega_id => asset_source
-    mapping(uint256 => address) vega_ids_to_source;
-    mapping(address => uint256) asset_source_to_vega_id;
+    mapping(bytes32 => address) vega_ids_to_source;
+    mapping(address => bytes32) asset_source_to_vega_id;
 
-    function get_vega_id(address asset_source, uint256 asset_id) public view returns(uint256){
+    function get_vega_id(address asset_source, uint256 asset_id) public view returns(bytes32){
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         return asset_source_to_vega_id[asset_source];
     }
-    function get_asset_source_and_asset_id(uint256 vega_id) public view returns(address, uint256){
+    function get_asset_source_and_asset_id(bytes32 vega_id) public view returns(address, uint256){
         return (vega_ids_to_source[vega_id], 0);
     }
 
-    function whitelist_asset(address asset_source, uint256 asset_id, uint256 vega_id, bytes memory signatures) public {
+    function whitelist_asset(address asset_source, uint256 asset_id, bytes32 vega_id, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(!whitelisted_tokens[asset_source], "asset already whitelisted");
-        bytes memory message = abi.encode(asset_source, asset_id, vega_id, 'whitelist_asset');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, vega_id));
+        bytes memory message = abi.encode(asset_source, asset_id, vega_id, nonce, 'whitelist_asset');
+        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
         whitelisted_tokens[asset_source] = true;
         vega_ids_to_source[vega_id] = asset_source;
         asset_source_to_vega_id[asset_source] = vega_id;
-        emit Asset_Whitelisted(asset_source, 0, vega_id);
+        emit Asset_Whitelisted(asset_source, 0, vega_id, nonce);
     }
     function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public {
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
