@@ -24,11 +24,19 @@ graceful() {
 
 # # #
 
+echo -n "Pulling mnemonic from package.json ... "
+jq -Mr '.scripts.ganache' package.json | sed -e 's#^.*-m "##; s#".*$##' >.secret
+cat .secret
+if ! test "$(wc -w <.secret)" == 12 ; then
+	echo "Failed to find a 12-word mnemonic."
+	exit 1
+fi
+
 npm run ganache 1>/dev/null &
 echo "$!" >"$ganache_pidfile"
 
 while true ; do
-	echo "Waiting for ganachi to be ready..."
+	echo "Waiting for ganache to be ready..."
 	sleep 1
 	if curl -s -XPOST -d '{"method":"web3_clientVersion"}' http://127.0.0.1:8545/ | grep -q EthereumJS ; then
 		echo "ganache is ready."
