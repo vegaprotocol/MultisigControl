@@ -14,13 +14,9 @@ docker_pull: ## Pull docker image from github registry
 docker_build: ## Build local docker image
 	@docker build -t "${IMAGE}" .
 
-.PHONY: docker_push
-docker_push: docker_build ## Push docker image to github image registry
-	@docker push "${IMAGE}"
-
 .PHONY: docker_run
 docker_run: ## Run docker image
-	@docker run -d --name=${CONTAINER} -p 8545:8545 "${IMAGE}"
+	@docker run -d --name=${CONTAINER} --net host "${IMAGE}"
 
 .PHONY: docker_stop
 docker_stop: ## Stop docker container
