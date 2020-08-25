@@ -1,4 +1,4 @@
-FROM node:10-stretch
+FROM node:12-stretch
 EXPOSE 8545
 ENTRYPOINT ["/app/run"]
 RUN mkdir /app
