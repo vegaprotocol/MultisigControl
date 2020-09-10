@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 
-contract IVega_Bridge {
+contract IVega_Bridge_Payable {
 
     event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, uint256 nonce);
     event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, bytes32 vega_public_key);
@@ -14,7 +14,7 @@ contract IVega_Bridge {
     function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
     function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
     function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
-    function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
+    function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public payable;
     function set_multisig_control(address new_multisig_contract_address) public;
 
     // VIEWS /////////////////
