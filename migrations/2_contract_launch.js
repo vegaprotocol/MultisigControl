@@ -18,9 +18,10 @@ module.exports = async function(deployer) {
     //NOTE this will break the test
     let vega_bridge_erc20_instance = await Vega_Bridge_ERC20.deployed();
     let vega_bridge_eth_instance = await Vega_Bridge_ETH.deployed();
-    await vega_bridge_erc20_instance.set_multisig_control(MultisigControl.address);
+    await vega_bridge_erc20_instance.set_multisig_control(MultisigControl.address);<<<<<<< HEAD
 
     //await vega_bridge_eth_instance.set_multisig_control(MultisigControl.address);
  //   await vega_bridge_erc20_instance.whitelist_asset_admin(VUSD_TEST.address, 0);
+
 
 };
