@@ -2,6 +2,7 @@ FROM node:12-stretch
 RUN mkdir /app
 WORKDIR /app
 ENV PATH="$PATH:/app/node_modules/.bin"
+RUN apt update && apt install -y --no-install-recommends jq
 ADD package.json package-lock.json ./
 RUN npm install
 ADD truffle-config-docker.js ./truffle-config.js
