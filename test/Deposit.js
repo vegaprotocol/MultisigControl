@@ -53,9 +53,10 @@ function recover_signer_address(sig, msgHash) {
     return ethUtil.bufferToHex(sender);
 }
 
+
 contract("Vega_Bridge_ERC20",  (accounts) => {
     it("should exist", async () => {
-
+	
         let signer_key = private_keys["0xb89a165ea8b619c14312db316baaa80d2a98b493"];
 
 
@@ -82,10 +83,11 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
         //approve transfer
         await vusd_test_instance.approve(Vega_Bridge_ERC20.address, token_balance);
 
-        //try to deposit token
+       await vega_bridge_erc20_instance.whitelist_asset_admin(VUSD_TEST.address, 0, "0x11e09c9e87849d7c2d9df126a9057f3b0ebb94e107dfb73f9451854efeeb27dd");
+	    //try to deposit token
 
         console.log("attempting to deposit token after whitelist");
-        let deposit_receipt = await vega_bridge_erc20_instance.deposit_asset(VUSD_TEST.address, 0, token_balance, "0xdb73174192130553da897f846bca35f2e3ba09c650d47d2e83d0e740626f77dc");
+        let deposit_receipt = await vega_bridge_erc20_instance.deposit_asset(VUSD_TEST.address, 0, token_balance, "0xe3b0477cf1e74f5ad1d3de858bd44fe9100ddf7771db434f3cc8a2b6540844c4");
         let log = deposit_receipt.logs[0];
         console.log("Deposit successful!")
         console.log()
@@ -95,9 +97,10 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
         console.log("asset_source: " + log.args.asset_source);
         console.log("amount: " + log.args.amount.toString());
         console.log("vega_public_key: " + log.args.vega_public_key);
+        console.log("Bridge address: " + Vega_Bridge_ERC20.address);
+	console.log();
         console.log()
-        console.log()
-
+	
 
     });
 
