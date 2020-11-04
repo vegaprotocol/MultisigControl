@@ -55,7 +55,7 @@ function recover_signer_address(sig, msgHash) {
 
 
 contract("Vega_Bridge_ERC20",  (accounts) => {
-    it("should exist", async () => {
+    it("should deposit vusd", async () => {
 	
         let signer_key = private_keys["0xb89a165ea8b619c14312db316baaa80d2a98b493"];
 
