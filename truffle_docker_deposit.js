@@ -12,7 +12,7 @@ let private_key = Buffer.from(
     'hex',
 ) ;
 
-let provider = new Web3.providers.HttpProvider("http://127.0.0.1:8545");
+let provider = new Web3.providers.HttpProvider("http://ganache:8545");
 
 
 let erc20_bridge_contract = contract(erc20_bridge_json);
@@ -55,7 +55,7 @@ async function run_deposit(){
 
     //deposit
     console.log("Depositing VUSD")
-    await erc20_bridge_instance.deposit_asset(erc20_token_contract.address, 0, to_deposit, "0xe3b0477cf1e74f5ad1d3de858bd44fe9100ddf7771db434f3cc8a2b6540844c4", {from: wallet_address});
+    await erc20_bridge_instance.deposit_asset(erc20_token_contract.address, 0, to_deposit, "0x5fa6c02ab6f55353b88939ffacc78f4f3467cd0a2e3a604052fee46e3d038fe4", {from: wallet_address});
     console.log("VUSD Deposited, have a  nice day...");
     //({from:eth_wallet})
 }
