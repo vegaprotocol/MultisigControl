@@ -1,4 +1,4 @@
-
+//ganache-cli -m "cherry manage trip absorb logic half number test shed logic purpose rifle"
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),
     path            = require('path');
@@ -12,13 +12,12 @@ let private_key = Buffer.from(
     'hex',
 ) ;
 
+
 let provider = new Web3.providers.HttpProvider("http://localhost:8545");
-
-
-let erc20_bridge_contract = contract(erc20_bridge_json);
+let erc20_bridge_contract = contract(erc20_bridge_json, ropsten_bridge_address);
 erc20_bridge_contract.setProvider(provider);
 
-let erc20_token_contract = contract(erc20_token_json);
+let erc20_token_contract = contract(erc20_token_json, ropsten_token_address);
 erc20_token_contract.setProvider(provider);
 
 
@@ -30,8 +29,11 @@ async function run_deposit(){
     let erc20_token_instance = await erc20_token_contract.deployed();
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
+    console.log("Wallet Address");
+    console.log(wallet_address);
+
     console.log("VUSD Balance Start: " + await erc20_token_instance.balanceOf(wallet_address));
-    console.log("Running Faucet...")
+    console.log("Running Faucet...");
     //faucet
     await erc20_token_instance.faucet({from: wallet_address});
 
