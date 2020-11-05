@@ -79,7 +79,7 @@ async function run_deposit(){
     //deposit
     console.log("Depositing VUSD5")
     try {
-        await erc20_bridge_instance.methods.deposit_asset(ropsten_token_address, 0, to_deposit, "0xeefadb096d28b9ab40c1eb7c96140fbb56b20fa0d8b25d4f385bf87be6280507").send({from: wallet_address});
+        await erc20_bridge_instance.methods.deposit_asset(ropsten_token_address, 0, to_deposit, "0xbb791479154d7344dc2bc6f4580ee7b9435e41849257fe6eea6e623c0cbe7c8e").send({from: wallet_address});
     } catch (e) {
         console.log(e)
     }
