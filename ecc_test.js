@@ -57,7 +57,6 @@ var crypto = require("crypto");
 //sender for all consuming contracts is the address of that contract
 function get_message_to_sign(param_types, params, nonce, function_name, sender){
     //generate nonce
-
     params.push(nonce);
     param_types.push("uint256");
     params.push(function_name);

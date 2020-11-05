@@ -15,10 +15,10 @@ let private_key = Buffer.from(
 
 let provider = new Web3.providers.HttpProvider("http://127.0.0.1:8545");
 
-let erc20_bridge_contract = contract(erc20_bridge_json, ropsten_bridge_address);
+let erc20_bridge_contract = contract(erc20_bridge_json);
 erc20_bridge_contract.setProvider(provider);
 
-let erc20_token_contract = contract(erc20_token_json, ropsten_token_address);
+let erc20_token_contract = contract(erc20_token_json);
 erc20_token_contract.setProvider(provider);
 
 
