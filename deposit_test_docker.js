@@ -48,14 +48,14 @@ async function run_deposit(){
     try{
         await erc20_bridge_instance.whitelist_asset_admin(erc20_token_contract.address, 0, "0x11e09c9e87849d7c2d9df126a9057f3b0ebb94e107dfb73f9451854efeeb27dd", {from: wallet_address});
     } catch (e) {
-        //may already be whitelisted
+        console.log("may already be whitelisted...");
     }
 
     console.log("Whitelist Complete")
 
     //deposit
     console.log("Depositing VUSD")
-    await erc20_bridge_instance.deposit_asset(erc20_token_contract.address, 0, to_deposit, "0x5fa6c02ab6f55353b88939ffacc78f4f3467cd0a2e3a604052fee46e3d038fe4", {from: wallet_address});
+    await erc20_bridge_instance.deposit_asset(erc20_token_contract.address, 0, to_deposit, "0xe878cd04bd1cd9d3facb9f0eaa4df3519d0cc57b7df0436526d1ba6857449403", {from: wallet_address});
     console.log("VUSD Deposited, have a  nice day...");
     //({from:eth_wallet})
 }
