@@ -1,4 +1,4 @@
-//ganache-cli -m "cherry manage trip absorb logic half number test shed logic purpose rifle"
+
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),
     path            = require('path');
@@ -12,13 +12,13 @@ let private_key = Buffer.from(
     'hex',
 ) ;
 
+let provider = new Web3.providers.HttpProvider("http://ganache:8545");
 
-let provider = new Web3.providers.HttpProvider("http://127.0.0.1:8545");
 
-let erc20_bridge_contract = contract(erc20_bridge_json, ropsten_bridge_address);
+let erc20_bridge_contract = contract(erc20_bridge_json);
 erc20_bridge_contract.setProvider(provider);
 
-let erc20_token_contract = contract(erc20_token_json, ropsten_token_address);
+let erc20_token_contract = contract(erc20_token_json);
 erc20_token_contract.setProvider(provider);
 
 
@@ -30,11 +30,8 @@ async function run_deposit(){
     let erc20_token_instance = await erc20_token_contract.deployed();
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
-    console.log("Wallet Address");
-    console.log(wallet_address);
-
     console.log("VUSD Balance Start: " + await erc20_token_instance.balanceOf(wallet_address));
-    console.log("Running Faucet...");
+    console.log("Running Faucet...")
     //faucet
     await erc20_token_instance.faucet({from: wallet_address});
 
@@ -51,14 +48,14 @@ async function run_deposit(){
     try{
         await erc20_bridge_instance.whitelist_asset_admin(erc20_token_contract.address, 0, "0x11e09c9e87849d7c2d9df126a9057f3b0ebb94e107dfb73f9451854efeeb27dd", {from: wallet_address});
     } catch (e) {
-        //may already be whitelisted
+        console.log("may already be whitelisted...");
     }
 
     console.log("Whitelist Complete")
 
     //deposit
     console.log("Depositing VUSD")
-    await erc20_bridge_instance.deposit_asset(erc20_token_contract.address, 0, to_deposit, "0xe3b0477cf1e74f5ad1d3de858bd44fe9100ddf7771db434f3cc8a2b6540844c4", {from: wallet_address});
+    await erc20_bridge_instance.deposit_asset(erc20_token_contract.address, 0, to_deposit, "0xe878cd04bd1cd9d3facb9f0eaa4df3519d0cc57b7df0436526d1ba6857449403", {from: wallet_address});
     console.log("VUSD Deposited, have a  nice day...");
     //({from:eth_wallet})
 }
