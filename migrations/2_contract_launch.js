@@ -17,7 +17,5 @@ module.exports = async function(deployer) {
     let vega_bridge_eth_instance = await Vega_Bridge_ETH.deployed();
     await vega_bridge_erc20_instance.set_multisig_control(MultisigControl.address);
     await vega_bridge_eth_instance.set_multisig_control(MultisigControl.address);
-    //await vega_bridge_erc20_instance.whitelist_asset_admin(VUSD_TEST.address, 0, "0x11e09c9e87849d7c2d9df126a9057f3b0ebb94e107dfb73f9451854efeeb27dd");
-
+    // await vega_bridge_erc20_instance.whitelist_asset_admin(VUSD_TEST.address, 0, ">>vega_id<<");
 };
-
