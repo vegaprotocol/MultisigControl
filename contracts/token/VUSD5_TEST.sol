@@ -7,7 +7,7 @@ import "./ERC20.sol";
 /**
  * @dev creates totalSupply and holds on contract until issue is called
  */
-contract VUSD_TEST is ERC20Detailed, Ownable, ERC20 {
+contract VUSD5_TEST is ERC20Detailed, Ownable, ERC20 {
 
     using SafeMath for uint256;
 
