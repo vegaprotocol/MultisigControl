@@ -1,23 +1,25 @@
 const MultisigControl = artifacts.require("MultisigControl");
-const Vega_Bridge_ERC20 = artifacts.require("Vega_Bridge_ERC20");
-const Vega_Bridge_ETH = artifacts.require("Vega_Bridge_ETH");
-const VUSD_TEST = artifacts.require("VUSD_TEST");
+const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
+const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+
+const VUSD5_TEST = artifacts.require("VUSD5_TEST");
 
 
 ///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
     await deployer.deploy(MultisigControl);
-    await deployer.deploy(Vega_Bridge_ERC20);
-    await deployer.deploy(Vega_Bridge_ETH, "0x00");
-    await deployer.deploy(VUSD_TEST, "VUSD_TEST", "VUSD", 18, 1000000);
+    await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
+    await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
+
+    await deployer.deploy(VUSD5_TEST, "VUSD5_TEST", "VUSD5", 5, 1000000);
     
     //TODO: remove this to vote it in properly
     //NOTE this will break the test
-    let vega_bridge_erc20_instance = await Vega_Bridge_ERC20.deployed();
-    let vega_bridge_eth_instance = await Vega_Bridge_ETH.deployed();
-    await vega_bridge_erc20_instance.set_multisig_control(MultisigControl.address);
-    await vega_bridge_eth_instance.set_multisig_control(MultisigControl.address);
-    await vega_bridge_erc20_instance.whitelist_asset_admin(VUSD_TEST.address, 0);
+    let erc20_asset_pool_instance = await ERC20_Asset_Pool.deployed();
+    let erc20_bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+
+    await erc20_asset_pool_instance.set_bridge_address_admin(ERC20_Bridge_Logic.address);
+    await erc20_bridge_logic_instance.list_asset_admin(VUSD5_TEST.address, 0, "0x460be4264be2d8e3d7a85696ec66d5c5a86e19617f7dc4ddfe127e30b3bfd620");
 
 };
 
