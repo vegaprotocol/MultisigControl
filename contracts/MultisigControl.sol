@@ -37,12 +37,14 @@ contract MultisigControl is Ownable {
     event ThresholdSet_Admin(uint16 new_threshold);
 
     function add_signer_admin(address new_signer) public onlyOwner{
+        require(!signers[new_signer], "signer already exists");
         signers[new_signer] = true;
         signer_count++;
         emit SignerAdded_Admin(new_signer);
     }
 
     function remove_signer_admin(address old_signer) public onlyOwner{
+        require(signers[old_signer], "signer doesn't exist");
         signers[old_signer] = false;
         signer_count--;
         emit SignerRemoved_Admin(old_signer);
