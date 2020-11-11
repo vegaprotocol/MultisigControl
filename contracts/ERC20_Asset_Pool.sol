@@ -9,8 +9,8 @@ import "./Killable.sol";
 
 contract ERC20_Asset_Pool is Ownable, Killable  /*TODO Remove Owner and Killable before Mainnet*/{
 
-    address multisig_control_address;
-    address erc20_bridge_address;
+    address public multisig_control_address;
+    address public erc20_bridge_address;
 
     /////////////////TODO: Remove before flight
     function set_bridge_address_admin(address new_address) public onlyOwner{
@@ -36,8 +36,29 @@ contract ERC20_Asset_Pool is Ownable, Killable  /*TODO Remove Owner and Killable
     //NOTE: To deposit, simply send to this contract, all funds will be part of the pool
 
     function withdraw(address token_address, address target, uint256 amount) public returns(bool){
-        require(msg.sender == erc20_bridge_address);
-        require(IERC20(token_address).transfer(target, amount));
+        require(msg.sender == erc20_bridge_address, string(abi.encodePacked("bad sender: ",toAsciiString(msg.sender))));
+        require(IERC20(token_address).transfer(target, amount), "token transfer failed");
         return true;
+    }
+
+
+
+
+
+    function toAsciiString(address x) public returns (string memory) {
+        bytes memory s = new bytes(40);
+        for (uint i = 0; i < 20; i++) {
+            byte b = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+            byte hi = byte(uint8(b) / 16);
+            byte lo = byte(uint8(b) - 16 * uint8(hi));
+            s[2*i] = char(hi);
+            s[2*i+1] = char(lo);
+        }
+        return string(s);
+    }
+
+    function char(byte b) public returns (byte c) {
+        if (uint8(b) < 10) return byte(uint8(b) + 0x30);
+        else return byte(uint8(b) + 0x57);
     }
 }
