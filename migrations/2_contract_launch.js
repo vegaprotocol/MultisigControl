@@ -11,6 +11,13 @@ const VUSD5_TEST = artifacts.require("VUSD5_TEST");
 module.exports = async function(deployer) {
     await deployer.deploy(MultisigControl);
 
+    await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
+    let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
+    let logic_2 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
+
+    console.log(logic_1.address);
+    console.log(logic_2.address);
+
     await deployer.deploy(Vega_Bridge_ERC20);
 
     await deployer.deploy(VUSD_TEST, "VUSD_TEST", "VUSD", 18, 1000000);
@@ -23,8 +30,13 @@ module.exports = async function(deployer) {
     let vega_bridge_eth_instance = await Vega_Bridge_ETH.deployed();
     await vega_bridge_erc20_instance.set_multisig_control(MultisigControl.address);
 
-    //await vega_bridge_eth_instance.set_multisig_control(MultisigControl.address);
- //   await vega_bridge_erc20_instance.whitelist_asset_admin(VUSD_TEST.address, 0);
 
 
+    await erc20_asset_pool_instance.set_bridge_address_admin(logic_1.address);
+
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    console.log(logic_1.address)
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 };
+
+
