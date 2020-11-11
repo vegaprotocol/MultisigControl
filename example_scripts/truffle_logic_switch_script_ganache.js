@@ -174,6 +174,16 @@ async function withdraw_from_bridge(asset_contract_instance, bridge_logic_contra
     console.log("wallet balance after withdrawal: " + (await asset_contract_instance.balanceOf(wallet_address)));
     console.log("bridge balance after withdrawal: " + (await asset_contract_instance.balanceOf(erc20_asset_pool_instance.address)));
 }
+async function change_pool_bridge_admin(erc20_asset_pool_instance, new_bridge_logic_contract_instance){
+    console.log();
+    console.log("CHANGE BRIDGE ADMIN:")
+    const eth_wallet = Wallet.fromPrivateKey(private_key);
+    let wallet_address = eth_wallet.getAddressString();
+    //TODO multisig rather than admin:
+    console.log("setting new bridge address")
+    await erc20_asset_pool_instance.set_bridge_address_admin(new_bridge_logic_contract_instance.address, {from: wallet_address})
+    console.log("new bridge set")
+}
 async function change_pool_bridge(erc20_asset_pool_instance, new_bridge_logic_contract_instance){
     console.log();
     console.log("CHANGE BRIDGE:")
@@ -181,7 +191,28 @@ async function change_pool_bridge(erc20_asset_pool_instance, new_bridge_logic_co
     let wallet_address = eth_wallet.getAddressString();
     //TODO multisig rather than admin:
     console.log("setting new bridge address")
-    await erc20_asset_pool_instance.set_bridge_address_admin(new_bridge_logic_contract_instance.address, {from: wallet_address})
+
+    let new_address = new_bridge_logic_contract_instance.address;
+    let multisig_nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+
+    let encoded = get_message_to_sign(
+        ["address"],
+        [new_bridge_logic_contract_instance.address],
+        multisig_nonce, "set_bridge_address", erc20_asset_pool_instance.address);
+
+    let msg_hash = ethUtil.keccak256(encoded);
+    let all_sigs = [];
+    let concat_string =  "0x";
+    for(let key_addr in validator_private_keys){
+        let key = validator_private_keys[key_addr];
+        let sig = ethUtil.ecsign(msg_hash,  key);
+        let sig_string = sig.r.toString('hex') + "" + sig.s.toString('hex') +""+ sig.v.toString(16);
+        concat_string = concat_string+ sig_string;
+        all_sigs.push("0x" + sig_string);
+    }
+
+    await erc20_asset_pool_instance.set_bridge_address(new_address,multisig_nonce,concat_string,  {from: wallet_address})
     console.log("new bridge set")
 }
 
@@ -204,7 +235,7 @@ async function switch_logic(){
     //faucet
     await faucet(vusd5_instance);
     //switch contract to backup
-    await change_pool_bridge(erc20_asset_pool_instance, main_erc20_bridge_logic_instance);
+    await change_pool_bridge_admin(erc20_asset_pool_instance, main_erc20_bridge_logic_instance);
     console.log();
     console.log("2///////////////////////////////////////////////////////////////////////")
     //deposit into main
