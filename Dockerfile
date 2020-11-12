@@ -1,3 +1,5 @@
+FROM ethereum/solc:0.5.16 AS solc
+
 FROM mhart/alpine-node:12 AS builder
 RUN mkdir /app
 WORKDIR /app
@@ -23,6 +25,8 @@ RUN mkdir /app
 WORKDIR /app
 ENV PATH="$PATH:/app/node_modules/.bin"
 RUN apk add --no-cache bash jq
+
+COPY --from=solc /usr/bin/solc /usr/bin/
 
 COPY --from=builder /usr/local/bin/allmark /usr/local/bin/
 COPY --from=builder /app/package*.json ./
