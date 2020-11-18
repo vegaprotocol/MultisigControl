@@ -4,7 +4,7 @@ import "./Ownable.sol";
 
 contract MultisigControl is Ownable {
     constructor () public{
-        threshold = 1000;
+        threshold = 500;
         add_signer_admin(msg.sender);
     }
 
@@ -132,8 +132,7 @@ contract MultisigControl is Ownable {
         }
         used_nonces[nonce] = true;
         //TODO: get math correct
-        return ((sig_count * 1000)/ (signer_count )) >= threshold;
-        //return sig_count > 0;//((sig_count * 1000) / (uint256(signer_count) * 1000)) > threshold;
+        return ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
     }
 
     //Returns number of valid signers
