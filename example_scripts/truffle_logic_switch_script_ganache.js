@@ -179,7 +179,6 @@ async function change_pool_bridge_admin(erc20_asset_pool_instance, new_bridge_lo
     console.log("CHANGE BRIDGE ADMIN:")
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
-    //TODO multisig rather than admin:
     console.log("setting new bridge address")
     await erc20_asset_pool_instance.set_bridge_address_admin(new_bridge_logic_contract_instance.address, {from: wallet_address})
     console.log("new bridge set")
@@ -189,7 +188,6 @@ async function change_pool_bridge(erc20_asset_pool_instance, new_bridge_logic_co
     console.log("CHANGE BRIDGE:")
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
-    //TODO multisig rather than admin:
     console.log("setting new bridge address")
 
     let new_address = new_bridge_logic_contract_instance.address;
@@ -261,7 +259,6 @@ async function switch_logic(){
         console.log("unauthorised withdrawal successfully blocked")
         console.log()
     }
-    //TODO require backup_withdraw_did_fail
 
     console.log();
     console.log("6///////////////////////////////////////////////////////////////////////")
@@ -282,7 +279,6 @@ async function switch_logic(){
         console.log("unauthorised withdrawal successfully blocked")
         console.log()
     }
-
     console.log();
     console.log("8///////////////////////////////////////////////////////////////////////")
     //withdraw from backup
@@ -295,10 +291,7 @@ async function switch_logic(){
     console.log("10///////////////////////////////////////////////////////////////////////")
     //withdraw from backup
     await withdraw_from_bridge(vusd5_instance, backup_erc20_bridge_logic_instance, multisig_control_instance, erc20_asset_pool_instance);
-
 }
-
-
 
 switch_logic();
 console.log('Press any key to exit');
