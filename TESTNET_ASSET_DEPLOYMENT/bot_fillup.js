@@ -28,23 +28,24 @@ let web3_instance = new Web3(provider);
 let token_contracts = require("./token_contracts");
 
 
-let bridge_address = "0xbE39479b1fE065Fdd3510E8997738eb22DfA3357";
+let bridge_address = "0xf6C9d3e937fb2dA4995272C1aC3f3D466B7c23fC";
 let mass_dump_address = token_contracts.mass_dump_address;
 let chunk_size = 15;
-let bot_configs = require("./bot_configs.json");
 
 let payouts = {};
-/*
+
 payouts[token_contracts.tdai_contract] = "10000000000000";
 payouts[token_contracts.tusdc_contract] = "10000000000000";
 payouts[token_contracts.teuro_contract] = "10000000000000";
 payouts[token_contracts.tbtc_contract] = "100000000000";
-*/
+payouts[token_contracts.tvote_contract] = "1000000000";
+/*
 payouts[token_contracts.tdai_contract] = "1";
 payouts[token_contracts.tusdc_contract] = "1";
 payouts[token_contracts.teuro_contract] = "1";
 payouts[token_contracts.tbtc_contract] = "1";
-
+payouts[token_contracts.tvote_contract] = "1";
+*/
 
 
 let private_key = Buffer.from(
@@ -55,20 +56,21 @@ async function run_deposit() {
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
 
-
+    let bot_configs = require("./bot_configs.json");
+    console.log(bot_configs)
     let mass_dump_instance = new web3_instance.eth.Contract(mass_dump_abi, mass_dump_address);
 
     let bundled_bots = {};
 
     for(let bot_idx = 0; bot_idx < bot_configs.length; bot_idx++){
         let this_bot = bot_configs[bot_idx];
-        console.log(this_bot)
-        if(bundled_bots[this_bot.settlementAsset] === undefined){
-            bundled_bots[this_bot.settlementAsset] = {
+
+        if(bundled_bots[this_bot.settlementEthereumContractAddress ] === undefined){
+            bundled_bots[this_bot.settlementEthereumContractAddress ] = {
                 bots : []
             };
         }
-        bundled_bots[this_bot.settlementAsset].bots.push("0x" + this_bot.pubKey);
+        bundled_bots[this_bot.settlementEthereumContractAddress ].bots.push("0x" + this_bot.pubKey);
     }
 
     console.log("here")
@@ -81,8 +83,8 @@ async function run_deposit() {
         if(bundled_bots[token_contracts[contract]] !== undefined){
             let this_bundle = bundled_bots[token_contracts[contract]];
 
-            console.log("Bot Bundle:")
-            console.log(this_bundle)
+            //console.log("Bot Bundle:")
+            //console.log(this_bundle)
 
 
             let chunk = [];
@@ -92,18 +94,23 @@ async function run_deposit() {
 
                 chunk = this_bundle.bots.slice(idx, idx+chunk_size);
                 idx += chunk_size;
-                console.log("CHUNK:")
+                //console.log("CHUNK:")
                 console.log(chunk)
                 console.log("Chunk Length: " + chunk.length)
                 if(chunk.length > 0){
 
-                    //submit chunk to mass_dump
-                    mass_dump_instance.methods.bot_topup(token_contracts[contract], payouts[token_contracts[contract]], chunk).send({
-                        from: wallet_address,
-                        gasPrice:"150000000000"
-                    }).then((rcpt)=>{
-                        console.log(contract + " complete")
-                    });
+                    console.log(token_contracts[contract], payouts[token_contracts[contract]]);
+
+                    try{
+                        //submit chunk to mass_dump
+                        await mass_dump_instance.methods.bot_topup(token_contracts[contract], payouts[token_contracts[contract]], chunk, bridge_address).send({
+                            from: wallet_address,
+                            gasPrice:"150000000000"
+                        })
+                    }catch (e) {
+                        console.log(e)
+                    }
+
                 }
 
             } while(chunk.length > 0);
