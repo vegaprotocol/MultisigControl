@@ -7,7 +7,7 @@ yarn-error.log*
 lerna-debug.log*
 
 .idea/
-/build/contracts/*.json
+/build
 
 .secret
 

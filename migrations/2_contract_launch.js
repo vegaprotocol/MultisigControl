@@ -3,8 +3,6 @@ const Vega_Bridge_ERC20 = artifacts.require("Vega_Bridge_ERC20");
 const VUSD_TEST = artifacts.require("VUSD_TEST");
 const VUSD5_TEST = artifacts.require("VUSD5_TEST");
 
-
-///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
     await deployer.deploy(MultisigControl);
     await deployer.deploy(Vega_Bridge_ERC20);

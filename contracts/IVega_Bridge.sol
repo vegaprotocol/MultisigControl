@@ -23,4 +23,10 @@ contract IVega_Bridge {
     function get_multisig_control_address() public view returns(address);
     function get_vega_id(address asset_source, uint256 asset_id) public view returns(bytes32);
     function get_asset_source_and_asset_id(bytes32 vega_id) public view returns(address, uint256);
+
+
+
+    //////////////////////ADMIN
+    function whitelist_asset_admin(address asset_source, uint256 asset_id, bytes32 vega_id) public;
+    function blacklist_asset_admin(address asset_source, uint256 asset_id) public;
 }
