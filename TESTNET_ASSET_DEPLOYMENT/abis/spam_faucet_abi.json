@@ -1,0 +1,37 @@
+[
+    {
+        "inputs": [],
+        "name": "k",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token_address",
+                "type": "address"
+            },
+            {
+                "internalType": "uint16",
+                "name": "times",
+                "type": "uint16"
+            },
+            {
+                "internalType": "address",
+                "name": "bridge_address",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "vega_public_key",
+                "type": "bytes32"
+            }
+        ],
+        "name": "spam",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

@@ -38,6 +38,7 @@ async function configure_assets() {
     let tbtc_vega_id = "0x5cfa87844724df6069b94e4c8a6f03af21907d7bc251593d08e4251043ee9f7c";
     let tusdc_vega_id = "0x993ed98f4f770d91a796faab1738551193ba45c62341d20597df70fea6704ede";
     let teuro_vega_id = "0x460be4264be2d8e3d7a85696ec66d5c5a86e19617f7dc4ddfe127e30b3bfd620";
+    let tvote_vega_id = "0xf11862be7fc37c47372439f982a8f09912c4f995434120ff43ff51d9c34ef71a"
 
     let bridge_addresses = ["0x220091406A379cebfD0590fe234e23Efb6d0CBb2", "0xbE39479b1fE065Fdd3510E8997738eb22DfA3357", "0xf6C9d3e937fb2dA4995272C1aC3f3D466B7c23fC"];
     for(let bridge_idx = 0; bridge_idx < bridge_addresses.length; bridge_idx++){
@@ -54,6 +55,9 @@ async function configure_assets() {
         try {
             await bridge_instance.methods.whitelist_asset_admin(token_contracts.teuro_contract, 0, teuro_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
         } catch (e) {console.log(e) }
+        try {
+            await bridge_instance.methods.whitelist_asset_admin(token_contracts.tvote_contract, 0, tvote_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+        } catch (e) {console.log(e) }
     }
 
 
@@ -66,23 +70,23 @@ async function configure_assets() {
     //issue each to wallet_address
     console.log("issuing tdai...");
     try {
-        await tdai_instance.methods.issue(wallet_address, await tdai_instance.methods.balanceOf(token_contracts.tdai_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
+        await tdai_instance.methods.issue(token_contracts.mass_dump_address, await tdai_instance.methods.balanceOf(token_contracts.tdai_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
     }catch (e) { console.log(e) }
     console.log("issuing tbtc...");
     try {
-        await tbtc_instance.methods.issue(wallet_address, await tbtc_instance.methods.balanceOf(token_contracts.tbtc_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
+        await tbtc_instance.methods.issue(token_contracts.mass_dump_address, await tbtc_instance.methods.balanceOf(token_contracts.tbtc_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
     }catch (e) { console.log(e)  }
     console.log("issuing tusdc...");
     try {
-        await tusdc_instance.methods.issue(wallet_address, await tusdc_instance.methods.balanceOf(token_contracts.tusdc_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
+        await tusdc_instance.methods.issue(token_contracts.mass_dump_address, await tusdc_instance.methods.balanceOf(token_contracts.tusdc_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
     }catch (e) {  console.log(e) }
     console.log("issuing teuro...");
     try {
-        await teuro_instance.methods.issue(wallet_address, await teuro_instance.methods.balanceOf( token_contracts.teuro_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
+        await teuro_instance.methods.issue(token_contracts.mass_dump_address, await teuro_instance.methods.balanceOf( token_contracts.teuro_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
     }catch (e) { console.log(e)  }
     console.log("issuing tvote...");
     try {
-        await tvote_instance.methods.issue(wallet_address, await tvote_instance.methods.balanceOf(token_contracts.tvote_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
+        await tvote_instance.methods.issue(token_contracts.mass_dump_address, await tvote_instance.methods.balanceOf(token_contracts.tvote_contract).call()).send({from:wallet_address, gasPrice:"150000000000" });
     }catch (e) { console.log(e)  }
 }
 
