@@ -1,4 +1,4 @@
-let killable_abi = require("./abis/killable_abi.json");
+let killable_abi = require("./abis_and_addresses/killable_abi.json");
 
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),
