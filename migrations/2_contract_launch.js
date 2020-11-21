@@ -1,7 +1,9 @@
 const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
 const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+
 const fs = require('fs');
+
 
 ///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
@@ -32,6 +34,7 @@ module.exports = async function(deployer) {
         logic_1:logic_1.address,
         logic_2:logic_2.address
     };
+
 
     console.log("Saving files")
     fs.writeFileSync('abis_and_addresses/bridge_addresses.json',  JSON.stringify(bridge_addresses));
