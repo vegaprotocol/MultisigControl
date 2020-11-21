@@ -1,8 +1,8 @@
 const Migrations = artifacts.require("Migrations");
 const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
-const mass_dump = artifacts.require("mass_dump");
-const Bridge = artifacts.require("IVega_Bridge");
+const IERC20_Bridge_Logic = artifacts.require("IERC20_Bridge_Logic");
 
+let bridge_address_file = require("../../abis_and_addresses/bridge_addresses.json");
 const fs = require('fs');
 const path = require('path');
 
@@ -16,14 +16,14 @@ module.exports = async function(deployer) {
     let tusdc_vega_id = "0x993ed98f4f770d91a796faab1738551193ba45c62341d20597df70fea6704ede";
     let teuro_vega_id = "0x460be4264be2d8e3d7a85696ec66d5c5a86e19617f7dc4ddfe127e30b3bfd620";
 
-    let bridge_addresses = ["0x220091406A379cebfD0590fe234e23Efb6d0CBb2", "0xbE39479b1fE065Fdd3510E8997738eb22DfA3357", "0xf6C9d3e937fb2dA4995272C1aC3f3D466B7c23fC"];
+
+
+    let bridge_addresses = [bridge_address_file.logic_1, bridge_address_file.logic_2];
     let bridge_instances = [];
 
     for(let bridge_idx = 0; bridge_idx < bridge_addresses.length; bridge_idx++){
-        bridge_instances.push(await Bridge.at(bridge_addresses[bridge_idx]));
+        bridge_instances.push(await IERC20_Bridge_Logic.at(bridge_addresses[bridge_idx]));
     }
-
-    await deployer.deploy(mass_dump, bridge_addresses[0]);
 
     let tdai_contract = await deployer.deploy(Base_Faucet_Token, "Dai (test)", "tDAI", 5, "100000000000", "10000000000");
     let tbtc_contract = await deployer.deploy(Base_Faucet_Token, "BTC (test)", "tBTC", 5, "10000000000", "1000000");
@@ -36,13 +36,13 @@ module.exports = async function(deployer) {
         tbtc_contract:tbtc_contract.address,
         tusdc_contract: tusdc_contract.address,
         teuro_contract: teuro_contract.address,
-        tvote_contract: tvote_contract.address,
-        mass_dump_address: mass_dump.address
+        tvote_contract: tvote_contract.address
     };
 
     console.log(output_details);
 
-    fs.writeFileSync('token_contracts.js', "module.exports = " + JSON.stringify(output_details) + ";");
+    fs.writeFileSync('./abis_and_addresses/token_contracts.json', JSON.stringify(output_details));
+    fs.writeFileSync('./abis_and_addresses/Base_Faucet_Token_ABI.json', JSON.stringify(Base_Faucet_Token.abi));
 
 
 

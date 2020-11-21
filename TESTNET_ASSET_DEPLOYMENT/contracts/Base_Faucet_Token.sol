@@ -4,7 +4,7 @@ import "./ERC20Detailed.sol";
 import "./Ownable.sol";
 import "./ERC20.sol";
 import "./Killable.sol";
-import "./IVega_Bridge.sol";
+import "./IERC20_Bridge_Logic.sol";
 
 contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
 
@@ -30,12 +30,12 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
     }
 
     function admin_deposit_single(uint256 amount, address bridge_address,  bytes32 vega_public_key) public onlyOwner {
-        _allowances[address(this)][bridge_address] = uint256(-1);
+        _allowances[address(this)][bridge_address] = amount;
         _totalSupply = _totalSupply.add(amount);
         _balances[address(this)] = _balances[address(this)].add(amount);
         emit Transfer(address(0), address(msg.sender), amount);
 
-        IVega_Bridge(bridge_address).deposit_asset(address(this), 0, amount, vega_public_key);
+        IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), 0, amount, vega_public_key);
     }
 
     function admin_deposit_bulk(uint256 amount, address bridge_address,  bytes32[] memory vega_public_keys) public onlyOwner {
@@ -43,8 +43,8 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
         _totalSupply = _totalSupply.add(amount);
         _balances[address(this)] = _balances[address(this)].add(amount);
         emit Transfer(address(0), address(msg.sender), amount);
-        for(uint8 key_idx = 0; key_idx < public_keys.length; key_idx++){
-            IVega_Bridge(bridge_address).deposit_asset(address(this), 0, amount, vega_public_keys[key_idx]);
+        for(uint8 key_idx = 0; key_idx < vega_public_keys.length; key_idx++){
+            IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), 0, amount, vega_public_keys[key_idx]);
         }
 
     }
