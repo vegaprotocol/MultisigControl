@@ -7,6 +7,17 @@ const fs = require('fs');
 
 ///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
+
+
+    let is_ganache = true;
+    for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
+
+        if(process.argv[arg_idx] === 'ropsten'){
+            console.log("Ropsten deploy, updating artifacts...");
+            is_ganache = false;
+        }
+    }
+
     await deployer.deploy(MultisigControl);
     await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
     let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
@@ -41,4 +52,13 @@ module.exports = async function(deployer) {
     fs.writeFileSync('abis_and_addresses/MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
     fs.writeFileSync('abis_and_addresses/ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));
     fs.writeFileSync('abis_and_addresses/ERC20_Bridge_Logic_ABI.json',  JSON.stringify(ERC20_Bridge_Logic.abi));
+
+    if(!is_ganache){
+        console.log("Saving Ropsten files...")
+        fs.writeFileSync('ropsten_deploy_details/bridge_addresses.json',  JSON.stringify(bridge_addresses));
+        fs.writeFileSync('ropsten_deploy_details/MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
+        fs.writeFileSync('ropsten_deploy_details/ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));
+        fs.writeFileSync('ropsten_deploy_details/ERC20_Bridge_Logic_ABI.json',  JSON.stringify(ERC20_Bridge_Logic.abi));
+    }
+
 };

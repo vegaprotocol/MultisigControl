@@ -97,13 +97,10 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic, Ownable, Killable /*TODO Rem
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(listed_tokens[asset_source], "asset not listed");
         //User must run approve before deposit
-<<<<<<< HEAD
+
         require(amount >= minimum_deposits[asset_source], "deposit below minimum");
         require(IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount), "transfer failed in deposit");
-=======
-        require(amount >= minimum_deposits[asset_source]);
-        require(IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount));
->>>>>>> bbb5eae31a9413fec3e8186488c80023650f4ece
+
         emit Asset_Deposited(msg.sender, asset_source, 0, amount, vega_public_key);
     }
 

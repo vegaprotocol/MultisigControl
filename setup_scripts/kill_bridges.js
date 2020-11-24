@@ -1,4 +1,4 @@
-let killable_abi = require("./abis_and_addresses/killable_abi.json");
+let killable_abi = require("../ropsten_deploy_details/killable_abi.json");
 
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),
@@ -22,21 +22,22 @@ let web3_instance = new Web3(provider);
 /////////////////////////////////////////////END ROPSTEN
 
 
-let token_contracts = require("./abis_and_addresses/token_contracts");
+let bridge_addresses = require("../ropsten_deploy_details/bridge_addresses.json");
 
 
 let private_key = Buffer.from(
     'adef89153e4bd6b43876045efdd6818cec359340683edaec5e8588e635e8428b',
     'hex',
 ) ;
-async function kill_tokens() {
+
+async function kill_bridges() {
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
 
-    console.log("killing tokens")
-    for(let contract in token_contracts){
+    console.log("killing wallets")
+    for(let contract in bridge_addresses){
         console.log(contract + "...")
-        let token_instance = new web3_instance.eth.Contract(killable_abi, token_contracts[contract]);
+        let token_instance = new web3_instance.eth.Contract(killable_abi, bridge_addresses[contract]);
         try {
             await token_instance.methods.kill().send({
                 from:wallet_address,
@@ -51,4 +52,4 @@ async function kill_tokens() {
 }
 
 
-kill_tokens()
+kill_bridges()
