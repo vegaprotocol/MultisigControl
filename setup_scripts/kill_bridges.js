@@ -1,28 +1,57 @@
-let killable_abi = require("../ropsten_deploy_details/killable_abi.json");
-
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),
     path            = require('path');
 let Wallet = require('ethereumjs-wallet');
 const ethUtil = require('ethereumjs-util');
-
-
-//////////////////////////////////////////////ROPSTEN
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-let ropsten_infura = "https://ropsten.infura.io/v3/d98154612ecd408ca30d9756a9add9fd";
-let mnemonic = "cherry manage trip absorb logic half number test shed logic purpose rifle";
-let provider = new HDWalletProvider({
-    mnemonic: {
-        phrase: mnemonic
-    },
-    providerOrUrl: ropsten_infura
-});
 
-let web3_instance = new Web3(provider);
-/////////////////////////////////////////////END ROPSTEN
+let root_path =  '../ropsten_deploy_details/';
 
+let is_ganache = true;
+let net = "local/";
+for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
 
-let bridge_addresses = require("../ropsten_deploy_details/bridge_addresses.json");
+    if(process.argv[arg_idx] === 'ropsten'){
+        console.log("Ropsten detected");
+        is_ganache = false;
+    }
+
+    if(process.argv[arg_idx] === '--vega'){
+        net = process.argv[arg_idx + 1];
+
+        switch(net){
+            case "test":
+                break;
+            case "stag":
+                break;
+            case "dev":
+                break;
+            default:
+                throw ("Bad network choice, -network ropsen --vega [test|stag|dev]");
+        }
+    }
+}
+if(!is_ganache && net === "local/"){
+    throw ("Bad network choice, truffle migrate --network ropsen --vega [test|stag|dev] OR truffle migrate");
+}
+root_path += net + "/";
+
+let web3_instance;
+if(is_ganache){
+    web3_instance = new Web3("http://localhost:8545");
+} else {
+    let ropsten_infura = "https://ropsten.infura.io/v3/d98154612ecd408ca30d9756a9add9fd";
+
+    web3_instance = new Web3(new HDWalletProvider({
+        mnemonic: {
+            phrase: "cherry manage trip absorb logic half number test shed logic purpose rifle"
+        },
+        providerOrUrl: ropsten_infura
+    }));
+}
+
+let killable_abi = require(root_path+  "Killable_ABI.json");
+let bridge_addresses = require(root_path + "bridge_addresses.json");
 
 
 let private_key = Buffer.from(
@@ -44,7 +73,7 @@ async function kill_bridges() {
                 gasPrice:"150000000000"
             });
         }catch (e) {
-
+            console.log(e)
         }
         console.log(contract + "... Done")
     }

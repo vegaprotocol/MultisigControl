@@ -4,19 +4,44 @@ const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
 
 const fs = require('fs');
 
+let copy = require('recursive-copy');
+
+let root_path =  'ropsten_deploy_details/';
+
+let is_ganache = true;
+let net = "local";
+for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
+
+    if(process.argv[arg_idx] === 'ropsten'){
+        console.log("Ropsten deploy, updating artifacts...");
+        is_ganache = false;
+    }
+
+    if(process.argv[arg_idx] === '--vega'){
+        net = process.argv[arg_idx + 1];
+
+        switch(net){
+            case "test":
+                break;
+            case "stag":
+                break;
+            case "dev":
+                break;
+            default:
+                throw ("Bad network choice, -network ropsen --vega [test|stag|dev]");
+        }
+    }
+}
+if(!is_ganache && net === "local"){
+    throw ("Bad network choice, truffle migrate --network ropsen --vega [test|stag|dev] OR truffle migrate");
+}
+root_path += net + "/";
+
+
 
 ///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
 
-
-    let is_ganache = true;
-    for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
-
-        if(process.argv[arg_idx] === 'ropsten'){
-            console.log("Ropsten deploy, updating artifacts...");
-            is_ganache = false;
-        }
-    }
 
     await deployer.deploy(MultisigControl);
     await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
@@ -31,14 +56,7 @@ module.exports = async function(deployer) {
 
     await erc20_asset_pool_instance.set_bridge_address_admin(logic_1.address);
 
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    console.log(logic_1.address)
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-
     //save logic addresses and ABIs
-    console.log(MultisigControl.abi)
-    console.log(MultisigControl.address)
     let bridge_addresses = {
         multisig_control: MultisigControl.address,
         asset_pool: ERC20_Asset_Pool.address,
@@ -47,18 +65,40 @@ module.exports = async function(deployer) {
     };
 
 
-    console.log("Saving files")
-    fs.writeFileSync('abis_and_addresses/bridge_addresses.json',  JSON.stringify(bridge_addresses));
-    fs.writeFileSync('abis_and_addresses/MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
-    fs.writeFileSync('abis_and_addresses/ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));
-    fs.writeFileSync('abis_and_addresses/ERC20_Bridge_Logic_ABI.json',  JSON.stringify(ERC20_Bridge_Logic.abi));
+    console.log("Saving files for " + net + " net");
+    fs.writeFileSync(root_path +'bridge_addresses.json',  JSON.stringify(bridge_addresses));
+    //fs.writeFileSync(root_path + 'MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
+    //fs.writeFileSync(root_path + 'ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));
+    //fs.writeFileSync(root_path + 'ERC20_Bridge_Logic_ABI.json',  JSON.stringify(ERC20_Bridge_Logic.abi));
 
-    if(!is_ganache){
-        console.log("Saving Ropsten files...")
-        fs.writeFileSync('ropsten_deploy_details/bridge_addresses.json',  JSON.stringify(bridge_addresses));
-        fs.writeFileSync('ropsten_deploy_details/MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
-        fs.writeFileSync('ropsten_deploy_details/ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));
-        fs.writeFileSync('ropsten_deploy_details/ERC20_Bridge_Logic_ABI.json',  JSON.stringify(ERC20_Bridge_Logic.abi));
+    copy("./contracts", root_path, {overwrite: true}, function(error, results) {
+        if (error) {
+            console.error('Copy failed: ' + error);
+        } else {
+            console.info('Copied ' + results.length + ' files');
+        }
+    });
+
+    let abi_path = "./build/contracts/";
+    const files = await fs.promises.readdir(  abi_path);
+
+    // Loop them all with the new for...of
+    for( const file of files ) {
+        let split_name = file.split('.');
+        if(split_name[1] === "json"){
+            try {
+                let json_file = require("../" + abi_path + file);
+                    let new_path = root_path + split_name[0] + "_ABI." + split_name[1]
+                    console.log("New Path: " + new_path);
+
+                    fs.writeFileSync(new_path,  JSON.stringify(json_file.abi));
+            }catch (e) {
+                console.log("Error: ")
+                console.log(e);
+            }
+        }
     }
+
+
 
 };
