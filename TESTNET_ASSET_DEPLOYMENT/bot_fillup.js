@@ -1,50 +1,83 @@
-//let bridge_abi = require("abis/ERC20_Bridge_Logic_ABI.js");
-let bridge_abi = require("./abis/Vega_Bridge_ERC20.js");
-let token_abi = require("./abis/erc20_token_abi");
-let mass_dump_abi = require("./abis/mass_dump_abi");
-
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),
     path            = require('path');
 let Wallet = require('ethereumjs-wallet');
 const ethUtil = require('ethereumjs-util');
-
-
-//////////////////////////////////////////////ROPSTEN
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-let ropsten_infura = "https://ropsten.infura.io/v3/d98154612ecd408ca30d9756a9add9fd";
-let mnemonic = "cherry manage trip absorb logic half number test shed logic purpose rifle";
-let provider = new HDWalletProvider({
-    mnemonic: {
-        phrase: mnemonic
-    },
-    providerOrUrl: ropsten_infura
-});
+const fetch = require('node-fetch');
 
-let web3_instance = new Web3(provider);
-/////////////////////////////////////////////END ROPSTEN
+let root_path =  "../ropsten_deploy_details/";
+
+let is_ganache = true;
+let net = "local";
+for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
+
+    if(process.argv[arg_idx] === 'ropsten'){
+        console.log("Ropsten detected");
+        is_ganache = false;
+    }
+
+    if(process.argv[arg_idx] === '--vega'){
+        net = process.argv[arg_idx + 1];
+
+        switch(net){
+            case "test":
+                break;
+            case "stag":
+                break;
+            case "dev":
+                break;
+            default:
+                throw ("Bad network choice, -network ropsen --vega [test|stag|dev]");
+        }
+    }
+}
+if(!is_ganache && net === "local"){
+    throw ("Bad network choice, truffle migrate --network ropsen --vega [test|stag|dev] OR truffle migrate");
+}
+root_path += net + "/";
+
+let web3_instance;
+if(is_ganache){
+    console.log("using ganache...")
+    web3_instance = new Web3("http://localhost:8545");
+} else {
+    console.log("using ropsten...")
+    let ropsten_infura = "https://ropsten.infura.io/v3/d98154612ecd408ca30d9756a9add9fd";
+
+    web3_instance = new Web3(new HDWalletProvider({
+        mnemonic: {
+            phrase: "cherry manage trip absorb logic half number test shed logic purpose rifle"
+        },
+        providerOrUrl: ropsten_infura
+    }));
+}
+
+//let bridge_abi = require("abis/ERC20_Bridge_Logic_ABI.js");
+let bridge_abi = require(root_path + "ERC20_Bridge_Logic_ABI.json");
+let token_abi = require(root_path + "Base_Faucet_Token_ABI.json");
+let bridge_address_file = require(root_path +"bridge_addresses.json");
+
+let token_addresses = require(root_path+"token_addresses.json");
 
 
-let token_contracts = require("./token_contracts");
+let bridge_address = bridge_address_file.logic_1;
 
-
-let bridge_address = "0xf6C9d3e937fb2dA4995272C1aC3f3D466B7c23fC";
-let mass_dump_address = token_contracts.mass_dump_address;
 let chunk_size = 15;
 
 let payouts = {};
 
-payouts[token_contracts.tdai_contract] = "10000000000000";
-payouts[token_contracts.tusdc_contract] = "10000000000000";
-payouts[token_contracts.teuro_contract] = "10000000000000";
-payouts[token_contracts.tbtc_contract] = "100000000000";
-payouts[token_contracts.tvote_contract] = "1000000000";
+payouts[token_addresses.tdai_contract] = "10000000000000";
+payouts[token_addresses.tusdc_contract] = "10000000000000";
+payouts[token_addresses.teuro_contract] = "10000000000000";
+payouts[token_addresses.tbtc_contract] = "100000000000";
+payouts[token_addresses.tvote_contract] = "1000000000";
 /*
-payouts[token_contracts.tdai_contract] = "1";
-payouts[token_contracts.tusdc_contract] = "1";
-payouts[token_contracts.teuro_contract] = "1";
-payouts[token_contracts.tbtc_contract] = "1";
-payouts[token_contracts.tvote_contract] = "1";
+payouts[token_addresses.tdai_contract] = "1";
+payouts[token_addresses.tusdc_contract] = "1";
+payouts[token_addresses.teuro_contract] = "1";
+payouts[token_addresses.tbtc_contract] = "1";
+payouts[token_addresses.tvote_contract] = "1";
 */
 
 
@@ -56,14 +89,19 @@ async function run_deposit() {
     const eth_wallet = Wallet.fromPrivateKey(private_key);
     let wallet_address = eth_wallet.getAddressString();
 
-    let bot_configs = require("./bot_configs.json");
-    console.log(bot_configs)
-    let mass_dump_instance = new web3_instance.eth.Contract(mass_dump_abi, mass_dump_address);
+    //TODO: fix this:
+    let bot_configs_url = "https://bots.vegaprotocol.io/devnet/traders-settlement";
+    if(net !== "local"){
+        bot_configs_url = "https://bots.vegaprotocol.io/"+net+"net/traders-settlement";
+    }
 
+    let bot_configs = await (await fetch(bot_configs_url, {method:"Get"})).json();
+    console.log(bot_configs)
     let bundled_bots = {};
 
     for(let bot_idx = 0; bot_idx < bot_configs.length; bot_idx++){
         let this_bot = bot_configs[bot_idx];
+
 
         if(bundled_bots[this_bot.settlementEthereumContractAddress ] === undefined){
             bundled_bots[this_bot.settlementEthereumContractAddress ] = {
@@ -73,20 +111,21 @@ async function run_deposit() {
         bundled_bots[this_bot.settlementEthereumContractAddress ].bots.push("0x" + this_bot.pubKey);
     }
 
-    console.log("here")
-    console.log(bundled_bots)
+    //console.log("here")
+    //console.log(bundled_bots)
 
-    for(let contract in token_contracts){
-        console.log(contract)
-        console.log(token_contracts[contract])
+    for(let contract in token_addresses){
 
-        if(bundled_bots[token_contracts[contract]] !== undefined){
-            let this_bundle = bundled_bots[token_contracts[contract]];
+        let token_instance = new web3_instance.eth.Contract(token_abi, token_addresses[contract]);
+
+
+        console.log(token_addresses[contract])
+
+        if(bundled_bots[token_addresses[contract]] !== undefined){
+            let this_bundle = bundled_bots[token_addresses[contract]];
 
             //console.log("Bot Bundle:")
             //console.log(this_bundle)
-
-
             let chunk = [];
             let idx = 0;
             console.log("starting loop")
@@ -99,23 +138,22 @@ async function run_deposit() {
                 console.log("Chunk Length: " + chunk.length)
                 if(chunk.length > 0){
 
-                    console.log(token_contracts[contract], payouts[token_contracts[contract]]);
+                    console.log(token_addresses[contract], payouts[token_addresses[contract]]);
 
                     try{
                         //submit chunk to mass_dump
-                        await mass_dump_instance.methods.bot_topup(token_contracts[contract], payouts[token_contracts[contract]], chunk, bridge_address).send({
+                        await token_instance.methods.admin_deposit_bulk(payouts[token_addresses[contract]], bridge_address, chunk).send({
                             from: wallet_address,
-                            gasPrice:"150000000000"
-                        })
+                            gasPrice:"150000000000",
+                            gas:"3000000"
+                        });
                     }catch (e) {
-                        console.log(e)
+                        console.log(e.data)
                     }
 
                 }
 
             } while(chunk.length > 0);
-
-
 
         }
 
