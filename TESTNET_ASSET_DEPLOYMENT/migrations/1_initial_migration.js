@@ -61,11 +61,11 @@ module.exports = async function(deployer) {
         bridge_instances.push(await IERC20_Bridge_Logic.at(bridge_addresses[bridge_idx]));
     }
 
-    let tdai_contract = await deployer.deploy(Base_Faucet_Token, "Dai (test)", "tDAI", 5, "0", "10000000000");
-    let tbtc_contract = await deployer.deploy(Base_Faucet_Token, "BTC (test)", "tBTC", 5, "0", "1000000");
-    let tusdc_contract = await deployer.deploy(Base_Faucet_Token, "USDC (test)", "tUSDC", 5, "0", "10000000000");
-    let teuro_contract = await deployer.deploy(Base_Faucet_Token, "EURO (test)", "tEURO", 5, "0", "10000000000");
-    let tvote_contract = await deployer.deploy(Base_Faucet_Token, "VOTE (test)", "tVOTE", 5, "6400000", "1");
+    let tdai_contract = await deployer.deploy(Base_Faucet_Token, "Dai ("+net+")", "tDAI", 5, "0", "10000000000");
+    let tbtc_contract = await deployer.deploy(Base_Faucet_Token, "BTC ("+net+")", "tBTC", 5, "0", "1000000");
+    let tusdc_contract = await deployer.deploy(Base_Faucet_Token, "USDC ("+net+")", "tUSDC", 5, "0", "10000000000");
+    let teuro_contract = await deployer.deploy(Base_Faucet_Token, "EURO ("+net+")", "tEURO", 5, "0", "10000000000");
+    let tvote_contract = await deployer.deploy(Base_Faucet_Token, "VOTE ("+net+")", "tVOTE", 5, "6400000", "1");
 
     let output_details = {
         tdai_contract: tdai_contract.address,
