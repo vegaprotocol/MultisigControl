@@ -26,12 +26,12 @@ for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
             case "dev":
                 break;
             default:
-                throw ("Bad network choice, -network ropsen --vega [test|stag|dev]");
+                throw ("Bad network choice, -network ropsten --vega [test|stag|dev]");
         }
     }
 }
 if(!is_ganache && net === "local"){
-    throw ("Bad network choice, truffle migrate --network ropsen --vega [test|stag|dev] OR truffle migrate");
+    throw ("Bad network choice, truffle migrate --network ropsten --vega [test|stag|dev] OR truffle migrate");
 }
 root_path += net + "/";
 
