@@ -102,6 +102,30 @@ async function run_deposit() {
     for(let bot_idx = 0; bot_idx < bot_configs.length; bot_idx++){
         let this_bot = bot_configs[bot_idx];
 
+        ////// NOTE this is a hack that will do nothing once the bot_configs picks up the new addresses, for now I'm using this to test
+        //TODO remove hack
+        switch(this_bot.settlementEthereumContractAddress) {
+            case "0xBe3304136265290BDdBc0930CB6F26c3428929e2":
+                this_bot.settlementEthereumContractAddress = token_addresses.tdai_contract;
+                break;
+            case "0x7778F85d0Ceb51950cD9AE24086af723069865fC":
+                this_bot.settlementEthereumContractAddress = token_addresses.tbtc_contract;
+                break;
+            case "0x2c6984bff4f8a3e13f071112085773D78B28F1F2":
+                this_bot.settlementEthereumContractAddress = token_addresses.tusdc_contract;
+                break;
+            case "0x0f4c414fe20C998023A14207FA6E1176D4D4F4fb":
+                this_bot.settlementEthereumContractAddress = token_addresses.teuro_contract;
+                break;
+            case "0xBab9201f25642e9917C3CDFb0d491A5ea13Df8A0":
+                this_bot.settlementEthereumContractAddress = token_addresses.tvote_contract;
+                break;
+            default:
+                break;
+        }
+        //////////////////////END HACK
+
+
 
         if(bundled_bots[this_bot.settlementEthereumContractAddress ] === undefined){
             bundled_bots[this_bot.settlementEthereumContractAddress ] = {
