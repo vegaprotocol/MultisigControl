@@ -1,5 +1,5 @@
 
-let spam_faucet_abi = require("./abis/spam_faucet_abi.json");
+let spam_faucet_abi = require("./abis_and_addresses/spam_faucet_abi.json");
 
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),

@@ -1,4 +1,4 @@
-let bridge_abi = require("./abis/Vega_Bridge_ERC20.js");
+let bridge_abi = require("./abis_and_addresses/Vega_Bridge_ERC20.js");
 
 const Web3            = require('web3'),
     contract        = require("truffle-contract"),

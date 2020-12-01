@@ -465,25 +465,25 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_minimum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Minimum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Asset_Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_id\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Listed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Removed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Withdrawn\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"multisig_control_source\",\"type\":\"address\"}],\"name\":\"Multisig_Control_Set\",\"type\":\"event\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"deposit_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"vega_id\",\"type\":\"bytes32\"}],\"name\":\"get_asset_source_and_asset_id\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"}],\"name\":\"get_deposit_minimum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"get_multisig_control_address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"}],\"name\":\"get_vega_id\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"}],\"name\":\"is_asset_listed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"list_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"remove_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minimum_amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_minimum\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"withdraw_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Ropsten_Testnet_Tools/contracts/IERC20_Bridge_Logic.sol\":\"IERC20_Bridge_Logic\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Ropsten_Testnet_Tools/contracts/IERC20_Bridge_Logic.sol\":{\"keccak256\":\"0xe0d29d9954d0ddd12794203213c62ac1f52f1953af56f32ba6eabc9633e41739\",\"urls\":[\"bzz-raw://799f2eca9cc6e4558b3f0f17cadb2238a3c19b534fd9ffabe72bbe8c446a27d2\",\"dweb:/ipfs/QmeUWc92uCeWgjpGUaRyPGtMUV9voSrrMUPq7b3f2FVEEz\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_minimum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Minimum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Asset_Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_id\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Listed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Removed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Withdrawn\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"multisig_control_source\",\"type\":\"address\"}],\"name\":\"Multisig_Control_Set\",\"type\":\"event\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"deposit_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"vega_id\",\"type\":\"bytes32\"}],\"name\":\"get_asset_source_and_asset_id\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"}],\"name\":\"get_deposit_minimum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"get_multisig_control_address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"}],\"name\":\"get_vega_id\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"}],\"name\":\"is_asset_listed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"list_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"remove_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minimum_amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_minimum\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"asset_id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"withdraw_asset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Bridge Stuff/MultisigControl/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":\"IERC20_Bridge_Logic\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Bridge Stuff/MultisigControl/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":{\"keccak256\":\"0xe0d29d9954d0ddd12794203213c62ac1f52f1953af56f32ba6eabc9633e41739\",\"urls\":[\"bzz-raw://799f2eca9cc6e4558b3f0f17cadb2238a3c19b534fd9ffabe72bbe8c446a27d2\",\"dweb:/ipfs/QmeUWc92uCeWgjpGUaRyPGtMUV9voSrrMUPq7b3f2FVEEz\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\r\n\r\n\r\ncontract IERC20_Bridge_Logic {\r\n\r\n    event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, uint256 nonce);\r\n    event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, bytes32 vega_public_key);\r\n    event Asset_Deposit_Minimum_Set(address indexed asset_source, uint256 indexed asset_id, uint256 new_minimum, uint256 nonce);\r\n    event Asset_Listed(address indexed asset_source, uint256 indexed asset_id, bytes32 indexed vega_id, uint256 nonce);\r\n    event Asset_Removed(address indexed asset_source, uint256 indexed asset_id, uint256 nonce);\r\n    event Multisig_Control_Set(address indexed multisig_control_source);\r\n\r\n    function list_asset(address asset_source, uint256 asset_id, bytes32 vega_id, uint256 nonce, bytes memory signatures) public;\r\n    function remove_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;\r\n    function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;\r\n    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;\r\n    function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;\r\n\r\n    // VIEWS /////////////////\r\n    function is_asset_listed(address asset_source, uint256 asset_id) public view returns(bool);\r\n    function get_deposit_minimum(address asset_source, uint256 asset_id) public view returns(uint256);\r\n    function get_multisig_control_address() public view returns(address);\r\n    function get_vega_id(address asset_source, uint256 asset_id) public view returns(bytes32);\r\n    function get_asset_source_and_asset_id(bytes32 vega_id) public view returns(address, uint256);\r\n\r\n}",
-  "sourcePath": "C:/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Ropsten_Testnet_Tools/contracts/IERC20_Bridge_Logic.sol",
+  "sourcePath": "C:\\Users\\holla\\OneDrive\\Desktop\\Source\\Vega Protocol\\Bridge Stuff\\MultisigControl\\MultisigControl\\TESTNET_ASSET_DEPLOYMENT\\contracts\\IERC20_Bridge_Logic.sol",
   "ast": {
-    "absolutePath": "/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Ropsten_Testnet_Tools/contracts/IERC20_Bridge_Logic.sol",
+    "absolutePath": "/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Bridge Stuff/MultisigControl/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
     "exportedSymbols": {
       "IERC20_Bridge_Logic": [
-        824
+        983
       ]
     },
-    "id": 825,
+    "id": 984,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 663,
+        "id": 822,
         "literals": [
           "solidity",
           "^",
@@ -499,9 +499,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 824,
+        "id": 983,
         "linearizedBaseContracts": [
-          824
+          983
         ],
         "name": "IERC20_Bridge_Logic",
         "nodeType": "ContractDefinition",
@@ -509,20 +509,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 675,
+            "id": 834,
             "name": "Asset_Withdrawn",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 674,
+              "id": 833,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 665,
+                  "id": 824,
                   "indexed": true,
                   "name": "user_address",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "89:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -531,7 +531,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 664,
+                    "id": 823,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "89:7:4",
@@ -546,11 +546,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 667,
+                  "id": 826,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "119:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -559,7 +559,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 666,
+                    "id": 825,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "119:7:4",
@@ -574,11 +574,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 669,
+                  "id": 828,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "149:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -587,7 +587,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 668,
+                    "id": 827,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "149:7:4",
@@ -601,11 +601,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 671,
+                  "id": 830,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "175:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -614,7 +614,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 670,
+                    "id": 829,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "175:7:4",
@@ -628,11 +628,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 673,
+                  "id": 832,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "191:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -641,7 +641,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 672,
+                    "id": 831,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "191:7:4",
@@ -661,20 +661,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 687,
+            "id": 846,
             "name": "Asset_Deposited",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 686,
+              "id": 845,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 677,
+                  "id": 836,
                   "indexed": true,
                   "name": "user_address",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "234:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -683,7 +683,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 676,
+                    "id": 835,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "234:7:4",
@@ -698,11 +698,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 679,
+                  "id": 838,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "264:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -711,7 +711,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 678,
+                    "id": 837,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "264:7:4",
@@ -726,11 +726,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 681,
+                  "id": 840,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "294:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -739,7 +739,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 680,
+                    "id": 839,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "294:7:4",
@@ -753,11 +753,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 683,
+                  "id": 842,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "320:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -766,7 +766,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 682,
+                    "id": 841,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "320:7:4",
@@ -780,11 +780,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 685,
+                  "id": 844,
                   "indexed": false,
                   "name": "vega_public_key",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "336:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -793,7 +793,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 684,
+                    "id": 843,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "336:7:4",
@@ -813,20 +813,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 697,
+            "id": 856,
             "name": "Asset_Deposit_Minimum_Set",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 696,
+              "id": 855,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 689,
+                  "id": 848,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "399:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -835,7 +835,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 688,
+                    "id": 847,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "399:7:4",
@@ -850,11 +850,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 691,
+                  "id": 850,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "429:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -863,7 +863,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 690,
+                    "id": 849,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "429:7:4",
@@ -877,11 +877,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 693,
+                  "id": 852,
                   "indexed": false,
                   "name": "new_minimum",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "455:19:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -890,7 +890,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 692,
+                    "id": 851,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "455:7:4",
@@ -904,11 +904,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 695,
+                  "id": 854,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "476:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -917,7 +917,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 694,
+                    "id": 853,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "476:7:4",
@@ -937,20 +937,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 707,
+            "id": 866,
             "name": "Asset_Listed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 706,
+              "id": 865,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 699,
+                  "id": 858,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "516:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -959,7 +959,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 698,
+                    "id": 857,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "516:7:4",
@@ -974,11 +974,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 701,
+                  "id": 860,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "546:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -987,7 +987,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 700,
+                    "id": 859,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "546:7:4",
@@ -1001,11 +1001,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 703,
+                  "id": 862,
                   "indexed": true,
                   "name": "vega_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "572:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1014,7 +1014,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 702,
+                    "id": 861,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "572:7:4",
@@ -1028,11 +1028,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 705,
+                  "id": 864,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "597:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1041,7 +1041,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 704,
+                    "id": 863,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "597:7:4",
@@ -1061,20 +1061,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 715,
+            "id": 874,
             "name": "Asset_Removed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 714,
+              "id": 873,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 709,
+                  "id": 868,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 715,
+                  "scope": 874,
                   "src": "638:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1083,7 +1083,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 708,
+                    "id": 867,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "638:7:4",
@@ -1098,11 +1098,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 711,
+                  "id": 870,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 715,
+                  "scope": 874,
                   "src": "668:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1111,7 +1111,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 710,
+                    "id": 869,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "668:7:4",
@@ -1125,11 +1125,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 713,
+                  "id": 872,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 715,
+                  "scope": 874,
                   "src": "694:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1138,7 +1138,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 712,
+                    "id": 871,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "694:7:4",
@@ -1158,20 +1158,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 719,
+            "id": 878,
             "name": "Multisig_Control_Set",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 718,
+              "id": 877,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 717,
+                  "id": 876,
                   "indexed": true,
                   "name": "multisig_control_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 719,
+                  "scope": 878,
                   "src": "742:39:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1180,7 +1180,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 716,
+                    "id": 875,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "742:7:4",
@@ -1201,22 +1201,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 732,
+            "id": 891,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "list_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 730,
+              "id": 889,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 721,
+                  "id": 880,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "811:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1225,7 +1225,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 720,
+                    "id": 879,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "811:7:4",
@@ -1240,10 +1240,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 723,
+                  "id": 882,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "833:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1252,7 +1252,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 722,
+                    "id": 881,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "833:7:4",
@@ -1266,10 +1266,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 725,
+                  "id": 884,
                   "name": "vega_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "851:15:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1278,7 +1278,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 724,
+                    "id": 883,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "851:7:4",
@@ -1292,10 +1292,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 727,
+                  "id": 886,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "868:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1304,7 +1304,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 726,
+                    "id": 885,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "868:7:4",
@@ -1318,10 +1318,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 729,
+                  "id": 888,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "883:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1330,7 +1330,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 728,
+                    "id": 887,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "883:5:4",
@@ -1346,12 +1346,12 @@
               "src": "810:97:4"
             },
             "returnParameters": {
-              "id": 731,
+              "id": 890,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "914:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "791:124:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1360,22 +1360,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 743,
+            "id": 902,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "remove_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 741,
+              "id": 900,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 734,
+                  "id": 893,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "943:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1384,7 +1384,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 733,
+                    "id": 892,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "943:7:4",
@@ -1399,10 +1399,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 736,
+                  "id": 895,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "965:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1411,7 +1411,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 735,
+                    "id": 894,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "965:7:4",
@@ -1425,10 +1425,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 738,
+                  "id": 897,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "983:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1437,7 +1437,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 737,
+                    "id": 896,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "983:7:4",
@@ -1451,10 +1451,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 740,
+                  "id": 899,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "998:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1463,7 +1463,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 739,
+                    "id": 898,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "998:5:4",
@@ -1479,12 +1479,12 @@
               "src": "942:80:4"
             },
             "returnParameters": {
-              "id": 742,
+              "id": 901,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1029:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "921:109:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1493,22 +1493,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 756,
+            "id": 915,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "set_deposit_minimum",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 754,
+              "id": 913,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 745,
+                  "id": 904,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1065:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1517,7 +1517,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 744,
+                    "id": 903,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1065:7:4",
@@ -1532,10 +1532,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 747,
+                  "id": 906,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1087:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1544,7 +1544,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 746,
+                    "id": 905,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1087:7:4",
@@ -1558,10 +1558,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 749,
+                  "id": 908,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1105:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1570,7 +1570,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 748,
+                    "id": 907,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1105:7:4",
@@ -1584,10 +1584,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 751,
+                  "id": 910,
                   "name": "minimum_amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1120:22:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1596,7 +1596,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 750,
+                    "id": 909,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1120:7:4",
@@ -1610,10 +1610,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 753,
+                  "id": 912,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1144:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1622,7 +1622,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 752,
+                    "id": 911,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "1144:5:4",
@@ -1638,12 +1638,12 @@
               "src": "1064:104:4"
             },
             "returnParameters": {
-              "id": 755,
+              "id": 914,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1175:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1036:140:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1652,22 +1652,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 771,
+            "id": 930,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "withdraw_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 769,
+              "id": 928,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 758,
+                  "id": 917,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1206:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1676,7 +1676,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 757,
+                    "id": 916,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1206:7:4",
@@ -1691,10 +1691,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 760,
+                  "id": 919,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1228:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1703,7 +1703,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 759,
+                    "id": 918,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1228:7:4",
@@ -1717,10 +1717,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 762,
+                  "id": 921,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1246:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1729,7 +1729,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 761,
+                    "id": 920,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1246:7:4",
@@ -1743,10 +1743,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 764,
+                  "id": 923,
                   "name": "expiry",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1262:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1755,7 +1755,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 763,
+                    "id": 922,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1262:7:4",
@@ -1769,10 +1769,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 766,
+                  "id": 925,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1278:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1781,7 +1781,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 765,
+                    "id": 924,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1278:7:4",
@@ -1795,10 +1795,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 768,
+                  "id": 927,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1293:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1807,7 +1807,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 767,
+                    "id": 926,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "1293:5:4",
@@ -1823,12 +1823,12 @@
               "src": "1205:112:4"
             },
             "returnParameters": {
-              "id": 770,
+              "id": 929,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1324:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1182:143:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1837,22 +1837,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 782,
+            "id": 941,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deposit_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 780,
+              "id": 939,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 773,
+                  "id": 932,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1354:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1861,7 +1861,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 772,
+                    "id": 931,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1354:7:4",
@@ -1876,10 +1876,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 775,
+                  "id": 934,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1376:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1888,7 +1888,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 774,
+                    "id": 933,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1376:7:4",
@@ -1902,10 +1902,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 777,
+                  "id": 936,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1394:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1914,7 +1914,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 776,
+                    "id": 935,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1394:7:4",
@@ -1928,10 +1928,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 779,
+                  "id": 938,
                   "name": "vega_public_key",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1410:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1940,7 +1940,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 778,
+                    "id": 937,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1410:7:4",
@@ -1956,12 +1956,12 @@
               "src": "1353:81:4"
             },
             "returnParameters": {
-              "id": 781,
+              "id": 940,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1441:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1331:111:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1970,22 +1970,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 791,
+            "id": 950,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "is_asset_listed",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 787,
+              "id": 946,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 784,
+                  "id": 943,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 950,
                   "src": "1507:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1994,7 +1994,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 783,
+                    "id": 942,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1507:7:4",
@@ -2009,10 +2009,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 786,
+                  "id": 945,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 950,
                   "src": "1529:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2021,7 +2021,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 785,
+                    "id": 944,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1529:7:4",
@@ -2037,15 +2037,15 @@
               "src": "1506:40:4"
             },
             "returnParameters": {
-              "id": 790,
+              "id": 949,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 789,
+                  "id": 948,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 950,
                   "src": "1567:4:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2054,7 +2054,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 788,
+                    "id": 947,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1567:4:4",
@@ -2069,7 +2069,7 @@
               ],
               "src": "1566:6:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1482:91:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2078,22 +2078,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 800,
+            "id": 959,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_deposit_minimum",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 796,
+              "id": 955,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 793,
+                  "id": 952,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 959,
                   "src": "1608:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2102,7 +2102,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 792,
+                    "id": 951,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1608:7:4",
@@ -2117,10 +2117,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 795,
+                  "id": 954,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 959,
                   "src": "1630:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2129,7 +2129,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 794,
+                    "id": 953,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1630:7:4",
@@ -2145,15 +2145,15 @@
               "src": "1607:40:4"
             },
             "returnParameters": {
-              "id": 799,
+              "id": 958,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 798,
+                  "id": 957,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 959,
                   "src": "1668:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2162,7 +2162,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 797,
+                    "id": 956,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1668:7:4",
@@ -2177,7 +2177,7 @@
               ],
               "src": "1667:9:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1579:98:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2186,28 +2186,28 @@
           {
             "body": null,
             "documentation": null,
-            "id": 805,
+            "id": 964,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_multisig_control_address",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 801,
+              "id": 960,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1720:2:4"
             },
             "returnParameters": {
-              "id": 804,
+              "id": 963,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 803,
+                  "id": 962,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 805,
+                  "scope": 964,
                   "src": "1743:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2216,7 +2216,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 802,
+                    "id": 961,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1743:7:4",
@@ -2232,7 +2232,7 @@
               ],
               "src": "1742:9:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1683:69:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2241,22 +2241,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 814,
+            "id": 973,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_vega_id",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 810,
+              "id": 969,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 807,
+                  "id": 966,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 814,
+                  "scope": 973,
                   "src": "1779:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2265,7 +2265,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 806,
+                    "id": 965,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1779:7:4",
@@ -2280,10 +2280,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 809,
+                  "id": 968,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 814,
+                  "scope": 973,
                   "src": "1801:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2292,7 +2292,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 808,
+                    "id": 967,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1801:7:4",
@@ -2308,15 +2308,15 @@
               "src": "1778:40:4"
             },
             "returnParameters": {
-              "id": 813,
+              "id": 972,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 812,
+                  "id": 971,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 814,
+                  "scope": 973,
                   "src": "1839:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2325,7 +2325,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 811,
+                    "id": 970,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1839:7:4",
@@ -2340,7 +2340,7 @@
               ],
               "src": "1838:9:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1758:90:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2349,22 +2349,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 823,
+            "id": 982,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_asset_source_and_asset_id",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 817,
+              "id": 976,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 816,
+                  "id": 975,
                   "name": "vega_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 823,
+                  "scope": 982,
                   "src": "1893:15:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2373,7 +2373,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 815,
+                    "id": 974,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1893:7:4",
@@ -2389,15 +2389,15 @@
               "src": "1892:17:4"
             },
             "returnParameters": {
-              "id": 822,
+              "id": 981,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 819,
+                  "id": 978,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 823,
+                  "scope": 982,
                   "src": "1930:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2406,7 +2406,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 818,
+                    "id": 977,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1930:7:4",
@@ -2421,10 +2421,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 821,
+                  "id": 980,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 823,
+                  "scope": 982,
                   "src": "1939:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2433,7 +2433,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 820,
+                    "id": 979,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1939:7:4",
@@ -2448,31 +2448,31 @@
               ],
               "src": "1929:18:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1854:94:4",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 825,
+        "scope": 984,
         "src": "29:1924:4"
       }
     ],
     "src": "0:1953:4"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Ropsten_Testnet_Tools/contracts/IERC20_Bridge_Logic.sol",
+    "absolutePath": "/C/Users/holla/OneDrive/Desktop/Source/Vega Protocol/Bridge Stuff/MultisigControl/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
     "exportedSymbols": {
       "IERC20_Bridge_Logic": [
-        824
+        983
       ]
     },
-    "id": 825,
+    "id": 984,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 663,
+        "id": 822,
         "literals": [
           "solidity",
           "^",
@@ -2488,9 +2488,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 824,
+        "id": 983,
         "linearizedBaseContracts": [
-          824
+          983
         ],
         "name": "IERC20_Bridge_Logic",
         "nodeType": "ContractDefinition",
@@ -2498,20 +2498,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 675,
+            "id": 834,
             "name": "Asset_Withdrawn",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 674,
+              "id": 833,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 665,
+                  "id": 824,
                   "indexed": true,
                   "name": "user_address",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "89:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2520,7 +2520,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 664,
+                    "id": 823,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "89:7:4",
@@ -2535,11 +2535,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 667,
+                  "id": 826,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "119:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2548,7 +2548,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 666,
+                    "id": 825,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "119:7:4",
@@ -2563,11 +2563,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 669,
+                  "id": 828,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "149:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2576,7 +2576,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 668,
+                    "id": 827,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "149:7:4",
@@ -2590,11 +2590,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 671,
+                  "id": 830,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "175:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2603,7 +2603,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 670,
+                    "id": 829,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "175:7:4",
@@ -2617,11 +2617,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 673,
+                  "id": 832,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 675,
+                  "scope": 834,
                   "src": "191:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2630,7 +2630,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 672,
+                    "id": 831,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "191:7:4",
@@ -2650,20 +2650,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 687,
+            "id": 846,
             "name": "Asset_Deposited",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 686,
+              "id": 845,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 677,
+                  "id": 836,
                   "indexed": true,
                   "name": "user_address",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "234:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2672,7 +2672,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 676,
+                    "id": 835,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "234:7:4",
@@ -2687,11 +2687,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 679,
+                  "id": 838,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "264:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2700,7 +2700,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 678,
+                    "id": 837,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "264:7:4",
@@ -2715,11 +2715,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 681,
+                  "id": 840,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "294:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2728,7 +2728,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 680,
+                    "id": 839,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "294:7:4",
@@ -2742,11 +2742,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 683,
+                  "id": 842,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "320:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2755,7 +2755,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 682,
+                    "id": 841,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "320:7:4",
@@ -2769,11 +2769,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 685,
+                  "id": 844,
                   "indexed": false,
                   "name": "vega_public_key",
                   "nodeType": "VariableDeclaration",
-                  "scope": 687,
+                  "scope": 846,
                   "src": "336:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2782,7 +2782,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 684,
+                    "id": 843,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "336:7:4",
@@ -2802,20 +2802,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 697,
+            "id": 856,
             "name": "Asset_Deposit_Minimum_Set",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 696,
+              "id": 855,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 689,
+                  "id": 848,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "399:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2824,7 +2824,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 688,
+                    "id": 847,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "399:7:4",
@@ -2839,11 +2839,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 691,
+                  "id": 850,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "429:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2852,7 +2852,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 690,
+                    "id": 849,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "429:7:4",
@@ -2866,11 +2866,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 693,
+                  "id": 852,
                   "indexed": false,
                   "name": "new_minimum",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "455:19:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2879,7 +2879,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 692,
+                    "id": 851,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "455:7:4",
@@ -2893,11 +2893,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 695,
+                  "id": 854,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 697,
+                  "scope": 856,
                   "src": "476:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2906,7 +2906,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 694,
+                    "id": 853,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "476:7:4",
@@ -2926,20 +2926,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 707,
+            "id": 866,
             "name": "Asset_Listed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 706,
+              "id": 865,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 699,
+                  "id": 858,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "516:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2948,7 +2948,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 698,
+                    "id": 857,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "516:7:4",
@@ -2963,11 +2963,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 701,
+                  "id": 860,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "546:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2976,7 +2976,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 700,
+                    "id": 859,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "546:7:4",
@@ -2990,11 +2990,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 703,
+                  "id": 862,
                   "indexed": true,
                   "name": "vega_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "572:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3003,7 +3003,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 702,
+                    "id": 861,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "572:7:4",
@@ -3017,11 +3017,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 705,
+                  "id": 864,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 707,
+                  "scope": 866,
                   "src": "597:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3030,7 +3030,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 704,
+                    "id": 863,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "597:7:4",
@@ -3050,20 +3050,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 715,
+            "id": 874,
             "name": "Asset_Removed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 714,
+              "id": 873,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 709,
+                  "id": 868,
                   "indexed": true,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 715,
+                  "scope": 874,
                   "src": "638:28:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3072,7 +3072,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 708,
+                    "id": 867,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "638:7:4",
@@ -3087,11 +3087,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 711,
+                  "id": 870,
                   "indexed": true,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 715,
+                  "scope": 874,
                   "src": "668:24:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3100,7 +3100,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 710,
+                    "id": 869,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "668:7:4",
@@ -3114,11 +3114,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 713,
+                  "id": 872,
                   "indexed": false,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 715,
+                  "scope": 874,
                   "src": "694:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3127,7 +3127,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 712,
+                    "id": 871,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "694:7:4",
@@ -3147,20 +3147,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 719,
+            "id": 878,
             "name": "Multisig_Control_Set",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 718,
+              "id": 877,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 717,
+                  "id": 876,
                   "indexed": true,
                   "name": "multisig_control_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 719,
+                  "scope": 878,
                   "src": "742:39:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3169,7 +3169,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 716,
+                    "id": 875,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "742:7:4",
@@ -3190,22 +3190,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 732,
+            "id": 891,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "list_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 730,
+              "id": 889,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 721,
+                  "id": 880,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "811:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3214,7 +3214,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 720,
+                    "id": 879,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "811:7:4",
@@ -3229,10 +3229,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 723,
+                  "id": 882,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "833:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3241,7 +3241,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 722,
+                    "id": 881,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "833:7:4",
@@ -3255,10 +3255,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 725,
+                  "id": 884,
                   "name": "vega_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "851:15:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3267,7 +3267,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 724,
+                    "id": 883,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "851:7:4",
@@ -3281,10 +3281,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 727,
+                  "id": 886,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "868:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3293,7 +3293,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 726,
+                    "id": 885,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "868:7:4",
@@ -3307,10 +3307,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 729,
+                  "id": 888,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 732,
+                  "scope": 891,
                   "src": "883:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3319,7 +3319,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 728,
+                    "id": 887,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "883:5:4",
@@ -3335,12 +3335,12 @@
               "src": "810:97:4"
             },
             "returnParameters": {
-              "id": 731,
+              "id": 890,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "914:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "791:124:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3349,22 +3349,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 743,
+            "id": 902,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "remove_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 741,
+              "id": 900,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 734,
+                  "id": 893,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "943:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3373,7 +3373,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 733,
+                    "id": 892,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "943:7:4",
@@ -3388,10 +3388,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 736,
+                  "id": 895,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "965:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3400,7 +3400,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 735,
+                    "id": 894,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "965:7:4",
@@ -3414,10 +3414,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 738,
+                  "id": 897,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "983:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3426,7 +3426,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 737,
+                    "id": 896,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "983:7:4",
@@ -3440,10 +3440,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 740,
+                  "id": 899,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 743,
+                  "scope": 902,
                   "src": "998:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3452,7 +3452,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 739,
+                    "id": 898,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "998:5:4",
@@ -3468,12 +3468,12 @@
               "src": "942:80:4"
             },
             "returnParameters": {
-              "id": 742,
+              "id": 901,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1029:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "921:109:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3482,22 +3482,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 756,
+            "id": 915,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "set_deposit_minimum",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 754,
+              "id": 913,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 745,
+                  "id": 904,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1065:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3506,7 +3506,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 744,
+                    "id": 903,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1065:7:4",
@@ -3521,10 +3521,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 747,
+                  "id": 906,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1087:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3533,7 +3533,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 746,
+                    "id": 905,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1087:7:4",
@@ -3547,10 +3547,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 749,
+                  "id": 908,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1105:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3559,7 +3559,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 748,
+                    "id": 907,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1105:7:4",
@@ -3573,10 +3573,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 751,
+                  "id": 910,
                   "name": "minimum_amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1120:22:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3585,7 +3585,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 750,
+                    "id": 909,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1120:7:4",
@@ -3599,10 +3599,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 753,
+                  "id": 912,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 756,
+                  "scope": 915,
                   "src": "1144:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3611,7 +3611,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 752,
+                    "id": 911,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "1144:5:4",
@@ -3627,12 +3627,12 @@
               "src": "1064:104:4"
             },
             "returnParameters": {
-              "id": 755,
+              "id": 914,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1175:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1036:140:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3641,22 +3641,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 771,
+            "id": 930,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "withdraw_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 769,
+              "id": 928,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 758,
+                  "id": 917,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1206:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3665,7 +3665,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 757,
+                    "id": 916,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1206:7:4",
@@ -3680,10 +3680,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 760,
+                  "id": 919,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1228:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3692,7 +3692,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 759,
+                    "id": 918,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1228:7:4",
@@ -3706,10 +3706,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 762,
+                  "id": 921,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1246:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3718,7 +3718,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 761,
+                    "id": 920,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1246:7:4",
@@ -3732,10 +3732,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 764,
+                  "id": 923,
                   "name": "expiry",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1262:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3744,7 +3744,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 763,
+                    "id": 922,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1262:7:4",
@@ -3758,10 +3758,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 766,
+                  "id": 925,
                   "name": "nonce",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1278:13:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3770,7 +3770,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 765,
+                    "id": 924,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1278:7:4",
@@ -3784,10 +3784,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 768,
+                  "id": 927,
                   "name": "signatures",
                   "nodeType": "VariableDeclaration",
-                  "scope": 771,
+                  "scope": 930,
                   "src": "1293:23:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3796,7 +3796,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 767,
+                    "id": 926,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "1293:5:4",
@@ -3812,12 +3812,12 @@
               "src": "1205:112:4"
             },
             "returnParameters": {
-              "id": 770,
+              "id": 929,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1324:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1182:143:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3826,22 +3826,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 782,
+            "id": 941,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deposit_asset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 780,
+              "id": 939,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 773,
+                  "id": 932,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1354:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3850,7 +3850,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 772,
+                    "id": 931,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1354:7:4",
@@ -3865,10 +3865,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 775,
+                  "id": 934,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1376:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3877,7 +3877,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 774,
+                    "id": 933,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1376:7:4",
@@ -3891,10 +3891,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 777,
+                  "id": 936,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1394:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3903,7 +3903,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 776,
+                    "id": 935,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1394:7:4",
@@ -3917,10 +3917,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 779,
+                  "id": 938,
                   "name": "vega_public_key",
                   "nodeType": "VariableDeclaration",
-                  "scope": 782,
+                  "scope": 941,
                   "src": "1410:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3929,7 +3929,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 778,
+                    "id": 937,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1410:7:4",
@@ -3945,12 +3945,12 @@
               "src": "1353:81:4"
             },
             "returnParameters": {
-              "id": 781,
+              "id": 940,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1441:0:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1331:111:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3959,22 +3959,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 791,
+            "id": 950,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "is_asset_listed",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 787,
+              "id": 946,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 784,
+                  "id": 943,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 950,
                   "src": "1507:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3983,7 +3983,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 783,
+                    "id": 942,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1507:7:4",
@@ -3998,10 +3998,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 786,
+                  "id": 945,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 950,
                   "src": "1529:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4010,7 +4010,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 785,
+                    "id": 944,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1529:7:4",
@@ -4026,15 +4026,15 @@
               "src": "1506:40:4"
             },
             "returnParameters": {
-              "id": 790,
+              "id": 949,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 789,
+                  "id": 948,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 950,
                   "src": "1567:4:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4043,7 +4043,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 788,
+                    "id": 947,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1567:4:4",
@@ -4058,7 +4058,7 @@
               ],
               "src": "1566:6:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1482:91:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -4067,22 +4067,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 800,
+            "id": 959,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_deposit_minimum",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 796,
+              "id": 955,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 793,
+                  "id": 952,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 959,
                   "src": "1608:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4091,7 +4091,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 792,
+                    "id": 951,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1608:7:4",
@@ -4106,10 +4106,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 795,
+                  "id": 954,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 959,
                   "src": "1630:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4118,7 +4118,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 794,
+                    "id": 953,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1630:7:4",
@@ -4134,15 +4134,15 @@
               "src": "1607:40:4"
             },
             "returnParameters": {
-              "id": 799,
+              "id": 958,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 798,
+                  "id": 957,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 959,
                   "src": "1668:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4151,7 +4151,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 797,
+                    "id": 956,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1668:7:4",
@@ -4166,7 +4166,7 @@
               ],
               "src": "1667:9:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1579:98:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -4175,28 +4175,28 @@
           {
             "body": null,
             "documentation": null,
-            "id": 805,
+            "id": 964,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_multisig_control_address",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 801,
+              "id": 960,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1720:2:4"
             },
             "returnParameters": {
-              "id": 804,
+              "id": 963,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 803,
+                  "id": 962,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 805,
+                  "scope": 964,
                   "src": "1743:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4205,7 +4205,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 802,
+                    "id": 961,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1743:7:4",
@@ -4221,7 +4221,7 @@
               ],
               "src": "1742:9:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1683:69:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -4230,22 +4230,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 814,
+            "id": 973,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_vega_id",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 810,
+              "id": 969,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 807,
+                  "id": 966,
                   "name": "asset_source",
                   "nodeType": "VariableDeclaration",
-                  "scope": 814,
+                  "scope": 973,
                   "src": "1779:20:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4254,7 +4254,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 806,
+                    "id": 965,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1779:7:4",
@@ -4269,10 +4269,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 809,
+                  "id": 968,
                   "name": "asset_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 814,
+                  "scope": 973,
                   "src": "1801:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4281,7 +4281,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 808,
+                    "id": 967,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1801:7:4",
@@ -4297,15 +4297,15 @@
               "src": "1778:40:4"
             },
             "returnParameters": {
-              "id": 813,
+              "id": 972,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 812,
+                  "id": 971,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 814,
+                  "scope": 973,
                   "src": "1839:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4314,7 +4314,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 811,
+                    "id": 970,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1839:7:4",
@@ -4329,7 +4329,7 @@
               ],
               "src": "1838:9:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1758:90:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -4338,22 +4338,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 823,
+            "id": 982,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "get_asset_source_and_asset_id",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 817,
+              "id": 976,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 816,
+                  "id": 975,
                   "name": "vega_id",
                   "nodeType": "VariableDeclaration",
-                  "scope": 823,
+                  "scope": 982,
                   "src": "1893:15:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4362,7 +4362,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 815,
+                    "id": 974,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1893:7:4",
@@ -4378,15 +4378,15 @@
               "src": "1892:17:4"
             },
             "returnParameters": {
-              "id": 822,
+              "id": 981,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 819,
+                  "id": 978,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 823,
+                  "scope": 982,
                   "src": "1930:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4395,7 +4395,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 818,
+                    "id": 977,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1930:7:4",
@@ -4410,10 +4410,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 821,
+                  "id": 980,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 823,
+                  "scope": 982,
                   "src": "1939:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4422,7 +4422,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 820,
+                    "id": 979,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1939:7:4",
@@ -4437,14 +4437,14 @@
               ],
               "src": "1929:18:4"
             },
-            "scope": 824,
+            "scope": 983,
             "src": "1854:94:4",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 825,
+        "scope": 984,
         "src": "29:1924:4"
       }
     ],
@@ -4456,7 +4456,8 @@
   },
   "networks": {},
   "schemaVersion": "3.0.21",
-  "updatedAt": "2020-11-20T04:52:18.598Z",
+  "updatedAt": "2020-12-01T01:03:44.691Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },
