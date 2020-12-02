@@ -117,9 +117,6 @@ async function run_deposit() {
             case "0x0f4c414fe20C998023A14207FA6E1176D4D4F4fb":
                 this_bot.settlementEthereumContractAddress = token_addresses.teuro_contract;
                 break;
-            case "0xBab9201f25642e9917C3CDFb0d491A5ea13Df8A0":
-                this_bot.settlementEthereumContractAddress = token_addresses.tvote_contract;
-                break;
             default:
                 break;
         }
