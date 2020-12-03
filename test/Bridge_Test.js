@@ -153,10 +153,10 @@ contract("Vega_Bridge_ERC20",  (accounts) => {
 
         console.log("sig bundle");
         console.log(concat_string);
+        console.log("Withdrawing...");
         //submit to withdrawal
         let withdrawal_recipt = await  vega_bridge_erc20_instance.withdraw_asset(token_address, 0, token_amount, expiry, withdraw_nonce, concat_string);
 
-        console.log("Withdrawing...");
         console.log("Withdraw complete.");
         console.log(withdrawal_recipt)
 
