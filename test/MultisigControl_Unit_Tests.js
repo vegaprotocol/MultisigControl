@@ -1,5 +1,6 @@
 const MultisigControl = artifacts.require("MultisigControl");
 
+
 var abi = require('ethereumjs-abi');
 var crypto = require("crypto");
 var ethUtil = require('ethereumjs-util');
@@ -140,6 +141,7 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
     });
 
     it("fail to verify_signatures - reused nonce", async () => {
+        //NOTE: nonce tracking is a feature of verify_signatures and thus rejecting a reused nonce can be assumed working for any function that properly
         let multisigControl_instance = await MultisigControl.deployed();
 
         //check that only private_keys[0] is the signer
@@ -188,14 +190,7 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
         try{
             await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, {from: accounts[0]})
             assert.equal(true, false, "nonce reuse worked, which shouldn't")
-        } catch (e) {
-
-        }
-
-
-
-
-
+        } catch (e) {}
     });
 
     it("verify_signatures - happy path 2 signers", async () => {
@@ -298,21 +293,92 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
     });
 });
 
-
 //function set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures) public{
 contract("MultisigControl -- Function: set_threshold",  (accounts) => {
     console.log();
     console.log("set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures)")
-    it("set threshold - happy path", async () => {
+    it("set threshold - happy path, too few sigs", async () => {
         // set 2 signers
+        let multisigControl_instance = await MultisigControl.deployed();
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            1,
+            "signer count should be 1, is: " + signer_count
+        );
+
+        await multisigControl_instance.add_signer_admin(accounts[1]);
+        signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            2,
+            "signer count should be 2, is: " + signer_count
+        );
+
         // get threshold, should be 500 (50%)
-        // sign with 1, should work
-        // set threshold to 1000 (100%)
+        let threshold = await multisigControl_instance.get_current_threshold();
+        assert.equal(
+            threshold,
+            500,
+            "threshold should be 500, is: " + threshold
+        );
+
         // sign with 1, should fail
-        // sign with 2, should work
+        let nonce_300 = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_300 = get_message_to_sign(
+            ["uint16"],
+            [300],
+            nonce_300,
+            "set_threshold",
+            accounts[0]);
+        let encoded_hash_300 = ethUtil.keccak256(encoded_message_300);
+
+        let signature_0_300 = ethUtil.ecsign(encoded_hash_300, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_300 = to_signature_string(signature_0_300);
+
+        let signature_1_300 = ethUtil.ecsign(encoded_hash_300, private_keys[accounts[1].toLowerCase()]);
+        let sig_string_1_300 = to_signature_string(signature_1_300);
+
+        let sig_bundle_300 = sig_string_0_300 + sig_string_1_300.substr(2);
+
+        //fail to sign with 1 sig
+        try {
+            await multisigControl_instance.set_threshold(300, nonce_300, sig_string_0_300);
+            assert.equal(true, false, "set threshold worked, shouldn't have")
+        }catch (e) {}
+
+        // set threshold to 300 (30%) with 2 signers
+        await multisigControl_instance.set_threshold(300, nonce_300, sig_bundle_300);
+
+        threshold = await multisigControl_instance.get_current_threshold();
+        assert.equal(
+            threshold,
+            300,
+            "threshold should be 300, is: " + threshold
+        );
+
+        // set threshold to 500 (50%) with 1 signer
+        let nonce_500 = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_500 = get_message_to_sign(
+            ["uint16"],
+            [500],
+            nonce_500,
+            "set_threshold",
+            accounts[0]);
+        let encoded_hash_500 = ethUtil.keccak256(encoded_message_500);
+
+        let signature_0_500 = ethUtil.ecsign(encoded_hash_500, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_500 = to_signature_string(signature_0_500);
+
+        await multisigControl_instance.set_threshold(500, nonce_500, sig_string_0_500);
+
+        threshold = await multisigControl_instance.get_current_threshold();
+        assert.equal(
+            threshold,
+            500,
+            "threshold should be 500, is: " + threshold
+        );
     });
-    it("fail to set threshold - bad signatures", async () => {});
-    it("fail to set threshold - too few signatures", async () => {});
 });
 
 //function add_signer(address new_signer, uint nonce, bytes memory signatures) public {

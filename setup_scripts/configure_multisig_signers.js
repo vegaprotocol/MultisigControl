@@ -102,7 +102,7 @@ async function configure_signatures() {
             gasPrice:"150000000000"
         });
     }
-    
+
     console.log("done");
 }
 
