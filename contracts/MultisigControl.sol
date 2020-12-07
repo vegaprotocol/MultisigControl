@@ -65,7 +65,6 @@ contract MultisigControl is Ownable, Killable {
     function set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures) public{
         bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
-        //todo: add sanity check
         threshold = new_threshold;
         emit ThresholdSet(new_threshold, nonce);
     }
@@ -75,7 +74,6 @@ contract MultisigControl is Ownable, Killable {
         bytes memory message = abi.encode(new_signer, nonce, "add_signer");
         require(!signers[new_signer], "signer already exists");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
-        //todo: add sanity check
         signers[new_signer] = true;
         signer_count++;
         emit SignerAdded(new_signer, nonce);
@@ -86,7 +84,6 @@ contract MultisigControl is Ownable, Killable {
         bytes memory message = abi.encode(old_signer, nonce, "remove_signer");
         require(signers[old_signer], "signer doesn't exist");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
-        //todo: add sanity check
         signers[old_signer] = false;
         signer_count--;
         emit SignerRemoved(old_signer, nonce);

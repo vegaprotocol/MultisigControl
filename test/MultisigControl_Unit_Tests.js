@@ -607,26 +607,229 @@ contract("MultisigControl -- Function: is_nonce_used",  async (accounts) => {
 
 
 //function get_valid_signer_count() public view returns(uint8){
-contract("MultisigControl -- Function: get_valid_signer_count",  (accounts) => {
-    console.log();
-    console.log("get_valid_signer_count()");
-    it("signer count is valid after add signer", async () => {});
-    it("signer count is valid after remove signer", async () => {});
+contract("MultisigControl -- Function: get_valid_signer_count",  async (accounts) => {
+
+    it("signer count is valid after add signer", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        //console.log();
+        //console.log("get_valid_signer_count()");
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            1,
+            "signer count should be 1, is: " + signer_count //contract is initialized with msg.sender as the only signer, so the count should be 1
+        );
+
+        let nonce_1_signer = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_1_signer = get_message_to_sign(
+            ["address"],
+            [accounts[1]],
+            nonce_1_signer,
+            "add_signer",
+            accounts[0]);
+        let encoded_hash_1_signer = ethUtil.keccak256(encoded_message_1_signer);
+
+        let signature_0_1_signer = ethUtil.ecsign(encoded_hash_1_signer, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_1_signer = to_signature_string(signature_0_1_signer);
+
+        await multisigControl_instance.add_signer(accounts[1], nonce_1_signer, sig_string_0_1_signer);
+
+        signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            2,
+            "signer count should be 2, is: " + signer_count
+        );
+
+
+
+    });
+    it("signer count is valid after remove signer", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            2,
+            "signer count should be 2, is: " + signer_count //we saw that count was 2 in last test, so the count should be 2
+        );
+
+        let threshold = await multisigControl_instance.get_current_threshold();
+        assert.equal(
+            threshold,
+            500,
+            "threshold should be 500, is: " + threshold
+        );
+
+        //new signer can sign
+        let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_2_signers = get_message_to_sign(
+            ["address"],
+            [accounts[1]],
+            nonce_2_signers,
+            "remove_signer",
+            accounts[0]);
+        let encoded_hash_2_signers = ethUtil.keccak256(encoded_message_2_signers);
+
+        let signature_0_2_signers = ethUtil.ecsign(encoded_hash_2_signers, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_2_signers = to_signature_string(signature_0_2_signers);
+
+        let signature_1_2_signers = ethUtil.ecsign(encoded_hash_2_signers, private_keys[accounts[1].toLowerCase()]);
+        let sig_string_1_2_signers = to_signature_string(signature_1_2_signers);
+
+        let sig_bundle = sig_string_0_2_signers + sig_string_1_2_signers.substr(2);
+        let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
+        assert.equal(
+            is_signer_1,
+            true,
+            "account 1 is not a signer and should be"
+        );
+
+        await multisigControl_instance.remove_signer(accounts[1], nonce_2_signers, sig_bundle);
+
+        is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
+        assert.equal(
+            is_signer_1,
+            false,
+            "account 1 is a signer and should not be"
+        );
+
+        signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            1,
+            "signer count should be 1, is: " + signer_count //we saw that count was 2 in last test, so the count should be 2
+        );
+
+
+    });
 });
 
 //function get_current_threshold() public view returns(uint16) {
 contract("MultisigControl -- Function: get_current_threshold",  (accounts) => {
     console.log();
     console.log("get_current_threshold()");
-    it("get_current_threshold is correct after setting", async () => {});
+    it("get_current_threshold is correct after setting", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+
+        let threshold = await multisigControl_instance.get_current_threshold();
+        assert.equal(
+            threshold,
+            500,// threshold is initialized to 500
+            "threshold should be 300, is: " + threshold
+        );
+
+        // set threshold to 300 (30%) with 1 signer
+        let nonce_300 = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_300 = get_message_to_sign(
+            ["uint16"],
+            [300],
+            nonce_300,
+            "set_threshold",
+            accounts[0]);
+        let encoded_hash_300 = ethUtil.keccak256(encoded_message_300);
+
+        let signature_0_300 = ethUtil.ecsign(encoded_hash_300, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_300 = to_signature_string(signature_0_300);
+
+        await multisigControl_instance.set_threshold(300, nonce_300, sig_string_0_300);
+
+        threshold = await multisigControl_instance.get_current_threshold();
+        assert.equal(
+            threshold,
+            300,
+            "threshold should be 300, is: " + threshold
+        );
+
+
+    });
 });
 
 //function is_valid_signer(address signer_address) public view returns(bool){
 contract("MultisigControl -- Function: is_valid_signer",  (accounts) => {
     console.log();
     console.log("is_valid_signer(address signer_address)");
-    it("valid signer is valid after setting", async () => {});
-    it("previously valid signer is invalid after setting as invalid", async () => {});
-    it("unknown signers are invalid", async () => {});
+    it("previously unknown signer is valid after setting", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        //console.log();
+        //console.log("get_valid_signer_count()");
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            1,
+            "signer count should be 1, is: " + signer_count //contract is initialized with msg.sender as the only signer, so the count should be 1
+        );
+
+        let nonce_1_signer = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_1_signer = get_message_to_sign(
+            ["address"],
+            [accounts[4]],
+            nonce_1_signer,
+            "add_signer",
+            accounts[0]);
+        let encoded_hash_1_signer = ethUtil.keccak256(encoded_message_1_signer);
+
+        let signature_0_1_signer = ethUtil.ecsign(encoded_hash_1_signer, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_1_signer = to_signature_string(signature_0_1_signer);
+
+
+        let is_signer_4 = await multisigControl_instance.is_valid_signer(accounts[4]);
+        assert.equal(
+            is_signer_4,
+            false,
+            "account 4 is a signer and should not be"
+        );
+
+        await multisigControl_instance.add_signer(accounts[4], nonce_1_signer, sig_string_0_1_signer);
+
+        is_signer_4 = await multisigControl_instance.is_valid_signer(accounts[4]);
+        assert.equal(
+            is_signer_4,
+            true,
+            "account 4 is not a signer and should be"
+        );
+
+    });
+    it("previously valid signer is invalid after setting as invalid", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_2_signers = get_message_to_sign(
+            ["address"],
+            [accounts[4]],
+            nonce_2_signers,
+            "remove_signer",
+            accounts[0]);
+        let encoded_hash_2_signers = ethUtil.keccak256(encoded_message_2_signers);
+
+        let signature_0_2_signers = ethUtil.ecsign(encoded_hash_2_signers, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_2_signers = to_signature_string(signature_0_2_signers);
+
+        let signature_1_2_signers = ethUtil.ecsign(encoded_hash_2_signers, private_keys[accounts[4].toLowerCase()]);
+        let sig_string_1_2_signers = to_signature_string(signature_1_2_signers);
+
+        let sig_bundle = sig_string_0_2_signers + sig_string_1_2_signers.substr(2);
+        let is_signer_4 = await multisigControl_instance.is_valid_signer(accounts[4]);
+        assert.equal(
+            is_signer_4,
+            true,
+            "account 4 is not a signer and should be"
+        );
+
+        await multisigControl_instance.remove_signer(accounts[4], nonce_2_signers, sig_bundle);
+        is_signer_4 = await multisigControl_instance.is_valid_signer(accounts[4]);
+        assert.equal(
+            is_signer_4,
+            false,
+            "account 4 is a signer and should not be"
+        );
+    });
+    it("unknown signers are invalid", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let is_signer_5 = await multisigControl_instance.is_valid_signer(accounts[5]);
+        assert.equal(
+            is_signer_5,
+            false,
+            "account 5 is a signer and should not be"
+        );
+    });
 
 });
