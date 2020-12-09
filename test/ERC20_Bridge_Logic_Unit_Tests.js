@@ -44,23 +44,26 @@ function to_signature_string(sig){
 ////FUNCTIONS
 contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
     //function list_asset(address asset_source, uint256 asset_id, bytes32 vega_id, uint256 nonce, bytes memory signatures) public;
-    it("list_asset", async () => {});
+    it("asset that was not listed is listed after running list_asset", async () => {});
+    it("list_asset fails to list an already listed asset", async () => {});
+    //NOTE signature tests are covered in MultisigControl
 });
 contract("ERC20_Bridge_Logic Function: remove_asset",  (accounts) => {
     //function remove_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
-    it("remove_asset", async () => {});
+    it("listed asset is not listed after running remove_asset and no longer able to deposited", async () => {});
+
 });
 contract("ERC20_Bridge_Logic Function: set_deposit_minimum",  (accounts) => {
     //function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
-    it("set_deposit_minimum", async () => {});
-});
-contract("ERC20_Bridge_Logic Function: withdraw_asset",  (accounts) => {
-    //function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
-    it("withdraw_asset", async () => {});
+    it("deposit minimum changes and is enforced by running set_deposit_minimum", async () => {});
 });
 contract("ERC20_Bridge_Logic Function: deposit_asset",  (accounts) => {
     //function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
     it("deposit_asset", async () => {});
+});
+contract("ERC20_Bridge_Logic Function: withdraw_asset",  (accounts) => {
+    //function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
+    it("withdraw_asset", async () => {});
 });
 
 
