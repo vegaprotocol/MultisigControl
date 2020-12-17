@@ -1,7 +1,11 @@
+const path = require('path')
+
 const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
 const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
-
+console.log(__dirname)
+console.log()
+const Base_Faucet_Token = artifacts.require('Base_Faucet_Token');
 const fs = require('fs');
 
 let copy = require('recursive-copy');
@@ -39,10 +43,15 @@ root_path += net + "/";
 
 
 
+
+let test_token_address;
 ///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
 
-
+    if(net === "local") {
+      await deployer.deploy(Base_Faucet_Token, "Test", "TEST", 5, "0","10000000000");
+      test_token_address = Base_Faucet_Token.address;
+    }
     await deployer.deploy(MultisigControl);
     await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
     let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
@@ -61,7 +70,8 @@ module.exports = async function(deployer) {
         multisig_control: MultisigControl.address,
         asset_pool: ERC20_Asset_Pool.address,
         logic_1:logic_1.address,
-        logic_2:logic_2.address
+        logic_2:logic_2.address,
+        test_token_address:test_token_address
     };
 
 
