@@ -8,7 +8,8 @@ import "./Ownable.sol";
 import "./Killable.sol";
 
 contract ERC20_Asset_Pool is Ownable, Killable  /*TODO Remove Owner and Killable before Mainnet*/{
-
+    event Multisig_Control_Set(address indexed new_address);
+    event Bridge_Address_Set(address indexed new_address);
     address public multisig_control_address;
     address public erc20_bridge_address;
 
@@ -25,12 +26,14 @@ contract ERC20_Asset_Pool is Ownable, Killable  /*TODO Remove Owner and Killable
         bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
         multisig_control_address = new_address;
+        emit Multisig_Control_Set(new_address);
     }
 
     function set_bridge_address(address new_address, uint256 nonce, bytes memory signatures) public {
         bytes memory message = abi.encode(new_address, nonce, 'set_bridge_address');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce));
         erc20_bridge_address = new_address;
+        emit Bridge_Address_Set(new_address);
     }
 
     //NOTE: To deposit, simply send to this contract, all funds will be part of the pool

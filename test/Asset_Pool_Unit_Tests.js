@@ -40,27 +40,40 @@ function to_signature_string(sig){
 }
 
 ////FUNCTIONS
-contract("ERC20_Bridge_Logic Function: set_multisig_control",  (accounts) => {
+contract("Asset_Pool Function: set_multisig_control",  (accounts) => {
     //function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
-    it("set_multisig_control", async () => {});
+    it("should change multisig control address", async () => {
+      //set new multisig_control_address
+      //multisig_control_address should match new address
+    });
+    //NOTE signature tests are in MultisigControl tests
 });
 
-contract("ERC20_Bridge_Logic Function: set_bridge_address",  (accounts) => {
+contract("Asset_Pool Function: set_bridge_address",  (accounts) => {
     //function set_bridge_address(address new_address, uint256 nonce, bytes memory signatures) public {
-    it("set_bridge_address", async () => {});
+    it("should change the bridge address to a new address, should now ignore old address", async () => {
+      //list asset
+      //deposit
+      //try withdraw from erc20_bridge_address, should work
+      //set new erc20_bridge_address
+      //try withdraw from new erc20_bridge_address, should work
+      //try withdraw from old erc20_bridge_address, should fail
+    });
 });
-contract("ERC20_Bridge_Logic Function: withdraw",  (accounts) => {
+contract("Asset_Pool Function: withdraw",  (accounts) => {
     //function withdraw(address token_address, address target, uint256 amount) public returns(bool){
-    it("withdraw", async () => {});
+    it("should allow bridge to withdraw target asset", async () => {
+      //list asset
+      //deposit
+      //create withdraw order
+      //run withdraw function, should work
+    });
+    it("withdraw function should fail to run from any address but the current bridge", async () => {
+      //list asset
+      //deposit asset
+      //run withdraw from accounts[0], should fail
+    });
 });
 
 
-////VIEWS
-contract("ERC20_Bridge_Logic Function: multisig_control_address",  (accounts) => {
-    //address public multisig_control_address;
-    it("multisig_control_address", async () => {});
-});
-contract("ERC20_Bridge_Logic Function: erc20_bridge_address",  (accounts) => {
-    //address public erc20_bridge_address;
-    it("erc20_bridge_address", async () => {});
-});
+//NOTE views are public getters, don't need to_signature_string
