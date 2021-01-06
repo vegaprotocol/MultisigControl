@@ -12,7 +12,7 @@ contract IERC20_Bridge_Logic {
 
     function list_asset(address asset_source, uint256 asset_id, bytes32 vega_id, uint256 nonce, bytes memory signatures) public;
     function remove_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
-    function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
+    function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public;
     function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
     function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
 
