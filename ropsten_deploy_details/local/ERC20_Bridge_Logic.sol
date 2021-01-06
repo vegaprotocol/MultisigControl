@@ -71,7 +71,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic, Ownable, Killable /*TODO Rem
         listed_tokens[asset_source] = false;
         emit Asset_Removed(asset_source, 0, nonce);
     }
-    function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public{
+    function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public{
         require(asset_id == 0, "only root asset (0) allowed for ERC20");
         require(listed_tokens[asset_source], "asset not listed");
 

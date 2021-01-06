@@ -48,10 +48,12 @@ let new_asset_id = crypto.randomBytes(32);
 let bridge_addresses = require(root_path + "bridge_addresses.json");
 
 
-async function deposit_asset(bridge_logic_instance, test_token_instance, account){
+async function deposit_asset(bridge_logic_instance, test_token_instance, account, token_balance){
   let wallet_pubkey = crypto.randomBytes(32);
   await test_token_instance.faucet();
-  let token_balance = await test_token_instance.balanceOf(account);
+  if(token_balance === undefined || token_balance === null){
+    token_balance = await test_token_instance.balanceOf(account);
+  }
   await test_token_instance.approve(ERC20_Bridge_Logic.address, token_balance);
   await bridge_logic_instance.deposit_asset(bridge_addresses.test_token_address, 0, token_balance, wallet_pubkey);
   return token_balance;
@@ -210,29 +212,91 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum",   (accounts) => {
 
     it("deposit minimum changes and is enforced by running set_deposit_minimum", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      //Get minimum deposit
-      //deposit less that min should fail
-      //deposit more that min should work
-      //Set minimum deposit
-      //Get minimum deposit, should be updated
-      //deposit less that min should fail
-      //deposit more that min should work
-    });
+      let test_token_instance = await Base_Faucet_Token.deployed();
 
+      //Get minimum deposit
+      let deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(test_token_instance.address, 0)).toString();
+      assert.equal(deposit_minimum,"0", "deposit min should be zero, isn't");
+
+      try {
+        await list_asset(bridge_logic_instance, accounts[0]);
+      } catch(e){/*ignore if already listed*/}
+
+      //new asset ID is listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address, 0),
+          true,
+          "token isn't listed, should be"
+      );
+
+      //Set minimum deposit
+      //NOTE signature tests are in MultisigControl
+      let nonce = new ethUtil.BN(crypto.randomBytes(32));
+      let encoded_message = get_message_to_sign(
+          ["address", "uint256", "uint256"],
+          [test_token_instance.address, 0, "500"],
+          nonce,
+          "set_deposit_minimum",
+          ERC20_Bridge_Logic.address);
+      let encoded_hash = ethUtil.keccak256(encoded_message);
+
+      let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+      let sig_string = to_signature_string(signature);
+
+      await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, 0, "500", nonce, sig_string);
+
+      //Get minimum deposit, should be updated
+      deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(test_token_instance.address, 0)).toString();
+      assert.equal(deposit_minimum, "500", "deposit min should be 500, isn't");
+
+      //deposit less that min should fail
+      try{
+        await deposit_asset(bridge_logic_instance, test_token_instance, "499");
+        assert.equal(
+            true,
+            false,
+            "token deposit worked, shouldn't have"
+        );
+      } catch(e){}
+
+      //deposit more that min should work
+      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "501");
+    });
 });
+
 contract("ERC20_Bridge_Logic Function: deposit_asset",   (accounts) => {
     //function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
 
     it("deposit_asset should fail due to asset not being listed", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+      let test_token_instance = await Base_Faucet_Token.deployed();
+
       //try to deposit asset, fails
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address, 0),
+          false,
+          "token is listed, shouldn't be"
+      );
+
+      try{
+        await deposit_asset(bridge_logic_instance, test_token_instance, "1");
+        assert.equal(
+            true,
+            false,
+            "token deposit worked, shouldn't have"
+        );
+      } catch(e){}
+
     });
     it("happy path - should allow listed asset to be deposited", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      let new_asset_id = new ethUtil.BN(crypto.randomBytes(32));
+      let test_token_instance = await Base_Faucet_Token.deployed();
+
       //list asset
-      //approve allowance
+      list_asset(bridge_logic_instance, accounts[0]);
+
       //deposit asset
+      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
     });
 });
 contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
