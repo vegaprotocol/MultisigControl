@@ -4,6 +4,9 @@ This repository contains the Ethereum side of the Ethereum bridge to Vega.
 ## Basic structure
 The bridge is comprised of a smart contract per asset class, and a generic asset pool. For example, when a user wants to deposit collateral in to a Vega network, they deposit an approved ERC20 token to the ERC20 bridge contract for the appropriate network. This is held in the asset pool contract, and the user's collateral is reflected in the Vega network: 
 ![Deposit process](./docs/diagram-deposit.png)
+
+For a more specific walkthrough, and find the ABIs & addresses for the Vega testnet, see [Public_Test_Bridge_Tools](https://github.com/vegaprotocol/Public_Test_Bridge_Tools).
+
 ### Withdrawal
 Withdrawal is a slightly more complex process, as it requires gathering a signed multisig bundle from the validators on that Vega network, which the user then submits to the ERC20 bridge. This extra step is required so that the network can verify that the collateral exists in the network and is not allocated to the user's margin account.
 
@@ -54,3 +57,9 @@ All addresses, ABIs, and smart contract files will be available in `./ropsten_de
 ## Run in Docker
 
 See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/doc/dockerisedvega.md).
+
+# See Also
+
+* https://github.com/vegaprotocol/Public_Test_Bridge_Tools
+* https://vega.xyz
+* https://docs.testnet.vega.xyz
