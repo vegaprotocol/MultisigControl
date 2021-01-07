@@ -1,5 +1,16 @@
 # MultisigControl
+This repository contains the Ethereum side of the Ethereum bridge to Vega.
 
+## Basic structure
+
+
+## Upgrading bridge contract for a running Vega network
+
+As the asset pool is a separate contract, it's possible to update the ERC20 bridge contract for a running network without impacting the collateral held for users of the network. The process is outlined below, and requires a user to propose a governance action on Vega, before submitting a multisig bundle to the asset pool contract.
+
+![Upgrade process](./docs/diagram-upgrade-process.png)
+
+See below for instructions on how to complete step 1.
 
 ## Local Ganache Deployment
 Terminal 1:
