@@ -2,13 +2,18 @@
 This repository contains the Ethereum side of the Ethereum bridge to Vega.
 
 ## Basic structure
+The bridge is comprised of a smart contract per asset class, and a generic asset pool. For example, when a user wants to deposit collateral in to a Vega network, they deposit an approved ERC20 token to the ERC20 bridge contract for the appropriate network. This is held in the asset pool contract, and the user's collateral is reflected in the Vega network: 
+![Deposit process](./docs/diagram-deposit.png)
+### Withdrawal
+Withdrawal is a slightly more complex process, as it requires gathering a signed multisig bundle from the validators on that Vega network, which the user then submits to the ERC20 bridge. This extra step is required so that the network can verify that the collateral exists in the network and is not allocated to the user's margin account.
 
+![Withdrawal process](./docs/diagram-withdraw.png)
 
 ## Upgrading bridge contract for a running Vega network
 
 As the asset pool is a separate contract, it's possible to update the ERC20 bridge contract for a running network without impacting the collateral held for users of the network. The process is outlined below, and requires a user to propose a governance action on Vega, before submitting a multisig bundle to the asset pool contract.
 
-![Upgrade process](./docs/diagram-upgrade-process.png)
+![Upgrade process](./docs/diagram-upgrade.png)
 
 See below for instructions on how to complete step 1.
 
