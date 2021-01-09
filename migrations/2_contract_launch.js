@@ -3,9 +3,9 @@ const path = require('path')
 const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
 const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
-console.log(__dirname)
-console.log()
-const Base_Faucet_Token = artifacts.require('Base_Faucet_Token');
+console.log(__dirname);
+console.log();
+const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
 const fs = require('fs');
 
 let copy = require('recursive-copy');
@@ -62,8 +62,6 @@ module.exports = async function(deployer) {
 
     let erc20_asset_pool_instance = await ERC20_Asset_Pool.deployed();
     let erc20_bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-
-    await erc20_asset_pool_instance.set_bridge_address_admin(logic_1.address);
 
     //save logic addresses and ABIs
     let bridge_addresses = {
