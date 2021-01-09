@@ -1,5 +1,4 @@
-pragma solidity ^0.5;
-
+pragma solidity 0.7.6;
 
 /**
  * @title SafeMath
