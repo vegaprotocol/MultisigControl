@@ -1,4 +1,5 @@
-pragma solidity ^0.5.0;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity 0.7.6;
 
 import "./ERC20Detailed.sol";
 import "./Ownable.sol";
@@ -10,8 +11,8 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
 
     using SafeMath for uint256;
     uint256 _faucet_amount;
-    constructor (string memory name, string memory symbol, uint8 decimals, uint256 total_supply_whole_tokens, uint256 faucet_amount) ERC20Detailed(name, symbol, decimals) public {
-        uint256 to_mint = total_supply_whole_tokens * (10**uint256(decimals));
+    constructor (string memory _name, string memory _symbol, uint8 _decimals, uint256 total_supply_whole_tokens, uint256 faucet_amount) ERC20Detailed(_name, _symbol, _decimals) {
+        uint256 to_mint = total_supply_whole_tokens * (10**uint256(_decimals));
         _faucet_amount = faucet_amount;
         _totalSupply = to_mint;
         _balances[address(this)] = to_mint;
@@ -35,7 +36,7 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
         _balances[address(this)] = _balances[address(this)].add(amount);
         emit Transfer(address(0), address(this), amount);
 
-        IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), 0, amount, vega_public_key);
+        IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), amount, vega_public_key);
     }
 
     function admin_deposit_bulk(uint256 amount, address bridge_address,  bytes32[] memory vega_public_keys) public onlyOwner {
@@ -45,7 +46,7 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
         _balances[address(this)] = _balances[address(this)].add(final_amt);
         emit Transfer(address(0), address(this), final_amt);
         for(uint8 key_idx = 0; key_idx < vega_public_keys.length; key_idx++){
-            IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), 0, amount, vega_public_keys[key_idx]);
+            IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), amount, vega_public_keys[key_idx]);
         }
 
     }

@@ -64,9 +64,31 @@ let private_key = Buffer.from(
     'adef89153e4bd6b43876045efdd6818cec359340683edaec5e8588e635e8428b',
     'hex',
 ) ;
+
+const eth_wallet = Wallet.fromPrivateKey(private_key);
+let wallet_address = eth_wallet.getAddressString();
+
+async function list_asset(bridge_logic_instance, asset_address, new_asset_id){
+
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  //create signature
+  let encoded_message = get_message_to_sign(
+      ["address", "bytes32"],
+      [asset_address, new_asset_id],
+      nonce,
+      "list_asset",
+      bridge_logic_instance.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_key);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  await bridge_logic_instance.list_asset(asset_address, new_asset_id, nonce, sig_string).send({from:wallet_address, gasPrice:"150000000000"});
+}
+
+
 async function configure_assets() {
-    const eth_wallet = Wallet.fromPrivateKey(private_key);
-    let wallet_address = eth_wallet.getAddressString();
 
     let tdai_vega_id = "0x6d9d35f657589e40ddfb448b7ad4a7463b66efb307527fedd2aa7df1bbd5ea61";
     let tbtc_vega_id = "0x5cfa87844724df6069b94e4c8a6f03af21907d7bc251593d08e4251043ee9f7c";
@@ -81,23 +103,28 @@ async function configure_assets() {
         let bridge_instance = new web3_instance.eth.Contract(bridge_abi, bridge_addresses[bridge_idx]);
         try {
             console.log("listing tdai on bridge:"+bridge_addresses[bridge_idx]+"...");
-            await bridge_instance.methods.list_asset_admin(token_addresses.tdai_contract, 0, tdai_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            //await bridge_instance.methods.list_asset_admin(token_addresses.tdai_contract, 0, tdai_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            await list_asset(bridge_instance, token_addresses.tdai_contract, tdai_vega_id);
         } catch (e) { }
         try {
             console.log("listing tbtc on bridge:"+bridge_addresses[bridge_idx]+"...");
-            await bridge_instance.methods.list_asset_admin(token_addresses.tbtc_contract, 0, tbtc_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            //await bridge_instance.methods.list_asset_admin(token_addresses.tbtc_contract, 0, tbtc_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            await list_asset(bridge_instance, token_addresses.tbtc_contract, tbtc_vega_id);
         } catch (e) { }
         try {
             console.log("listing tusdc on bridge:"+bridge_addresses[bridge_idx]+"...");
-            await bridge_instance.methods.list_asset_admin(token_addresses.tusdc_contract, 0, tusdc_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            //await bridge_instance.methods.list_asset_admin(token_addresses.tusdc_contract, 0, tusdc_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            await list_asset(bridge_instance, token_addresses.tusdc_contract, tusdc_vega_id);
         } catch (e) { }
         try {
             console.log("listing teuro on bridge:"+bridge_addresses[bridge_idx]+"...");
-            await bridge_instance.methods.list_asset_admin(token_addresses.teuro_contract, 0, teuro_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            //await bridge_instance.methods.list_asset_admin(token_addresses.teuro_contract, 0, teuro_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            await list_asset(bridge_instance, token_addresses.teuro_contract, teuro_vega_id);
         } catch (e) { }
         try {
             console.log("listing tvote on bridge:"+bridge_addresses[bridge_idx]+"...");
-            await bridge_instance.methods.list_asset_admin(token_addresses.tvote_contract, 0, tvote_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            //await bridge_instance.methods.list_asset_admin(token_addresses.tvote_contract, 0, tvote_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+            await list_asset(bridge_instance, token_addresses.tvote_contract, tvote_vega_id);
         } catch (e) { }
     }
 
