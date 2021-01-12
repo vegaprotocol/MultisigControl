@@ -10,7 +10,7 @@ contract ERC20_Asset_Pool {
     address public multisig_control_address;
     address public erc20_bridge_address;
 
-    constructor(address multisig_control) public{
+    constructor(address multisig_control) {
         multisig_control_address = multisig_control;
     }
     function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
