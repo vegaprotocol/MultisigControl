@@ -232,7 +232,6 @@ contract("ERC20_Bridge_Logic Function: remove_asset",   (accounts) => {
     it("listed asset is not listed after running remove_asset and no longer able to deposited", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
       let test_token_instance = await Base_Faucet_Token.deployed();
-      let new_asset_id = new ethUtil.BN(crypto.randomBytes(32));
 
       try {
         await list_asset(bridge_logic_instance, accounts[0]);
@@ -362,7 +361,6 @@ contract("ERC20_Bridge_Logic Function: deposit_asset",   (accounts) => {
 contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
     //function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
 
-    let new_asset_id = new ethUtil.BN(crypto.randomBytes(32));
     it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
       let test_token_instance = await Base_Faucet_Token.deployed();
@@ -508,7 +506,6 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
 contract("ERC20_Bridge_Logic Function: is_asset_listed",   (accounts) => {
     //function is_asset_listed(address asset_source, uint256 asset_id) public view returns(bool);
 
-    let new_asset_id = new ethUtil.BN(crypto.randomBytes(32));
     it("asset is listed after 'list_asset'", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
       let test_token_instance = await Base_Faucet_Token.deployed();
@@ -605,37 +602,91 @@ contract("ERC20_Bridge_Logic Function: get_multisig_control_address",   (account
       assert.equal(multisig_control_address, MultisigControl.address, "Multisig control shows the wrong address");
     });
 });
-contract("ERC20_Bridge_Logic Function: get_vega_id",   (accounts) => {
-    //function get_vega_id(address asset_source, uint256 asset_id) public view returns(bytes32);
+contract("ERC20_Bridge_Logic Function: get_vega_id",  (accounts) => {
+    //function get_vega_id(address asset_source) public view returns(bytes32);
+    it("get_vega_id returns proper vega id for newly listed assets", async () => {
+      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+      let test_token_instance = await Base_Faucet_Token.deployed();
+      //new asset ID is not listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+          false,
+          "token is listed, shouldn't be"
+      );
 
-    let new_asset_id = new ethUtil.BN(crypto.randomBytes(32));
-    it("get_vega_id returns proper id for newly listed assets", async () => {
-      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      //get_vega_id should fail
-      //list asset
-      //get_vega_id, should show saved id
+      //non listed asset should fail vega_id
+      let vega_id = await bridge_logic_instance.get_vega_id(test_token_instance.address);
+
+      assert.equal(vega_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
+      await list_asset(bridge_logic_instance, accounts[0]);
+      //new asset ID is listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
+          true,
+          "token isn't listed, should be"
+      );
+      vega_id = await bridge_logic_instance.get_vega_id(test_token_instance.address);
+      assert.equal(vega_id, ("0x" + new_asset_id.toString("hex")), "listed asset returns incorrect address")
+
     });
-    it("get_vega_id fails to return id unknown or removed assets", async () => {
+
+    it("get_vega_id returns vega id 0x00... for unknown assets", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      //get_vega_id, should show saved id
-      //remove asset
-      //get_vega_id should fail
+
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(accounts[3]),
+          false,
+          "token is listed, shouldn't be"
+      );
+
+      //non listed asset should fail vega_id
+      let vega_id = await bridge_logic_instance.get_vega_id(accounts[3]);
+
+      assert.equal(vega_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
+
     });
 });
-contract("ERC20_Bridge_Logic Function: get_asset_source",  (accounts) => {
-    //function get_asset_source(bytes32 vega_id) public view returns(address, uint256);
 
-    let new_asset_id = new ethUtil.BN(crypto.randomBytes(32));
-    it("get_asset_source_and_asset_id returns proper values for newly listed asset", async () => {
+contract("ERC20_Bridge_Logic Function: get_asset_source",   (accounts) => {
+
+    it("get_asset_source returns proper values for newly listed asset", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      //get_asset_source_and_asset_id should fail
-      //list asset
-      //get_asset_source_and_asset_id, should show details
+      let test_token_instance = await Base_Faucet_Token.deployed();
+      //new asset ID is not listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+          false,
+          "token is listed, shouldn't be"
+      );
+
+      //non listed asset should fail get_asset_source
+      let asset_source = await bridge_logic_instance.get_asset_source("0x"+ new_asset_id.toString("hex"));
+      assert.equal(asset_source, "0x0000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
+      await list_asset(bridge_logic_instance, accounts[0]);
+      //new asset ID is listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
+          true,
+          "token isn't listed, should be"
+      );
+      asset_source = await bridge_logic_instance.get_asset_source("0x" + new_asset_id.toString("hex"));
+      assert.equal(asset_source, test_token_instance.address, "listed asset returns incorrect address")
     });
-    it("get_asset_source_and_asset_id fails to return for unknown or removed assets", async () => {
+
+    it("get_asset_source_and_asset_id fails to return for unknown assets", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      //get_asset_source_and_asset_id, should show details
-      //remove asset
-      //get_asset_source_and_asset_id should fail
+      let test_token_instance = await Base_Faucet_Token.deployed();
+      let bad_asset = crypto.randomBytes(32);
+      //new asset ID is not listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(accounts[0]),
+          false,
+          "token is listed, shouldn't be"
+      );
+
+      //non listed asset should fail get_asset_source
+      let asset_source = await bridge_logic_instance.get_asset_source("0x"+ bad_asset.toString("hex"));
+      assert.equal(asset_source, "0x0000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be");
+
     });
 });
