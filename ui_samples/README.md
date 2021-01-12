@@ -8,3 +8,11 @@
 * `npm install`
 * `node server.js`
 * navigate to `http://localhost:3000/ui_widgets.html`
+
+# To generate pbf js (Windows instructions):
+https://www.npmjs.com/package/grpc-web
+https://github.com/protocolbuffers/protobuf/releases/latest
+rename protoc-gen-grpc-web... to protoc-gen-grpc-web.exe (truncate rest of stuff)
+CMD (NOT BASH): protoc multisig_api.proto --js_out=import_style=commonjs:generated --grpc-web_out=import_style=commonjs,mode=grpcwebtext:generated
+
+
