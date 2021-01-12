@@ -24,13 +24,6 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     mapping(bytes32 => address) vega_ids_to_source;
     mapping(address => bytes32) asset_source_to_vega_id;
 
-    function get_vega_id(address asset_source) public override view returns(bytes32){
-        return asset_source_to_vega_id[asset_source];
-    }
-    function get_asset_source(bytes32 vega_id) public override view returns(address){
-        return vega_ids_to_source[vega_id];
-    }
-
     function list_asset(address asset_source, bytes32 vega_id, uint256 nonce, bytes memory signatures) public override {
         require(!listed_tokens[asset_source], "asset already listed");
         bytes memory message = abi.encode(asset_source, vega_id, nonce, 'list_asset');
@@ -57,7 +50,6 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
 
     }
     function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public  override{
-        require(listed_tokens[asset_source], "asset not listed");
         require(expiry > block.timestamp, "withdrawal has expired");
 
         bytes memory message = abi.encode(asset_source, amount, expiry, msg.sender,  nonce, 'withdraw_asset');
@@ -87,7 +79,12 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function get_multisig_control_address() public override view returns(address) {
         return multisig_control_address;
     }
-
+    function get_vega_id(address asset_source) public override view returns(bytes32){
+        return asset_source_to_vega_id[asset_source];
+    }
+    function get_asset_source(bytes32 vega_id) public override view returns(address){
+        return vega_ids_to_source[vega_id];
+    }
 
 
 }
