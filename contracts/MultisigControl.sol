@@ -86,6 +86,7 @@ contract MultisigControl is IMultisigControl {
             if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
+
             if(signers[recovered_address] && !has_signed[message_hash][recovered_address]){
                 has_signed[message_hash][recovered_address] = true;
                 sig_count++;
@@ -94,12 +95,11 @@ contract MultisigControl is IMultisigControl {
         used_nonces[nonce] = true;
         return ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
     }
-
     //Returns number of valid signers
     function get_valid_signer_count() public override view returns(uint8){
         return signer_count;
     }
-
+    event x(address addr);
     //Returns current threshold
     function get_current_threshold() public override view returns(uint16) {
         return threshold;
