@@ -15,7 +15,7 @@ abstract contract IERC20_Bridge_Logic {
     function remove_asset(address asset_source, uint256 nonce, bytes memory signatures) public virtual;
     function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public virtual;
     function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
-    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public virtual;
+    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, address target, uint256 nonce, bytes memory signatures) public virtual;
     function deposit_asset(address asset_source,uint256 amount, bytes32 vega_public_key) public virtual;
 
     // VIEWS /////////////////

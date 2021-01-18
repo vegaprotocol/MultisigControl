@@ -29,8 +29,6 @@ abstract contract IMultisigControl {
     // Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public virtual returns(bool);
 
-
-
     /**********************VIEWS*********************/
     //Returns number of valid signers
     function get_valid_signer_count() public virtual view returns(uint8);
