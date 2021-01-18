@@ -45,6 +45,21 @@ function recover_signer_address(sig, msgHash) {
     return ethUtil.bufferToHex(sender);
 }
 
+async function add_signer(multisigControl_instance, new_signer) {
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  let encoded_message = get_message_to_sign(
+      ["address"],
+      [new_signer],
+      nonce.toString(),
+      "add_signer",
+      "0xb89a165ea8b619c14312db316baaa80d2a98b493");
+    let encoded_hash = ethUtil.keccak256(encoded_message);
+    let signature = ethUtil.ecsign(encoded_hash, private_keys["0xb89a165ea8b619c14312db316baaa80d2a98b493"]);
+    let sig_string = to_signature_string(signature);
+
+    await multisigControl_instance.add_signer(new_signer, nonce, sig_string);
+}
+
 //function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
 contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
     console.log();
@@ -197,8 +212,8 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
 
         let multisigControl_instance = await MultisigControl.deployed();
 
-        //admin set accounts[1] as signer
-        await multisigControl_instance.add_signer_admin(accounts[1]);
+        await add_signer(multisigControl_instance, accounts[1]);
+
         //check that only private_keys[0] is the signer
         let is_signer_0 = await multisigControl_instance.is_valid_signer(accounts[0]);
         let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
@@ -250,9 +265,9 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
     it("fail to verify_signatures - too few signatures", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
-        //admin set accounts[1] as signer
+
         try{
-            await multisigControl_instance.add_signer_admin(accounts[1]);
+            await add_signer(multisigControl_instance, accounts[1]);
         } catch (e) {
             // the signer should have been added in a prior step, but just in case
         }
@@ -307,7 +322,7 @@ contract("MultisigControl -- Function: set_threshold",  (accounts) => {
             "signer count should be 1, is: " + signer_count
         );
 
-        await multisigControl_instance.add_signer_admin(accounts[1]);
+        await add_signer(multisigControl_instance, accounts[1]);
         signer_count = await multisigControl_instance.get_valid_signer_count();
         assert.equal(
             signer_count,
