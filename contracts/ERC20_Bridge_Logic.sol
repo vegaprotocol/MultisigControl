@@ -63,12 +63,12 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
         emit Asset_Deposit_Maximum_Set(asset_source, maximum_amount, nonce);
     }
 
-    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public  override{
+    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, address target, uint256 nonce, bytes memory signatures) public  override{
         require(expiry > block.timestamp, "withdrawal has expired");
-        bytes memory message = abi.encode(asset_source, amount, expiry, msg.sender,  nonce, 'withdraw_asset');
+        bytes memory message = abi.encode(asset_source, amount, expiry, target,  nonce, 'withdraw_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
-        require(ERC20_Asset_Pool(erc20_asset_pool_address).withdraw(asset_source, msg.sender, amount), "token didn't transfer, rejected by asset pool.");
-        emit Asset_Withdrawn(msg.sender, asset_source, amount, nonce);
+        require(ERC20_Asset_Pool(erc20_asset_pool_address).withdraw(asset_source, target, amount), "token didn't transfer, rejected by asset pool.");
+        emit Asset_Withdrawn(target, asset_source, amount, nonce);
     }
 
     function deposit_asset(address asset_source, uint256 amount, bytes32 vega_public_key) public override {
@@ -100,7 +100,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function get_vega_asset_id(address asset_source) public override view returns(bytes32){
         return asset_source_to_vega_asset_id[asset_source];
     }
-    
+
     function get_asset_source(bytes32 vega_asset_id) public override view returns(address){
         return vega_asset_ids_to_source[vega_asset_id];
     }
