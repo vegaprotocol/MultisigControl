@@ -68,9 +68,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
   let target = account;
-  if(bad_user !== undefined){
-    target = bad_user;
-  }
+
   //create signature
   let encoded_message = get_message_to_sign(
       ["address", "uint256", "uint256", "address"],
@@ -90,7 +88,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   if(bad_params){
     to_withdraw = "1"
   }
-  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, nonce, sig_string);
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, target, nonce, sig_string);
 }
 
 
@@ -520,37 +518,6 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
             true,
             false,
             "pad params withdrawal worked, shouldn't have"
-        );
-      } catch(e){}
-    });
-    it("withdraw_asset fails due to being submitted by the wrong Ethereum address", async () =>{
-      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      let test_token_instance = await Base_Faucet_Token.deployed();
-      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
-      //list asset
-      try {
-        await list_asset(bridge_logic_instance, accounts[0]);
-      } catch(e){/*ignore if already listed*/}
-
-      //new asset ID is listed
-      assert.equal(
-          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
-          true,
-          "token isn't listed, should be"
-      );
-
-      await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
-
-      //deposit asset
-      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
-
-      //withdraw asset
-      try{
-        await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false, false, accounts[1]);
-        assert.equal(
-            true,
-            false,
-            "wrong user submission withdrawal worked, shouldn't have"
         );
       } catch(e){}
     });
