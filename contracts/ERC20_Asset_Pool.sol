@@ -25,7 +25,7 @@ contract ERC20_Asset_Pool {
         emit Multisig_Control_Set(multisig_control);
     }
 
-    /// @praram new_address The new MultisigControl contract address.
+    /// @param new_address The new MultisigControl contract address.
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed set_multisig_control order
     /// @notice See MultisigControl for more about signatures
