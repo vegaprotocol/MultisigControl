@@ -1,9 +1,18 @@
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
+const MultisigControl = artifacts.require("MultisigControl");
+const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
 
 var abi = require('ethereumjs-abi');
 var crypto = require("crypto");
 var ethUtil = require('ethereumjs-util');
 
+
+let new_asset_id = crypto.randomBytes(32);
+
+let root_path = "../ropsten_deploy_details/local/";
+
+let bridge_addresses = require(root_path + "bridge_addresses.json");
 //TODO: ganache-cli -m "cherry manage trip absorb logic half number test shed logic purpose rifle"
 let private_keys =
     {
@@ -33,18 +42,132 @@ function get_message_to_sign(param_types, params, nonce, function_name, sender){
     return abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
 
 }
+async function list_asset(bridge_logic_instance, from_address){
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  //create signature
+  let encoded_message = get_message_to_sign(
+      ["address", "bytes32"],
+      [bridge_addresses.test_token_address, new_asset_id],
+      nonce,
+      "list_asset",
+      ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
 
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+}
 
 function to_signature_string(sig){
     return "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') +""+ sig.v.toString(16);
 }
 
+async function set_multisig_control(asset_pool_instance, multisig_control_address, account){
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  //create signature
+  let encoded_message = get_message_to_sign(
+      ["address"],
+      [multisig_control_address],
+      nonce,
+      "set_multisig_control",
+      asset_pool_instance.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  await asset_pool_instance.set_multisig_control(multisig_control_address, nonce, sig_string);
+}
+
+async function set_bridge_address( asset_pool_instance, bridge_logic_address, account){
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  //create signature
+  let encoded_message = get_message_to_sign(
+      ["address"],
+      [bridge_logic_address],
+      nonce,
+      "set_bridge_address",
+      asset_pool_instance.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  await asset_pool_instance.set_bridge_address(bridge_logic_address, nonce, sig_string);
+}
+
+
+
+async function deposit_asset(bridge_logic_instance, test_token_instance, account, token_balance){
+  let wallet_pubkey = crypto.randomBytes(32);
+  await test_token_instance.faucet();
+  if(token_balance === undefined || token_balance === null){
+    token_balance = await test_token_instance.balanceOf(account);
+  }
+  await test_token_instance.approve(ERC20_Bridge_Logic.address, token_balance);
+  await bridge_logic_instance.deposit_asset(bridge_addresses.test_token_address, token_balance, wallet_pubkey);
+  return token_balance;
+}
+
+async function withdraw_asset(bridge_logic_instance, test_token_instance, account, expire, bad_params, bad_user){
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  let expiry = Math.floor(Date.now()/1000) + 2; // 2 seconds
+  let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
+
+  let target = account;
+  if(bad_user !== undefined){
+    target = bad_user;
+  }
+  //create signature
+  let encoded_message = get_message_to_sign(
+      ["address", "uint256", "uint256", "address"],
+      [test_token_instance.address, to_withdraw, expiry, target],
+      nonce,
+      "withdraw_asset",
+      ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
+
+  let sig_string = to_signature_string(signature);
+  if(expire){
+    //wait 3 seconds
+    await timeout(3000);
+  }
+  //NOTE Sig tests are in MultisigControl
+  if(bad_params){
+    to_withdraw = "1"
+  }
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, nonce, sig_string);
+}
+
+
+
+
 ////FUNCTIONS
 contract("Asset_Pool Function: set_multisig_control",  (accounts) => {
     //function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
     it("should change multisig control address", async () => {
+      let multisig_control_instance = await MultisigControl.deployed();
+      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
       //set new multisig_control_address
-      //multisig_control_address should match new address
+      assert.equal(
+          await asset_pool_instance.multisig_control_address(),
+          multisig_control_instance.address,
+          "unexpected initial multisig_control_address"
+      );
+
+      await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
+
+      assert.equal(
+          await asset_pool_instance.multisig_control_address(),
+          accounts[1],
+          "unexpected multisig_control_address"
+      );
+
     });
     //NOTE signature tests are in MultisigControl tests
 });
@@ -52,26 +175,100 @@ contract("Asset_Pool Function: set_multisig_control",  (accounts) => {
 contract("Asset_Pool Function: set_bridge_address",  (accounts) => {
     //function set_bridge_address(address new_address, uint256 nonce, bytes memory signatures) public {
     it("should change the bridge address to a new address, should now ignore old address", async () => {
-      //list asset
-      //deposit
-      //try withdraw from erc20_bridge_address, should work
-      //set new erc20_bridge_address
-      //try withdraw from new erc20_bridge_address, should work
-      //try withdraw from old erc20_bridge_address, should fail
+      let multisig_control_instance = await MultisigControl.deployed();
+      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+
+      assert.equal(
+          await asset_pool_instance.erc20_bridge_address(),
+          "0x0000000000000000000000000000000000000000",
+          "unexpected initial erc20_bridge_address"
+      );
+
+      await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
+
+      assert.equal(
+          await asset_pool_instance.erc20_bridge_address(),
+          bridge_addresses.logic_1,
+          "unexpected erc20_bridge_address"
+      );
     });
 });
 contract("Asset_Pool Function: withdraw",  (accounts) => {
     //function withdraw(address token_address, address target, uint256 amount) public returns(bool){
     it("should allow bridge to withdraw target asset", async () => {
+      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+      let test_token_instance = await Base_Faucet_Token.deployed();
+      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
       //list asset
-      //deposit
-      //create withdraw order
-      //run withdraw function, should work
+      try {
+        await list_asset(bridge_logic_instance, accounts[0]);
+      } catch(e){/*ignore if already listed*/}
+
+      //new asset ID is listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
+          true,
+          "token isn't listed, should be"
+      );
+
+      await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+      //deposit asset
+      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+      let account_bal_before = await test_token_instance.balanceOf(accounts[0]);
+      let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+      //withdraw asset
+      await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false, false);
+
+      let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
+      let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+      assert.equal(
+          account_bal_before.add(pool_bal_before).toString(),
+          account_bal_after.toString(),
+          "account balance didn't go up"
+      );
+
+      assert.equal(
+          pool_bal_after.toString(),
+          "0",
+          "pool should be empty, isn't"
+      );
     });
     it("withdraw function should fail to run from any address but the current bridge", async () => {
+      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+      let test_token_instance = await Base_Faucet_Token.deployed();
+      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
       //list asset
+      try {
+        await list_asset(bridge_logic_instance, accounts[0]);
+      } catch(e){/*ignore if already listed*/}
+
+      //new asset ID is listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
+          true,
+          "token isn't listed, should be"
+      );
+
+      await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
       //deposit asset
-      //run withdraw from accounts[0], should fail
+      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+      let account_bal_before = await test_token_instance.balanceOf(accounts[0]);
+      let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+      //withdraw asset
+      try {
+        await asset_pool_instance.withdraw(test_token_instance.address, accounts[0], await test_token_instance.balanceOf(asset_pool_instance.address));
+        assert.equal(true, false, "Withdrawal worked from unauthorized bridge address")
+      }catch(e){}
+
+
+
     });
 });
 
