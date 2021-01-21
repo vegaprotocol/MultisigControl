@@ -400,7 +400,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
       assert.equal(
           pool_bal_after.toString(),
           "0",
-          "token is listed, shouldn't be"
+          "pool should be empty, isn't"
       );
 
     });
