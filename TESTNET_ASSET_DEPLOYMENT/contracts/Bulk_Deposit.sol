@@ -5,7 +5,7 @@ import "./IERC20.sol";
 import "./IERC20_Bridge_Logic.sol";
 
 contract Bulk_Deposit {
-    function bulk_desposit(address bridge, address token, uint256[] values, bytes32[] vega_public_keys) public onlyOwner {
+    function bulk_deposit(address bridge, address token, bytes32[] calldata vega_public_keys, uint256[] calldata values) public {
       require(values.length == vega_public_keys.length, "array length mismatch");
 
       //pull all tokens to this
@@ -15,7 +15,7 @@ contract Bulk_Deposit {
       IERC20(token).approve(bridge, IERC20(token).balanceOf(address(this)));
 
       for(uint16 dep_idx = 0; dep_idx < values.length; dep_idx++){
-        require(IERC20_Bridge_Logic(bridge).deposit_asset(token, values[dep_idx], vega_public_keys[dep_idx]), "deposit failed");
+        IERC20_Bridge_Logic(bridge).deposit_asset(token, values[dep_idx], vega_public_keys[dep_idx]);
       }
     }
 }
