@@ -342,7 +342,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -361,7 +362,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -380,7 +382,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -393,7 +396,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -412,7 +416,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -431,7 +436,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_maximum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Maximum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_minimum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Minimum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Asset_Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Listed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Removed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Withdrawn\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"deposit_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"}],\"name\":\"get_asset_source\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_deposit_maximum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_deposit_minimum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_multisig_control_address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_vega_asset_id\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"is_asset_listed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"list_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"remove_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maximum_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_maximum\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"minimum_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_minimum\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"withdraw_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Vega Protocol\",\"kind\":\"dev\",\"methods\":{\"deposit_asset(address,uint256,bytes32)\":{\"details\":\"MUST emit Asset_Deposited if successfulERC20 approve function should be run before running this\",\"params\":{\"amount\":\"Amount of tokens to be deposited into Vega\",\"asset_source\":\"Contract address for given ERC20 token\",\"vega_public_key\":\"Target vega public key to be credited with this deposit\"}},\"get_asset_source(bytes32)\":{\"params\":{\"vega_asset_id\":\"Vega-assigned asset ID for which you want the ERC20 token address\"},\"returns\":{\"_0\":\"The ERC20 token contract address for a given Vega Asset Id\"}},\"get_deposit_maximum(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"Maximum valid deposit of given ERC20 token\"}},\"get_deposit_minimum(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"Minimum valid deposit of given ERC20 token\"}},\"get_multisig_control_address()\":{\"returns\":{\"_0\":\"current multisig_control_address\"}},\"get_vega_asset_id(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"The assigned Vega Asset Id for given ERC20 token\"}},\"is_asset_listed(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"True if asset is listed\"}},\"list_asset(address,bytes32,uint256,bytes)\":{\"details\":\"MUST emit Asset_Listed if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\",\"vega_asset_id\":\"Vega-generated asset ID for internal use in Vega Core\"}},\"remove_asset(address,uint256,bytes)\":{\"details\":\"MUST emit Asset_Removed if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_deposit_maximum(address,uint256,uint256,bytes)\":{\"details\":\"MUST emit Asset_Deposit_Maximum_Set if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"maximum_amount\":\"Maximum deposit amount\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_deposit_minimum(address,uint256,uint256,bytes)\":{\"details\":\"MUST emit Asset_Deposit_Minimum_Set if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"minimum_amount\":\"Minimum deposit amount\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"withdraw_asset(address,uint256,uint256,address,uint256,bytes)\":{\"details\":\"MUST emit Asset_Withdrawn if successful\",\"params\":{\"amount\":\"Amount of ERC20 tokens to withdraw\",\"asset_source\":\"Contract address for given ERC20 token\",\"expiry\":\"Vega-assigned timestamp of withdrawal order expiration\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\",\"target\":\"Target Ethereum address to receive withdrawn ERC20 tokens\"}}},\"title\":\"ERC20 Bridge Logic Interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"deposit_asset(address,uint256,bytes32)\":{\"notice\":\"This function allows a user to deposit given ERC20 tokens into VegaERC20 approve function should be run before running this\"},\"get_deposit_maximum(address)\":{\"notice\":\"This view returns maximum valid deposit\"},\"get_deposit_minimum(address)\":{\"notice\":\"This view returns minimum valid deposit\"},\"is_asset_listed(address)\":{\"notice\":\"This view returns true if the given ERC20 token contract has been listed valid for deposit\"},\"list_asset(address,bytes32,uint256,bytes)\":{\"notice\":\"This function lists the given ERC20 token contract as valid for deposit to this bridgeSee MultisigControl for more about signatures\"},\"remove_asset(address,uint256,bytes)\":{\"notice\":\"This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridgeSee MultisigControl for more about signatures\"},\"set_deposit_maximum(address,uint256,uint256,bytes)\":{\"notice\":\"This function sets the maximum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"},\"set_deposit_minimum(address,uint256,uint256,bytes)\":{\"notice\":\"This function sets the minimum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"},\"withdraw_asset(address,uint256,uint256,address,uint256,bytes)\":{\"notice\":\"This function sets the maximum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"}},\"notice\":\"Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":\"IERC20_Bridge_Logic\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":{\"keccak256\":\"0x4efbd3e355f9dcb70d9f1fe09ef3dd2ba6c185725b2f4a2dad66fd3c88f4515b\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://d1cbbc505f9a3e2368c86aedea61fdba60c904488c104c815e1044ca9de82dda\",\"dweb:/ipfs/QmaCANmHXzcznxz6vRqj99pw7eww4Hkzbt5zi2Zo1PP8Az\"]}},\"version\":1}",
@@ -4402,7 +4408,8 @@
   },
   "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2021-01-23T00:33:55.754Z",
+  "updatedAt": "2021-01-26T01:33:59.065Z",
+  "networkType": "ethereum",
   "devdoc": {
     "author": "Vega Protocol",
     "kind": "dev",
