@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: UNLICENSED
+//SPDX-License-Identifier: MIT
 pragma solidity 0.7.6;
 
 /// @title ERC20 Bridge Logic Interface

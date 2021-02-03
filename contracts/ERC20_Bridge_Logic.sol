@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: UNLICENSED
+//SPDX-License-Identifier: MIT
 pragma solidity 0.7.6;
 
 import "./SafeMath.sol";
@@ -163,7 +163,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function get_vega_asset_id(address asset_source) public override view returns(bytes32){
         return asset_source_to_vega_asset_id[asset_source];
     }
-    
+
     /// @param vega_asset_id Vega-assigned asset ID for which you want the ERC20 token address
     /// @return The ERC20 token contract address for a given Vega Asset Id
     function get_asset_source(bytes32 vega_asset_id) public override view returns(address){
