@@ -37,7 +37,7 @@ Terminal 2:
 1. `cd TESTNET_ASSET_DEPLOYMENT`
 1. `truffle migrate` This deploys the tokens
 1. `node confgure_assets.js` This will list the tokens on the bridge logic 1 contract
-1. `node confgure_signers.js` This will set the contract to the initial siger for bootstrapping
+1. `node confgure_signers.js` This will set the contract to the initial signer for bootstrapping
 1. `node confgure_asset_pool.js` This will finish bridge setup
 
 All addresses, ABIs, and smart contract files will be available in `./ropsten_deploy_details/local`
@@ -49,7 +49,7 @@ All addresses, ABIs, and smart contract files will be available in `./ropsten_de
 1. `cd TESTNET_ASSET_DEPLOYMENT`
 1. `truffle migrate --network ropsten --vega [test|stag|dev]` This deploys the tokens
 1. `node confgure_assets.js --network ropsten --vega [test|stag|dev]` This will list the tokens on the bridge logic 1 contract
-1. `node confgure_signers.js --network ropsten --vega [test|stag|dev]` This will set the contract to the initial siger for bootstrapping
+1. `node confgure_signers.js --network ropsten --vega [test|stag|dev]` This will set the contract to the initial signer for bootstrapping
 1. `node confgure_asset_pool.js --network ropsten --vega [test|stag|dev]` This will finish bridge setup
 Done.
 
