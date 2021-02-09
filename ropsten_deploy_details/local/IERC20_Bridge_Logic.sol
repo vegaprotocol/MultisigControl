@@ -4,7 +4,7 @@ pragma solidity 0.7.6;
 /// @title ERC20 Bridge Logic Interface
 /// @author Vega Protocol
 /// @notice Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.
-// @notice All funds deposited/withdrawn are to/from the ERC20_Asset_Pool
+/// @notice All funds deposited/withdrawn are to/from the ERC20_Asset_Pool
 abstract contract IERC20_Bridge_Logic {
 
     /***************************EVENTS****************************/
