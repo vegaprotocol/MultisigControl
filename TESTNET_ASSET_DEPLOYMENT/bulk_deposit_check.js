@@ -87,6 +87,7 @@ let Base_Faucet_Token_ABI = require(root_path + "Base_Faucet_Token_ABI.json");
 let pool_abi = require(root_path + "ERC20_Asset_Pool_ABI.json");
 let bridge_abi = require(root_path + "ERC20_Bridge_Logic_ABI.json");
 let multisig_control_abi = require(root_path + "MultisigControl_ABI.json");
+let bulk_deposit_abi = require(root_path + "Bulk_Deposit_ABI.json");
 let bridge_address_file = require(root_path + "bridge_addresses.json");
 let token_addresses = require(root_path + "token_addresses.json");
 
@@ -99,7 +100,7 @@ let private_key = Buffer.from(
 const eth_wallet = Wallet.fromPrivateKey(private_key);
 let wallet_address = eth_wallet.getAddressString();
 
-async function list_asset(bridge_logic_instance, asset_address, new_asset_id, bridge_address){
+async function list_asset(bridge_logic_instance, asset_address, new_asset_id){
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   //create signature
   let encoded_message = get_message_to_sign(
@@ -122,67 +123,42 @@ function to_signature_string(sig){
     return "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') +""+ sig.v.toString(16);
 }
 
-async function configure_assets() {
-
-    let tdai_vega_id = "0x6d9d35f657589e40ddfb448b7ad4a7463b66efb307527fedd2aa7df1bbd5ea61";
-    let tbtc_vega_id = "0x5cfa87844724df6069b94e4c8a6f03af21907d7bc251593d08e4251043ee9f7c";
-    let tusdc_vega_id = "0x993ed98f4f770d91a796faab1738551193ba45c62341d20597df70fea6704ede";
-    let teuro_vega_id = "0x8b52d4a3a4b0ffe733cddbc2b67be273816cfeb6ca4c8b339bac03ffba08e4e4";
-    let tvote_vega_id = "0xf11862be7fc37c47372439f982a8f09912c4f995434120ff43ff51d9c34ef71a";
 
 
-    //check if signer is valid
-    let multisig_instance = new web3_instance.eth.Contract(multisig_control_abi, bridge_address_file.multisig_control);
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    let is_valid = await multisig_instance.methods.is_valid_signer(wallet_address).call();
-    let signer_count = await multisig_instance.methods.get_valid_signer_count().call();
+async function bulk_deposit() {
+    let bridge_logic_instance = new web3_instance.eth.Contract(bridge_abi, bridge_address_file.logic_1);
+    let tdai_instance = new web3_instance.eth.Contract(Base_Faucet_Token_ABI, token_addresses.tdai_contract)
+    let bulk_deposit_instance = new web3_instance.eth.Contract(bulk_deposit_abi, token_addresses.bulk_deposit_contract)
 
-    console.log("is_valid: " + is_valid)
-    console.log("signer_count: " + signer_count)
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    try{
+      await list_asset(bridge_logic_instance, token_addresses.tdai_contract, crypto.randomBytes(32));
+      //in case it's already listed
+    }catch(e){}
 
-    let bridge_addresses = [bridge_address_file.logic_1, bridge_address_file.logic_2];
+    //faucet
+    await tdai_instance.methods.faucet().send({from:wallet_address, gasPrice:"150000000000", gas: "2000000"});
+    //approve bridge
+    await tdai_instance.methods.approve(token_addresses.bulk_deposit_contract, "100000000000000000").send({from:wallet_address, gasPrice:"150000000000", gas: "2000000"});
 
-    for(let bridge_idx = 0; bridge_idx < bridge_addresses.length; bridge_idx++){
-        let bridge_instance = new web3_instance.eth.Contract(bridge_abi, bridge_addresses[bridge_idx]);
+    let vega_public_keys = [];
+    let values = [];
 
-        try {
-            console.log("listing tdai on bridge:"+bridge_addresses[bridge_idx]+"...");
-            //await bridge_instance.methods.list_asset_admin(token_addresses.tdai_contract, 0, tdai_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
+    let deposit_count = 10;
 
-            await list_asset(bridge_instance, token_addresses.tdai_contract, tdai_vega_id, bridge_addresses[bridge_idx]);
-        } catch (e) {console.log(e)}
-        try {
-            console.log("listing tbtc on bridge:"+bridge_addresses[bridge_idx]+"...");
-            //await bridge_instance.methods.list_asset_admin(token_addresses.tbtc_contract, 0, tbtc_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
-            await list_asset(bridge_instance, token_addresses.tbtc_contract, tbtc_vega_id, bridge_addresses[bridge_idx]);
-        } catch (e) { console.log(e)}
-        try {
-            console.log("listing tusdc on bridge:"+bridge_addresses[bridge_idx]+"...");
-            //await bridge_instance.methods.list_asset_admin(token_addresses.tusdc_contract, 0, tusdc_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
-            await list_asset(bridge_instance, token_addresses.tusdc_contract, tusdc_vega_id, bridge_addresses[bridge_idx]);
-        } catch (e) { console.log(e)}
-        try {
-            console.log("listing teuro on bridge:"+bridge_addresses[bridge_idx]+"...");
-            //await bridge_instance.methods.list_asset_admin(token_addresses.teuro_contract, 0, teuro_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
-            await list_asset(bridge_instance, token_addresses.teuro_contract, teuro_vega_id, bridge_addresses[bridge_idx]);
-        } catch (e) { console.log(e)}
-        try {
-            console.log("listing tvote on bridge:"+bridge_addresses[bridge_idx]+"...");
-            //await bridge_instance.methods.list_asset_admin(token_addresses.tvote_contract, 0, tvote_vega_id).send({from:wallet_address, gasPrice:"150000000000"});
-            await list_asset(bridge_instance, token_addresses.tvote_contract, tvote_vega_id, bridge_addresses[bridge_idx]);
-        } catch (e) { console.log(e)}
+    for(let deposit_idx = 0; deposit_idx < deposit_count; deposit_idx++){
+      vega_public_keys.push(crypto.randomBytes(32));
+      values.push("1");
     }
 
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    let bulk_deposit_results = await bulk_deposit_instance.methods.bulk_deposit(bridge_address_file.logic_1, token_addresses.tdai_contract, vega_public_keys, values).send({from:wallet_address, gasPrice:"150000000000", gas: "2000000"});
 
-    let tdai_instance = new web3_instance.eth.Contract(Base_Faucet_Token_ABI, token_addresses.tdai_contract);
-    let tbtc_instance = new web3_instance.eth.Contract(Base_Faucet_Token_ABI, token_addresses.tbtc_contract);
-    let tusdc_instance = new web3_instance.eth.Contract(Base_Faucet_Token_ABI, token_addresses.tusdc_contract);
-    let teuro_instance = new web3_instance.eth.Contract(Base_Faucet_Token_ABI, token_addresses.teuro_contract);
-    let tvote_instance = new web3_instance.eth.Contract(Base_Faucet_Token_ABI, token_addresses.tvote_contract);
+    let past_logs = await bridge_logic_instance.getPastEvents("allEvents");
 
+    console.log(past_logs)
+    //get
 
 }
 
 
-configure_assets()
+bulk_deposit()

@@ -68,9 +68,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
   let target = account;
-  if(bad_user !== undefined){
-    target = bad_user;
-  }
+
   //create signature
   let encoded_message = get_message_to_sign(
       ["address", "uint256", "uint256", "address"],
@@ -90,7 +88,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   if(bad_params){
     to_withdraw = "1"
   }
-  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, nonce, sig_string);
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, target, nonce, sig_string);
 }
 
 
@@ -261,7 +259,6 @@ contract("ERC20_Bridge_Logic Function: remove_asset",   (accounts) => {
 contract("ERC20_Bridge_Logic Function: set_deposit_minimum",   (accounts) => {
     //function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
 
-
     it("deposit minimum changes and is enforced by running set_deposit_minimum", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
       let test_token_instance = await Base_Faucet_Token.deployed();
@@ -313,6 +310,63 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum",   (accounts) => {
 
       //deposit more that min should work
       await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "501");
+    });
+});
+
+contract("ERC20_Bridge_Logic Function: set_deposit_maximum",   (accounts) => {
+    //function set_deposit_maximum(address asset_source, uint256 asset_id, uint256 nonce, uint256 maximum_amount, bytes memory signatures) public;
+
+    it("deposit maximum changes and is enforced by running set_deposit_maximum", async () => {
+      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+      let test_token_instance = await Base_Faucet_Token.deployed();
+
+      //Get maximum deposit
+      let deposit_maximum = (await bridge_logic_instance.get_deposit_maximum(test_token_instance.address)).toString();
+      assert.equal(deposit_maximum,"0", "deposit max should be zero, isn't");
+
+      try {
+        await list_asset(bridge_logic_instance, accounts[0]);
+      } catch(e){/*ignore if already listed*/}
+
+      //new asset ID is listed
+      assert.equal(
+          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
+          true,
+          "token isn't listed, should be"
+      );
+
+      //Set maximum deposit
+      //NOTE signature tests are in MultisigControl
+      let nonce = new ethUtil.BN(crypto.randomBytes(32));
+      let encoded_message = get_message_to_sign(
+          ["address", "uint256"],
+          [test_token_instance.address, "500"],
+          nonce,
+          "set_deposit_maximum",
+          ERC20_Bridge_Logic.address);
+      let encoded_hash = ethUtil.keccak256(encoded_message);
+
+      let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+      let sig_string = to_signature_string(signature);
+
+      await bridge_logic_instance.set_deposit_maximum(test_token_instance.address, "500", nonce, sig_string);
+
+      //Get maximum deposit, should be updated
+      deposit_maximum = (await bridge_logic_instance.get_deposit_maximum(test_token_instance.address)).toString();
+      assert.equal(deposit_maximum, "500", "deposit min should be 500, isn't");
+
+      //deposit less that min should fail
+      try{
+        await deposit_asset(bridge_logic_instance, test_token_instance, "501");
+        assert.equal(
+            true,
+            false,
+            "token deposit worked, shouldn't have"
+        );
+      } catch(e){}
+
+      //deposit more that min should work
+      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "499");
     });
 });
 
@@ -467,37 +521,6 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
         );
       } catch(e){}
     });
-    it("withdraw_asset fails due to being submitted by the wrong Ethereum address", async () =>{
-      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      let test_token_instance = await Base_Faucet_Token.deployed();
-      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
-      //list asset
-      try {
-        await list_asset(bridge_logic_instance, accounts[0]);
-      } catch(e){/*ignore if already listed*/}
-
-      //new asset ID is listed
-      assert.equal(
-          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
-          true,
-          "token isn't listed, should be"
-      );
-
-      await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
-
-      //deposit asset
-      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
-
-      //withdraw asset
-      try{
-        await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false, false, accounts[1]);
-        assert.equal(
-            true,
-            false,
-            "wrong user submission withdrawal worked, shouldn't have"
-        );
-      } catch(e){}
-    });
     //NOTE signature tests are covered in MultisigControl
 });
 
@@ -602,9 +625,9 @@ contract("ERC20_Bridge_Logic Function: get_multisig_control_address",   (account
       assert.equal(multisig_control_address, MultisigControl.address, "Multisig control shows the wrong address");
     });
 });
-contract("ERC20_Bridge_Logic Function: get_vega_id",  (accounts) => {
-    //function get_vega_id(address asset_source) public view returns(bytes32);
-    it("get_vega_id returns proper vega id for newly listed assets", async () => {
+contract("ERC20_Bridge_Logic Function: get_vega_asset_id",  (accounts) => {
+    //function get_vega_asset_id(address asset_source) public view returns(bytes32);
+    it("get_vega_asset_id returns proper vega id for newly listed assets", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
       let test_token_instance = await Base_Faucet_Token.deployed();
       //new asset ID is not listed
@@ -614,10 +637,10 @@ contract("ERC20_Bridge_Logic Function: get_vega_id",  (accounts) => {
           "token is listed, shouldn't be"
       );
 
-      //non listed asset should fail vega_id
-      let vega_id = await bridge_logic_instance.get_vega_id(test_token_instance.address);
+      //non listed asset should fail vega_asset_id
+      let vega_asset_id = await bridge_logic_instance.get_vega_asset_id(test_token_instance.address);
 
-      assert.equal(vega_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
+      assert.equal(vega_asset_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
       await list_asset(bridge_logic_instance, accounts[0]);
       //new asset ID is listed
       assert.equal(
@@ -625,12 +648,12 @@ contract("ERC20_Bridge_Logic Function: get_vega_id",  (accounts) => {
           true,
           "token isn't listed, should be"
       );
-      vega_id = await bridge_logic_instance.get_vega_id(test_token_instance.address);
-      assert.equal(vega_id, ("0x" + new_asset_id.toString("hex")), "listed asset returns incorrect address")
+      vega_asset_id = await bridge_logic_instance.get_vega_asset_id(test_token_instance.address);
+      assert.equal(vega_asset_id, ("0x" + new_asset_id.toString("hex")), "listed asset returns incorrect address")
 
     });
 
-    it("get_vega_id returns vega id 0x00... for unknown assets", async () => {
+    it("get_vega_asset_id returns vega id 0x00... for unknown assets", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
 
       assert.equal(
@@ -639,10 +662,10 @@ contract("ERC20_Bridge_Logic Function: get_vega_id",  (accounts) => {
           "token is listed, shouldn't be"
       );
 
-      //non listed asset should fail vega_id
-      let vega_id = await bridge_logic_instance.get_vega_id(accounts[3]);
+      //non listed asset should fail vega_asset_id
+      let vega_asset_id = await bridge_logic_instance.get_vega_asset_id(accounts[3]);
 
-      assert.equal(vega_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
+      assert.equal(vega_asset_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "Asset has already been listed, shouldn't be")
 
     });
 });

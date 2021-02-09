@@ -2,7 +2,7 @@
 This repository contains the Ethereum side of the Ethereum bridge to Vega.
 
 ## Basic structure
-The bridge is comprised of a smart contract per asset class, and a generic asset pool. For example, when a user wants to deposit collateral in to a Vega network, they deposit an approved ERC20 token to the ERC20 bridge contract for the appropriate network. This is held in the asset pool contract, and the user's collateral is reflected in the Vega network: 
+The bridge is comprised of a smart contract per asset class, and a generic asset pool. For example, when a user wants to deposit collateral in to a Vega network, they deposit an approved ERC20 token to the ERC20 bridge contract for the appropriate network. This is held in the asset pool contract, and the user's collateral is reflected in the Vega network:
 ![Deposit process](./docs/diagram-deposit.png)
 
 For a more specific walkthrough, and find the ABIs & addresses for the Vega testnet, see [Public_Test_Bridge_Tools](https://github.com/vegaprotocol/Public_Test_Bridge_Tools).
@@ -37,12 +37,8 @@ Terminal 2:
 1. `cd TESTNET_ASSET_DEPLOYMENT`
 1. `truffle migrate` This deploys the tokens
 1. `node confgure_assets.js` This will list the tokens on the bridge logic 1 contract
-1. update `TESTNET_ASSET_DEPLOYMENT/bot_configs.json` with the contents of `https://bots.vegaprotocol.io/devnet/traders-settlement`
-1. `node bot_fillup.js` this will issue tokens to the bots from the previous step, in the amounts set in `TESTNET_ASSET_DEPLOYMENT/bot_fillup.js` 
 
-Done. Bots should be loaded.
-
-All addresses, ABIs, and smart contract files will be available in `./ropsten_deploy_details/local` 
+All addresses, ABIs, and smart contract files will be available in `./ropsten_deploy_details/local`
 
 ## Ropsten Deployment [test|stag|dev]
 
@@ -51,10 +47,8 @@ All addresses, ABIs, and smart contract files will be available in `./ropsten_de
 1. `cd TESTNET_ASSET_DEPLOYMENT`
 1. `truffle migrate --network ropsten --vega [test|stag|dev]` This deploys the tokens
 1. `node confgure_assets.js --network ropsten --vega [test|stag|dev]` This will list the tokens on the bridge logic 1 contract
-1. update `TESTNET_ASSET_DEPLOYMENT/bot_configs.json --network ropsten --vega [test|stag|dev]` with the contents of `https://bots.vegaprotocol.io/devnet/traders-settlement`
-1. `node bot_fillup.js` this will issue tokens to the bots from the previous step, in the amounts set in `TESTNET_ASSET_DEPLOYMENT/bot_fillup.js` 
 
-Done. Bots should be loaded.
+Done.
 
 All addresses, ABIs, and smart contract files will be available in `./ropsten_deploy_details/[test|stag|dev]`
 
