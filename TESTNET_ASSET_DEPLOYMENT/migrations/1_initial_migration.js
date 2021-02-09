@@ -1,6 +1,7 @@
 const Migrations = artifacts.require("Migrations");
 const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
 const IERC20_Bridge_Logic = artifacts.require("IERC20_Bridge_Logic");
+const Bulk_Deposit = artifacts.require("Bulk_Deposit");
 
 
 const fs = require('fs');
@@ -44,6 +45,7 @@ let bridge_address_file = require("../" + root_path+"bridge_addresses.json");
 
 module.exports = async function(deployer) {
     await deployer.deploy(Migrations);
+
     let is_ganache = true;
     for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
 
@@ -66,13 +68,14 @@ module.exports = async function(deployer) {
     let tusdc_contract = await deployer.deploy(Base_Faucet_Token, "USDC ("+net+")", "tUSDC", 5, "0", "10000000000");
     let teuro_contract = await deployer.deploy(Base_Faucet_Token, "EURO ("+net+")", "tEURO", 5, "0", "10000000000");
     let tvote_contract = await deployer.deploy(Base_Faucet_Token, "VOTE ("+net+")", "tVOTE", 5, "6400000", "1");
-
+    let bulk_deposit = await deployer.deploy(Bulk_Deposit);
     let output_details = {
         tdai_contract: tdai_contract.address,
         tbtc_contract:tbtc_contract.address,
         tusdc_contract: tusdc_contract.address,
         teuro_contract: teuro_contract.address,
-        tvote_contract: tvote_contract.address
+        tvote_contract: tvote_contract.address,
+        bulk_deposit_contract: bulk_deposit.address
     };
 
 

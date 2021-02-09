@@ -141,7 +141,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   if(bad_params){
     to_withdraw = "1"
   }
-  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, nonce, sig_string);
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, target, nonce, sig_string);
 }
 
 
