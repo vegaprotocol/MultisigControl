@@ -4,7 +4,7 @@ pragma solidity 0.7.6;
 /// @title MultisigControl Interface
 /// @author Vega Protocol
 /// @notice Implementations of this interface are used by the Vega network to control smart contracts without the need for Vega to have any Ethereum of its own.
-/// @notice To do this, the Vega validators sign a MultisigControl order to constuct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethrerum
+/// @notice To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum
 abstract contract IMultisigControl {
 
     /***************************EVENTS****************************/
