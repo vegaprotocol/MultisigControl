@@ -127,7 +127,8 @@ async function list_asset(bridge_logic_instance, from_address){
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+  let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+  console.log(receipt.logs)
 }
 
 
@@ -182,14 +183,14 @@ contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
       } catch(e){}
 
       //list new asset
-      list_asset(bridge_logic_instance, accounts[0]);
-
+      await list_asset(bridge_logic_instance, accounts[0]);
       //new asset ID is listed
       assert.equal(
           await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
           true,
           "token isn't listed, should be"
       );
+
       //deposit new asset
       let amount_deposited = await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
@@ -399,7 +400,7 @@ contract("ERC20_Bridge_Logic Function: deposit_asset",   (accounts) => {
       let test_token_instance = await Base_Faucet_Token.deployed();
 
       //list asset
-      list_asset(bridge_logic_instance, accounts[0]);
+      await list_asset(bridge_logic_instance, accounts[0]);
 
       assert.equal(
           await bridge_logic_instance.is_asset_listed(test_token_instance.address),

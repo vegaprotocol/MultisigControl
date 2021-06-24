@@ -342,8 +342,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -362,8 +361,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -382,8 +380,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -396,8 +393,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -416,8 +412,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -436,11 +431,10 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_maximum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Maximum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_minimum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Minimum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Asset_Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Listed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Removed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Withdrawn\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"deposit_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"}],\"name\":\"get_asset_source\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_deposit_maximum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_deposit_minimum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_multisig_control_address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_vega_asset_id\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"is_asset_listed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"list_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"remove_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maximum_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_maximum\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"minimum_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_minimum\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"withdraw_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Vega Protocol\",\"kind\":\"dev\",\"methods\":{\"deposit_asset(address,uint256,bytes32)\":{\"details\":\"MUST emit Asset_Deposited if successfulERC20 approve function should be run before running this\",\"params\":{\"amount\":\"Amount of tokens to be deposited into Vega\",\"asset_source\":\"Contract address for given ERC20 token\",\"vega_public_key\":\"Target vega public key to be credited with this deposit\"}},\"get_asset_source(bytes32)\":{\"params\":{\"vega_asset_id\":\"Vega-assigned asset ID for which you want the ERC20 token address\"},\"returns\":{\"_0\":\"The ERC20 token contract address for a given Vega Asset Id\"}},\"get_deposit_maximum(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"Maximum valid deposit of given ERC20 token\"}},\"get_deposit_minimum(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"Minimum valid deposit of given ERC20 token\"}},\"get_multisig_control_address()\":{\"returns\":{\"_0\":\"current multisig_control_address\"}},\"get_vega_asset_id(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"The assigned Vega Asset Id for given ERC20 token\"}},\"is_asset_listed(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"True if asset is listed\"}},\"list_asset(address,bytes32,uint256,bytes)\":{\"details\":\"MUST emit Asset_Listed if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\",\"vega_asset_id\":\"Vega-generated asset ID for internal use in Vega Core\"}},\"remove_asset(address,uint256,bytes)\":{\"details\":\"MUST emit Asset_Removed if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_deposit_maximum(address,uint256,uint256,bytes)\":{\"details\":\"MUST emit Asset_Deposit_Maximum_Set if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"maximum_amount\":\"Maximum deposit amount\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_deposit_minimum(address,uint256,uint256,bytes)\":{\"details\":\"MUST emit Asset_Deposit_Minimum_Set if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"minimum_amount\":\"Minimum deposit amount\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"withdraw_asset(address,uint256,uint256,address,uint256,bytes)\":{\"details\":\"MUST emit Asset_Withdrawn if successful\",\"params\":{\"amount\":\"Amount of ERC20 tokens to withdraw\",\"asset_source\":\"Contract address for given ERC20 token\",\"expiry\":\"Vega-assigned timestamp of withdrawal order expiration\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\",\"target\":\"Target Ethereum address to receive withdrawn ERC20 tokens\"}}},\"title\":\"ERC20 Bridge Logic Interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"deposit_asset(address,uint256,bytes32)\":{\"notice\":\"This function allows a user to deposit given ERC20 tokens into VegaERC20 approve function should be run before running this\"},\"get_deposit_maximum(address)\":{\"notice\":\"This view returns maximum valid deposit\"},\"get_deposit_minimum(address)\":{\"notice\":\"This view returns minimum valid deposit\"},\"is_asset_listed(address)\":{\"notice\":\"This view returns true if the given ERC20 token contract has been listed valid for deposit\"},\"list_asset(address,bytes32,uint256,bytes)\":{\"notice\":\"This function lists the given ERC20 token contract as valid for deposit to this bridgeSee MultisigControl for more about signatures\"},\"remove_asset(address,uint256,bytes)\":{\"notice\":\"This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridgeSee MultisigControl for more about signatures\"},\"set_deposit_maximum(address,uint256,uint256,bytes)\":{\"notice\":\"This function sets the maximum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"},\"set_deposit_minimum(address,uint256,uint256,bytes)\":{\"notice\":\"This function sets the minimum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"},\"withdraw_asset(address,uint256,uint256,address,uint256,bytes)\":{\"notice\":\"This function sets the maximum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"}},\"notice\":\"Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":\"IERC20_Bridge_Logic\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":{\"keccak256\":\"0x4efbd3e355f9dcb70d9f1fe09ef3dd2ba6c185725b2f4a2dad66fd3c88f4515b\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://d1cbbc505f9a3e2368c86aedea61fdba60c904488c104c815e1044ca9de82dda\",\"dweb:/ipfs/QmaCANmHXzcznxz6vRqj99pw7eww4Hkzbt5zi2Zo1PP8Az\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.6+commit.7338295f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_maximum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Maximum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"new_minimum\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Deposit_Minimum_Set\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Asset_Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Listed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Removed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"Asset_Withdrawn\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"deposit_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"}],\"name\":\"get_asset_source\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_deposit_maximum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_deposit_minimum\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_multisig_control_address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"get_vega_asset_id\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"}],\"name\":\"is_asset_listed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"vega_asset_id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"list_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"remove_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maximum_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_maximum\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"minimum_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_deposit_minimum\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asset_source\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"withdraw_asset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Vega Protocol\",\"kind\":\"dev\",\"methods\":{\"deposit_asset(address,uint256,bytes32)\":{\"details\":\"MUST emit Asset_Deposited if successfulERC20 approve function should be run before running this\",\"params\":{\"amount\":\"Amount of tokens to be deposited into Vega\",\"asset_source\":\"Contract address for given ERC20 token\",\"vega_public_key\":\"Target vega public key to be credited with this deposit\"}},\"get_asset_source(bytes32)\":{\"params\":{\"vega_asset_id\":\"Vega-assigned asset ID for which you want the ERC20 token address\"},\"returns\":{\"_0\":\"The ERC20 token contract address for a given Vega Asset Id\"}},\"get_deposit_maximum(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"Maximum valid deposit of given ERC20 token\"}},\"get_deposit_minimum(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"Minimum valid deposit of given ERC20 token\"}},\"get_multisig_control_address()\":{\"returns\":{\"_0\":\"current multisig_control_address\"}},\"get_vega_asset_id(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"The assigned Vega Asset Id for given ERC20 token\"}},\"is_asset_listed(address)\":{\"params\":{\"asset_source\":\"Contract address for given ERC20 token\"},\"returns\":{\"_0\":\"True if asset is listed\"}},\"list_asset(address,bytes32,uint256,bytes)\":{\"details\":\"MUST emit Asset_Listed if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\",\"vega_asset_id\":\"Vega-generated asset ID for internal use in Vega Core\"}},\"remove_asset(address,uint256,bytes)\":{\"details\":\"MUST emit Asset_Removed if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_deposit_maximum(address,uint256,uint256,bytes)\":{\"details\":\"MUST emit Asset_Deposit_Maximum_Set if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"maximum_amount\":\"Maximum deposit amount\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_deposit_minimum(address,uint256,uint256,bytes)\":{\"details\":\"MUST emit Asset_Deposit_Minimum_Set if successful\",\"params\":{\"asset_source\":\"Contract address for given ERC20 token\",\"minimum_amount\":\"Minimum deposit amount\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"withdraw_asset(address,uint256,uint256,address,uint256,bytes)\":{\"details\":\"MUST emit Asset_Withdrawn if successful\",\"params\":{\"amount\":\"Amount of ERC20 tokens to withdraw\",\"asset_source\":\"Contract address for given ERC20 token\",\"expiry\":\"Vega-assigned timestamp of withdrawal order expiration\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\",\"target\":\"Target Ethereum address to receive withdrawn ERC20 tokens\"}}},\"title\":\"ERC20 Bridge Logic Interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"deposit_asset(address,uint256,bytes32)\":{\"notice\":\"This function allows a user to deposit given ERC20 tokens into VegaERC20 approve function should be run before running this\"},\"get_deposit_maximum(address)\":{\"notice\":\"This view returns maximum valid deposit\"},\"get_deposit_minimum(address)\":{\"notice\":\"This view returns minimum valid deposit\"},\"is_asset_listed(address)\":{\"notice\":\"This view returns true if the given ERC20 token contract has been listed valid for deposit\"},\"list_asset(address,bytes32,uint256,bytes)\":{\"notice\":\"This function lists the given ERC20 token contract as valid for deposit to this bridgeSee MultisigControl for more about signatures\"},\"remove_asset(address,uint256,bytes)\":{\"notice\":\"This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridgeSee MultisigControl for more about signatures\"},\"set_deposit_maximum(address,uint256,uint256,bytes)\":{\"notice\":\"This function sets the maximum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"},\"set_deposit_minimum(address,uint256,uint256,bytes)\":{\"notice\":\"This function sets the minimum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"},\"withdraw_asset(address,uint256,uint256,address,uint256,bytes)\":{\"notice\":\"This function sets the maximum allowable deposit for the given ERC20 tokenSee MultisigControl for more about signatures\"}},\"notice\":\"Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/paulwebb/repos/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":\"IERC20_Bridge_Logic\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/paulwebb/repos/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol\":{\"keccak256\":\"0x4efbd3e355f9dcb70d9f1fe09ef3dd2ba6c185725b2f4a2dad66fd3c88f4515b\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://d1cbbc505f9a3e2368c86aedea61fdba60c904488c104c815e1044ca9de82dda\",\"dweb:/ipfs/QmaCANmHXzcznxz6vRqj99pw7eww4Hkzbt5zi2Zo1PP8Az\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -449,9 +443,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "//SPDX-License-Identifier: UNLICENSED\npragma solidity 0.7.6;\n\n/// @title ERC20 Bridge Logic Interface\n/// @author Vega Protocol\n/// @notice Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.\n// @notice All funds deposited/withdrawn are to/from the ERC20_Asset_Pool\nabstract contract IERC20_Bridge_Logic {\n\n    /***************************EVENTS****************************/\n    event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 amount, uint256 nonce);\n    event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 amount, bytes32 vega_public_key);\n    event Asset_Deposit_Minimum_Set(address indexed asset_source,  uint256 new_minimum, uint256 nonce);\n    event Asset_Deposit_Maximum_Set(address indexed asset_source,  uint256 new_maximum, uint256 nonce);\n    event Asset_Listed(address indexed asset_source,  bytes32 indexed vega_asset_id, uint256 nonce);\n    event Asset_Removed(address indexed asset_source,  uint256 nonce);\n\n    /***************************FUNCTIONS*************************/\n    /// @notice This function lists the given ERC20 token contract as valid for deposit to this bridge\n    /// @param asset_source Contract address for given ERC20 token\n    /// @param vega_asset_id Vega-generated asset ID for internal use in Vega Core\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit Asset_Listed if successful\n    function list_asset(address asset_source, bytes32 vega_asset_id, uint256 nonce, bytes memory signatures) public virtual;\n\n    /// @notice This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridge\n    /// @param asset_source Contract address for given ERC20 token\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit Asset_Removed if successful\n    function remove_asset(address asset_source, uint256 nonce, bytes memory signatures) public virtual;\n\n    /// @notice This function sets the minimum allowable deposit for the given ERC20 token\n    /// @param asset_source Contract address for given ERC20 token\n    /// @param minimum_amount Minimum deposit amount\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit Asset_Deposit_Minimum_Set if successful\n    function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public virtual;\n\n    /// @notice This function sets the maximum allowable deposit for the given ERC20 token\n    /// @param asset_source Contract address for given ERC20 token\n    /// @param maximum_amount Maximum deposit amount\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit Asset_Deposit_Maximum_Set if successful\n    function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;\n\n    /// @notice This function sets the maximum allowable deposit for the given ERC20 token\n    /// @param asset_source Contract address for given ERC20 token\n    /// @param amount Amount of ERC20 tokens to withdraw\n    /// @param expiry Vega-assigned timestamp of withdrawal order expiration\n    /// @param target Target Ethereum address to receive withdrawn ERC20 tokens\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit Asset_Withdrawn if successful\n    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, address target, uint256 nonce, bytes memory signatures) public virtual;\n\n    /// @notice This function allows a user to deposit given ERC20 tokens into Vega\n    /// @param asset_source Contract address for given ERC20 token\n    /// @param amount Amount of tokens to be deposited into Vega\n    /// @param vega_public_key Target vega public key to be credited with this deposit\n    /// @dev MUST emit Asset_Deposited if successful\n    /// @dev ERC20 approve function should be run before running this\n    /// @notice ERC20 approve function should be run before running this\n    function deposit_asset(address asset_source, uint256 amount, bytes32 vega_public_key) public virtual;\n\n    /***************************VIEWS*****************************/\n    /// @notice This view returns true if the given ERC20 token contract has been listed valid for deposit\n    /// @param asset_source Contract address for given ERC20 token\n    /// @return True if asset is listed\n    function is_asset_listed(address asset_source) public virtual view returns(bool);\n\n    /// @notice This view returns minimum valid deposit\n    /// @param asset_source Contract address for given ERC20 token\n    /// @return Minimum valid deposit of given ERC20 token\n    function get_deposit_minimum(address asset_source) public virtual view returns(uint256);\n\n    /// @notice This view returns maximum valid deposit\n    /// @param asset_source Contract address for given ERC20 token\n    /// @return Maximum valid deposit of given ERC20 token\n    function get_deposit_maximum(address asset_source) public virtual view returns(uint256);\n\n    /// @return current multisig_control_address\n    function get_multisig_control_address() public virtual view returns(address);\n\n    /// @param asset_source Contract address for given ERC20 token\n    /// @return The assigned Vega Asset Id for given ERC20 token\n    function get_vega_asset_id(address asset_source) public virtual view returns(bytes32);\n\n    /// @param vega_asset_id Vega-assigned asset ID for which you want the ERC20 token address\n    /// @return The ERC20 token contract address for a given Vega Asset Id\n    function get_asset_source(bytes32 vega_asset_id) public virtual view returns(address);\n\n}\n\n/**\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMWEMMMMMMMMMMMMMMMMMMMMMMMMMM...............MMMMMMMMMMMMM\nMMMMMMLOVEMMMMMMMMMMMMMMMMMMMMMM...............MMMMMMMMMMMMM\nMMMMMMMMMMHIXELMMMMMMMMMMMM....................MMMMMNNMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMM....................MMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMM88=........................+MMMMMMMMMM\nMMMMMMMMMMMMMMMMM....................MMMMM...MMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMM....................MMMMM...MMMMMMMMMMMMMMM\nMMMMMMMMMMMM.........................MM+..MMM....+MMMMMMMMMM\nMMMMMMMMMNMM...................... ..MM?..MMM.. .+MMMMMMMMMM\nMMMMNDDMM+........................+MM........MM..+MMMMMMMMMM\nMMMMZ.............................+MM....................MMM\nMMMMZ.............................+MM....................MMM\nMMMMZ.............................+MM....................DDD\nMMMMZ.............................+MM..ZMMMMMMMMMMMMMMMMMMMM\nMMMMZ.............................+MM..ZMMMMMMMMMMMMMMMMMMMM\nMM..............................MMZ....ZMMMMMMMMMMMMMMMMMMMM\nMM............................MM.......ZMMMMMMMMMMMMMMMMMMMM\nMM............................MM.......ZMMMMMMMMMMMMMMMMMMMM\nMM......................ZMMMMM.......MMMMMMMMMMMMMMMMMMMMMMM\nMM............... ......ZMMMMM.... ..MMMMMMMMMMMMMMMMMMMMMMM\nMM...............MMMMM88~.........+MM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......$DDDDDDD.......$DDDDD..DDNMM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......$DDDDDDD.......$DDDDD..DDNMM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......ZMMMMMMM.......ZMMMMM..MMMMM..ZMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMM+.......MMMMM88NMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMM+.......MMMMM88NMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/\n",
-  "sourcePath": "/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
+  "sourcePath": "/Users/paulwebb/repos/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
   "ast": {
-    "absolutePath": "/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
+    "absolutePath": "/Users/paulwebb/repos/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
     "exportedSymbols": {
       "IERC20_Bridge_Logic": [
         1138
@@ -2427,1979 +2421,2158 @@
     "src": "38:8467:5"
   },
   "legacyAST": {
-    "absolutePath": "/home/danny/source/vega/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
-    "exportedSymbols": {
-      "IERC20_Bridge_Logic": [
-        1138
-      ]
+    "attributes": {
+      "absolutePath": "/Users/paulwebb/repos/MultisigControl/TESTNET_ASSET_DEPLOYMENT/contracts/IERC20_Bridge_Logic.sol",
+      "exportedSymbols": {
+        "IERC20_Bridge_Logic": [
+          1138
+        ]
+      },
+      "license": "UNLICENSED"
     },
-    "id": 1139,
-    "license": "UNLICENSED",
-    "nodeType": "SourceUnit",
-    "nodes": [
+    "children": [
       {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.7",
+            ".6"
+          ]
+        },
         "id": 968,
-        "literals": [
-          "solidity",
-          "0.7",
-          ".6"
-        ],
-        "nodeType": "PragmaDirective",
+        "name": "PragmaDirective",
         "src": "38:22:5"
       },
       {
-        "abstract": true,
-        "baseContracts": [],
-        "contractDependencies": [],
-        "contractKind": "contract",
-        "documentation": {
-          "id": 969,
-          "nodeType": "StructuredDocumentation",
-          "src": "62:194:5",
-          "text": "@title ERC20 Bridge Logic Interface\n @author Vega Protocol\n @notice Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega."
+        "attributes": {
+          "abstract": true,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            1138
+          ],
+          "name": "IERC20_Bridge_Logic",
+          "scope": 1139
         },
-        "fullyImplemented": false,
-        "id": 1138,
-        "linearizedBaseContracts": [
-          1138
-        ],
-        "name": "IERC20_Bridge_Logic",
-        "nodeType": "ContractDefinition",
-        "nodes": [
+        "children": [
           {
-            "anonymous": false,
-            "id": 979,
-            "name": "Asset_Withdrawn",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 978,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 971,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "user_address",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 979,
-                  "src": "465:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 970,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "465:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 973,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 979,
-                  "src": "495:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 972,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "495:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 975,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 979,
-                  "src": "525:14:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 974,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "525:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 977,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 979,
-                  "src": "541:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 976,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "541:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "464:91:5"
+            "attributes": {
+              "text": "@title ERC20 Bridge Logic Interface\n @author Vega Protocol\n @notice Implementations of this interface are used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega."
             },
+            "id": 969,
+            "name": "StructuredDocumentation",
+            "src": "62:194:5"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "Asset_Withdrawn"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "user_address",
+                      "scope": 979,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 970,
+                        "name": "ElementaryTypeName",
+                        "src": "465:7:5"
+                      }
+                    ],
+                    "id": 971,
+                    "name": "VariableDeclaration",
+                    "src": "465:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 979,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 972,
+                        "name": "ElementaryTypeName",
+                        "src": "495:7:5"
+                      }
+                    ],
+                    "id": 973,
+                    "name": "VariableDeclaration",
+                    "src": "495:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "amount",
+                      "scope": 979,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 974,
+                        "name": "ElementaryTypeName",
+                        "src": "525:7:5"
+                      }
+                    ],
+                    "id": 975,
+                    "name": "VariableDeclaration",
+                    "src": "525:14:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 979,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 976,
+                        "name": "ElementaryTypeName",
+                        "src": "541:7:5"
+                      }
+                    ],
+                    "id": 977,
+                    "name": "VariableDeclaration",
+                    "src": "541:13:5"
+                  }
+                ],
+                "id": 978,
+                "name": "ParameterList",
+                "src": "464:91:5"
+              }
+            ],
+            "id": 979,
+            "name": "EventDefinition",
             "src": "443:113:5"
           },
           {
-            "anonymous": false,
-            "id": 989,
-            "name": "Asset_Deposited",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 988,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 981,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "user_address",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 989,
-                  "src": "583:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 980,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "583:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 983,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 989,
-                  "src": "613:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 982,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "613:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 985,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 989,
-                  "src": "643:14:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 984,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "643:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 987,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "vega_public_key",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 989,
-                  "src": "659:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes32",
-                    "typeString": "bytes32"
-                  },
-                  "typeName": {
-                    "id": 986,
-                    "name": "bytes32",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "659:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes32",
-                      "typeString": "bytes32"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "582:101:5"
+            "attributes": {
+              "anonymous": false,
+              "name": "Asset_Deposited"
             },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "user_address",
+                      "scope": 989,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 980,
+                        "name": "ElementaryTypeName",
+                        "src": "583:7:5"
+                      }
+                    ],
+                    "id": 981,
+                    "name": "VariableDeclaration",
+                    "src": "583:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 989,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 982,
+                        "name": "ElementaryTypeName",
+                        "src": "613:7:5"
+                      }
+                    ],
+                    "id": 983,
+                    "name": "VariableDeclaration",
+                    "src": "613:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "amount",
+                      "scope": 989,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 984,
+                        "name": "ElementaryTypeName",
+                        "src": "643:7:5"
+                      }
+                    ],
+                    "id": 985,
+                    "name": "VariableDeclaration",
+                    "src": "643:14:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "vega_public_key",
+                      "scope": 989,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 986,
+                        "name": "ElementaryTypeName",
+                        "src": "659:7:5"
+                      }
+                    ],
+                    "id": 987,
+                    "name": "VariableDeclaration",
+                    "src": "659:23:5"
+                  }
+                ],
+                "id": 988,
+                "name": "ParameterList",
+                "src": "582:101:5"
+              }
+            ],
+            "id": 989,
+            "name": "EventDefinition",
             "src": "561:123:5"
           },
           {
-            "anonymous": false,
-            "id": 997,
-            "name": "Asset_Deposit_Minimum_Set",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 996,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 991,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 997,
-                  "src": "721:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 990,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "721:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 993,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "new_minimum",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 997,
-                  "src": "752:19:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 992,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "752:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 995,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 997,
-                  "src": "773:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 994,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "773:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "720:67:5"
+            "attributes": {
+              "anonymous": false,
+              "name": "Asset_Deposit_Minimum_Set"
             },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 997,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 990,
+                        "name": "ElementaryTypeName",
+                        "src": "721:7:5"
+                      }
+                    ],
+                    "id": 991,
+                    "name": "VariableDeclaration",
+                    "src": "721:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "new_minimum",
+                      "scope": 997,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 992,
+                        "name": "ElementaryTypeName",
+                        "src": "752:7:5"
+                      }
+                    ],
+                    "id": 993,
+                    "name": "VariableDeclaration",
+                    "src": "752:19:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 997,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 994,
+                        "name": "ElementaryTypeName",
+                        "src": "773:7:5"
+                      }
+                    ],
+                    "id": 995,
+                    "name": "VariableDeclaration",
+                    "src": "773:13:5"
+                  }
+                ],
+                "id": 996,
+                "name": "ParameterList",
+                "src": "720:67:5"
+              }
+            ],
+            "id": 997,
+            "name": "EventDefinition",
             "src": "689:99:5"
           },
           {
-            "anonymous": false,
-            "id": 1005,
-            "name": "Asset_Deposit_Maximum_Set",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 1004,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 999,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1005,
-                  "src": "825:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 998,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "825:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1001,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "new_maximum",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1005,
-                  "src": "856:19:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1000,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "856:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1003,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1005,
-                  "src": "877:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1002,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "877:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "824:67:5"
+            "attributes": {
+              "anonymous": false,
+              "name": "Asset_Deposit_Maximum_Set"
             },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1005,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 998,
+                        "name": "ElementaryTypeName",
+                        "src": "825:7:5"
+                      }
+                    ],
+                    "id": 999,
+                    "name": "VariableDeclaration",
+                    "src": "825:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "new_maximum",
+                      "scope": 1005,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1000,
+                        "name": "ElementaryTypeName",
+                        "src": "856:7:5"
+                      }
+                    ],
+                    "id": 1001,
+                    "name": "VariableDeclaration",
+                    "src": "856:19:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1005,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1002,
+                        "name": "ElementaryTypeName",
+                        "src": "877:7:5"
+                      }
+                    ],
+                    "id": 1003,
+                    "name": "VariableDeclaration",
+                    "src": "877:13:5"
+                  }
+                ],
+                "id": 1004,
+                "name": "ParameterList",
+                "src": "824:67:5"
+              }
+            ],
+            "id": 1005,
+            "name": "EventDefinition",
             "src": "793:99:5"
           },
           {
-            "anonymous": false,
-            "id": 1013,
-            "name": "Asset_Listed",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 1012,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1007,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1013,
-                  "src": "916:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1006,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "916:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1009,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "vega_asset_id",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1013,
-                  "src": "947:29:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes32",
-                    "typeString": "bytes32"
-                  },
-                  "typeName": {
-                    "id": 1008,
-                    "name": "bytes32",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "947:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes32",
-                      "typeString": "bytes32"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1011,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1013,
-                  "src": "978:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1010,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "978:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "915:77:5"
+            "attributes": {
+              "anonymous": false,
+              "name": "Asset_Listed"
             },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1013,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1006,
+                        "name": "ElementaryTypeName",
+                        "src": "916:7:5"
+                      }
+                    ],
+                    "id": 1007,
+                    "name": "VariableDeclaration",
+                    "src": "916:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "vega_asset_id",
+                      "scope": 1013,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 1008,
+                        "name": "ElementaryTypeName",
+                        "src": "947:7:5"
+                      }
+                    ],
+                    "id": 1009,
+                    "name": "VariableDeclaration",
+                    "src": "947:29:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1013,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1010,
+                        "name": "ElementaryTypeName",
+                        "src": "978:7:5"
+                      }
+                    ],
+                    "id": 1011,
+                    "name": "VariableDeclaration",
+                    "src": "978:13:5"
+                  }
+                ],
+                "id": 1012,
+                "name": "ParameterList",
+                "src": "915:77:5"
+              }
+            ],
+            "id": 1013,
+            "name": "EventDefinition",
             "src": "897:96:5"
           },
           {
-            "anonymous": false,
-            "id": 1019,
-            "name": "Asset_Removed",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 1018,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1015,
-                  "indexed": true,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1019,
-                  "src": "1018:28:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1014,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1018:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1017,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1019,
-                  "src": "1049:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1016,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1049:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1017:46:5"
+            "attributes": {
+              "anonymous": false,
+              "name": "Asset_Removed"
             },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1019,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1014,
+                        "name": "ElementaryTypeName",
+                        "src": "1018:7:5"
+                      }
+                    ],
+                    "id": 1015,
+                    "name": "VariableDeclaration",
+                    "src": "1018:28:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1019,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1016,
+                        "name": "ElementaryTypeName",
+                        "src": "1049:7:5"
+                      }
+                    ],
+                    "id": 1017,
+                    "name": "VariableDeclaration",
+                    "src": "1049:13:5"
+                  }
+                ],
+                "id": 1018,
+                "name": "ParameterList",
+                "src": "1017:46:5"
+              }
+            ],
+            "id": 1019,
+            "name": "EventDefinition",
             "src": "998:66:5"
           },
           {
-            "documentation": {
-              "id": 1020,
-              "nodeType": "StructuredDocumentation",
-              "src": "1138:537:5",
-              "text": "@notice This function lists the given ERC20 token contract as valid for deposit to this bridge\n @param asset_source Contract address for given ERC20 token\n @param vega_asset_id Vega-generated asset ID for internal use in Vega Core\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Listed if successful"
+            "attributes": {
+              "functionSelector": "a8780cda",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "list_asset",
+              "scope": 1138,
+              "stateMutability": "nonpayable",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "a8780cda",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This function lists the given ERC20 token contract as valid for deposit to this bridge\n @param asset_source Contract address for given ERC20 token\n @param vega_asset_id Vega-generated asset ID for internal use in Vega Core\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Listed if successful"
+                },
+                "id": 1020,
+                "name": "StructuredDocumentation",
+                "src": "1138:537:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1031,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1021,
+                        "name": "ElementaryTypeName",
+                        "src": "1700:7:5"
+                      }
+                    ],
+                    "id": 1022,
+                    "name": "VariableDeclaration",
+                    "src": "1700:20:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "vega_asset_id",
+                      "scope": 1031,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 1023,
+                        "name": "ElementaryTypeName",
+                        "src": "1722:7:5"
+                      }
+                    ],
+                    "id": 1024,
+                    "name": "VariableDeclaration",
+                    "src": "1722:21:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1031,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1025,
+                        "name": "ElementaryTypeName",
+                        "src": "1745:7:5"
+                      }
+                    ],
+                    "id": 1026,
+                    "name": "VariableDeclaration",
+                    "src": "1745:13:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "signatures",
+                      "scope": 1031,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "bytes",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes",
+                          "type": "bytes"
+                        },
+                        "id": 1027,
+                        "name": "ElementaryTypeName",
+                        "src": "1760:5:5"
+                      }
+                    ],
+                    "id": 1028,
+                    "name": "VariableDeclaration",
+                    "src": "1760:23:5"
+                  }
+                ],
+                "id": 1029,
+                "name": "ParameterList",
+                "src": "1699:85:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1030,
+                "name": "ParameterList",
+                "src": "1799:0:5"
+              }
+            ],
             "id": 1031,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "list_asset",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1029,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1022,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1031,
-                  "src": "1700:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1021,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1700:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1024,
-                  "mutability": "mutable",
-                  "name": "vega_asset_id",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1031,
-                  "src": "1722:21:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes32",
-                    "typeString": "bytes32"
-                  },
-                  "typeName": {
-                    "id": 1023,
-                    "name": "bytes32",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1722:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes32",
-                      "typeString": "bytes32"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1026,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1031,
-                  "src": "1745:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1025,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1745:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1028,
-                  "mutability": "mutable",
-                  "name": "signatures",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1031,
-                  "src": "1760:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_memory_ptr",
-                    "typeString": "bytes"
-                  },
-                  "typeName": {
-                    "id": 1027,
-                    "name": "bytes",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1760:5:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes_storage_ptr",
-                      "typeString": "bytes"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1699:85:5"
-            },
-            "returnParameters": {
-              "id": 1030,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "1799:0:5"
-            },
-            "scope": 1138,
-            "src": "1680:120:5",
-            "stateMutability": "nonpayable",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "1680:120:5"
           },
           {
-            "documentation": {
-              "id": 1032,
-              "nodeType": "StructuredDocumentation",
-              "src": "1806:492:5",
-              "text": "@notice This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridge\n @param asset_source Contract address for given ERC20 token\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Removed if successful"
+            "attributes": {
+              "functionSelector": "c76de358",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "remove_asset",
+              "scope": 1138,
+              "stateMutability": "nonpayable",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "c76de358",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridge\n @param asset_source Contract address for given ERC20 token\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Removed if successful"
+                },
+                "id": 1032,
+                "name": "StructuredDocumentation",
+                "src": "1806:492:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1041,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1033,
+                        "name": "ElementaryTypeName",
+                        "src": "2325:7:5"
+                      }
+                    ],
+                    "id": 1034,
+                    "name": "VariableDeclaration",
+                    "src": "2325:20:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1041,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1035,
+                        "name": "ElementaryTypeName",
+                        "src": "2347:7:5"
+                      }
+                    ],
+                    "id": 1036,
+                    "name": "VariableDeclaration",
+                    "src": "2347:13:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "signatures",
+                      "scope": 1041,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "bytes",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes",
+                          "type": "bytes"
+                        },
+                        "id": 1037,
+                        "name": "ElementaryTypeName",
+                        "src": "2362:5:5"
+                      }
+                    ],
+                    "id": 1038,
+                    "name": "VariableDeclaration",
+                    "src": "2362:23:5"
+                  }
+                ],
+                "id": 1039,
+                "name": "ParameterList",
+                "src": "2324:62:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1040,
+                "name": "ParameterList",
+                "src": "2401:0:5"
+              }
+            ],
             "id": 1041,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "remove_asset",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1039,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1034,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1041,
-                  "src": "2325:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1033,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "2325:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1036,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1041,
-                  "src": "2347:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1035,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "2347:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1038,
-                  "mutability": "mutable",
-                  "name": "signatures",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1041,
-                  "src": "2362:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_memory_ptr",
-                    "typeString": "bytes"
-                  },
-                  "typeName": {
-                    "id": 1037,
-                    "name": "bytes",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "2362:5:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes_storage_ptr",
-                      "typeString": "bytes"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "2324:62:5"
-            },
-            "returnParameters": {
-              "id": 1040,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "2401:0:5"
-            },
-            "scope": 1138,
-            "src": "2303:99:5",
-            "stateMutability": "nonpayable",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "2303:99:5"
           },
           {
-            "documentation": {
-              "id": 1042,
-              "nodeType": "StructuredDocumentation",
-              "src": "2408:508:5",
-              "text": "@notice This function sets the minimum allowable deposit for the given ERC20 token\n @param asset_source Contract address for given ERC20 token\n @param minimum_amount Minimum deposit amount\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Deposit_Minimum_Set if successful"
+            "attributes": {
+              "functionSelector": "3882b3da",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "set_deposit_minimum",
+              "scope": 1138,
+              "stateMutability": "nonpayable",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "3882b3da",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This function sets the minimum allowable deposit for the given ERC20 token\n @param asset_source Contract address for given ERC20 token\n @param minimum_amount Minimum deposit amount\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Deposit_Minimum_Set if successful"
+                },
+                "id": 1042,
+                "name": "StructuredDocumentation",
+                "src": "2408:508:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1053,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1043,
+                        "name": "ElementaryTypeName",
+                        "src": "2950:7:5"
+                      }
+                    ],
+                    "id": 1044,
+                    "name": "VariableDeclaration",
+                    "src": "2950:20:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "minimum_amount",
+                      "scope": 1053,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1045,
+                        "name": "ElementaryTypeName",
+                        "src": "2972:7:5"
+                      }
+                    ],
+                    "id": 1046,
+                    "name": "VariableDeclaration",
+                    "src": "2972:22:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1053,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1047,
+                        "name": "ElementaryTypeName",
+                        "src": "2996:7:5"
+                      }
+                    ],
+                    "id": 1048,
+                    "name": "VariableDeclaration",
+                    "src": "2996:13:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "signatures",
+                      "scope": 1053,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "bytes",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes",
+                          "type": "bytes"
+                        },
+                        "id": 1049,
+                        "name": "ElementaryTypeName",
+                        "src": "3011:5:5"
+                      }
+                    ],
+                    "id": 1050,
+                    "name": "VariableDeclaration",
+                    "src": "3011:23:5"
+                  }
+                ],
+                "id": 1051,
+                "name": "ParameterList",
+                "src": "2949:86:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1052,
+                "name": "ParameterList",
+                "src": "3050:0:5"
+              }
+            ],
             "id": 1053,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "set_deposit_minimum",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1051,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1044,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1053,
-                  "src": "2950:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1043,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "2950:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1046,
-                  "mutability": "mutable",
-                  "name": "minimum_amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1053,
-                  "src": "2972:22:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1045,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "2972:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1048,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1053,
-                  "src": "2996:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1047,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "2996:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1050,
-                  "mutability": "mutable",
-                  "name": "signatures",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1053,
-                  "src": "3011:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_memory_ptr",
-                    "typeString": "bytes"
-                  },
-                  "typeName": {
-                    "id": 1049,
-                    "name": "bytes",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "3011:5:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes_storage_ptr",
-                      "typeString": "bytes"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "2949:86:5"
-            },
-            "returnParameters": {
-              "id": 1052,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "3050:0:5"
-            },
-            "scope": 1138,
-            "src": "2921:130:5",
-            "stateMutability": "nonpayable",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "2921:130:5"
           },
           {
-            "documentation": {
-              "id": 1054,
-              "nodeType": "StructuredDocumentation",
-              "src": "3057:508:5",
-              "text": "@notice This function sets the maximum allowable deposit for the given ERC20 token\n @param asset_source Contract address for given ERC20 token\n @param maximum_amount Maximum deposit amount\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Deposit_Maximum_Set if successful"
+            "attributes": {
+              "functionSelector": "292463b1",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "set_deposit_maximum",
+              "scope": 1138,
+              "stateMutability": "nonpayable",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "292463b1",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This function sets the maximum allowable deposit for the given ERC20 token\n @param asset_source Contract address for given ERC20 token\n @param maximum_amount Maximum deposit amount\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Deposit_Maximum_Set if successful"
+                },
+                "id": 1054,
+                "name": "StructuredDocumentation",
+                "src": "3057:508:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1065,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1055,
+                        "name": "ElementaryTypeName",
+                        "src": "3599:7:5"
+                      }
+                    ],
+                    "id": 1056,
+                    "name": "VariableDeclaration",
+                    "src": "3599:20:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "maximum_amount",
+                      "scope": 1065,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1057,
+                        "name": "ElementaryTypeName",
+                        "src": "3621:7:5"
+                      }
+                    ],
+                    "id": 1058,
+                    "name": "VariableDeclaration",
+                    "src": "3621:22:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1065,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1059,
+                        "name": "ElementaryTypeName",
+                        "src": "3645:7:5"
+                      }
+                    ],
+                    "id": 1060,
+                    "name": "VariableDeclaration",
+                    "src": "3645:13:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "signatures",
+                      "scope": 1065,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "bytes",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes",
+                          "type": "bytes"
+                        },
+                        "id": 1061,
+                        "name": "ElementaryTypeName",
+                        "src": "3660:5:5"
+                      }
+                    ],
+                    "id": 1062,
+                    "name": "VariableDeclaration",
+                    "src": "3660:23:5"
+                  }
+                ],
+                "id": 1063,
+                "name": "ParameterList",
+                "src": "3598:86:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1064,
+                "name": "ParameterList",
+                "src": "3699:0:5"
+              }
+            ],
             "id": 1065,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "set_deposit_maximum",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1063,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1056,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "3599:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1055,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "3599:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1058,
-                  "mutability": "mutable",
-                  "name": "maximum_amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "3621:22:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1057,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "3621:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1060,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "3645:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1059,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "3645:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1062,
-                  "mutability": "mutable",
-                  "name": "signatures",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "3660:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_memory_ptr",
-                    "typeString": "bytes"
-                  },
-                  "typeName": {
-                    "id": 1061,
-                    "name": "bytes",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "3660:5:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes_storage_ptr",
-                      "typeString": "bytes"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "3598:86:5"
-            },
-            "returnParameters": {
-              "id": 1064,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "3699:0:5"
-            },
-            "scope": 1138,
-            "src": "3570:130:5",
-            "stateMutability": "nonpayable",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "3570:130:5"
           },
           {
-            "documentation": {
-              "id": 1066,
-              "nodeType": "StructuredDocumentation",
-              "src": "3706:659:5",
-              "text": "@notice This function sets the maximum allowable deposit for the given ERC20 token\n @param asset_source Contract address for given ERC20 token\n @param amount Amount of ERC20 tokens to withdraw\n @param expiry Vega-assigned timestamp of withdrawal order expiration\n @param target Target Ethereum address to receive withdrawn ERC20 tokens\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Withdrawn if successful"
+            "attributes": {
+              "functionSelector": "af9bd2b2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "withdraw_asset",
+              "scope": 1138,
+              "stateMutability": "nonpayable",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "af9bd2b2",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This function sets the maximum allowable deposit for the given ERC20 token\n @param asset_source Contract address for given ERC20 token\n @param amount Amount of ERC20 tokens to withdraw\n @param expiry Vega-assigned timestamp of withdrawal order expiration\n @param target Target Ethereum address to receive withdrawn ERC20 tokens\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit Asset_Withdrawn if successful"
+                },
+                "id": 1066,
+                "name": "StructuredDocumentation",
+                "src": "3706:659:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1081,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1067,
+                        "name": "ElementaryTypeName",
+                        "src": "4394:7:5"
+                      }
+                    ],
+                    "id": 1068,
+                    "name": "VariableDeclaration",
+                    "src": "4394:20:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "amount",
+                      "scope": 1081,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1069,
+                        "name": "ElementaryTypeName",
+                        "src": "4416:7:5"
+                      }
+                    ],
+                    "id": 1070,
+                    "name": "VariableDeclaration",
+                    "src": "4416:14:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "expiry",
+                      "scope": 1081,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1071,
+                        "name": "ElementaryTypeName",
+                        "src": "4432:7:5"
+                      }
+                    ],
+                    "id": 1072,
+                    "name": "VariableDeclaration",
+                    "src": "4432:14:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "target",
+                      "scope": 1081,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1073,
+                        "name": "ElementaryTypeName",
+                        "src": "4448:7:5"
+                      }
+                    ],
+                    "id": 1074,
+                    "name": "VariableDeclaration",
+                    "src": "4448:14:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "nonce",
+                      "scope": 1081,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1075,
+                        "name": "ElementaryTypeName",
+                        "src": "4464:7:5"
+                      }
+                    ],
+                    "id": 1076,
+                    "name": "VariableDeclaration",
+                    "src": "4464:13:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "signatures",
+                      "scope": 1081,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "bytes",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes",
+                          "type": "bytes"
+                        },
+                        "id": 1077,
+                        "name": "ElementaryTypeName",
+                        "src": "4479:5:5"
+                      }
+                    ],
+                    "id": 1078,
+                    "name": "VariableDeclaration",
+                    "src": "4479:23:5"
+                  }
+                ],
+                "id": 1079,
+                "name": "ParameterList",
+                "src": "4393:110:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1080,
+                "name": "ParameterList",
+                "src": "4518:0:5"
+              }
+            ],
             "id": 1081,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "withdraw_asset",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1079,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1068,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1081,
-                  "src": "4394:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1067,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "4394:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1070,
-                  "mutability": "mutable",
-                  "name": "amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1081,
-                  "src": "4416:14:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1069,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "4416:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1072,
-                  "mutability": "mutable",
-                  "name": "expiry",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1081,
-                  "src": "4432:14:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1071,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "4432:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1074,
-                  "mutability": "mutable",
-                  "name": "target",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1081,
-                  "src": "4448:14:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1073,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "4448:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1076,
-                  "mutability": "mutable",
-                  "name": "nonce",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1081,
-                  "src": "4464:13:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1075,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "4464:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1078,
-                  "mutability": "mutable",
-                  "name": "signatures",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1081,
-                  "src": "4479:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_memory_ptr",
-                    "typeString": "bytes"
-                  },
-                  "typeName": {
-                    "id": 1077,
-                    "name": "bytes",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "4479:5:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes_storage_ptr",
-                      "typeString": "bytes"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "4393:110:5"
-            },
-            "returnParameters": {
-              "id": 1080,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "4518:0:5"
-            },
-            "scope": 1138,
-            "src": "4370:149:5",
-            "stateMutability": "nonpayable",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "4370:149:5"
           },
           {
-            "documentation": {
-              "id": 1082,
-              "nodeType": "StructuredDocumentation",
-              "src": "4525:494:5",
-              "text": "@notice This function allows a user to deposit given ERC20 tokens into Vega\n @param asset_source Contract address for given ERC20 token\n @param amount Amount of tokens to be deposited into Vega\n @param vega_public_key Target vega public key to be credited with this deposit\n @dev MUST emit Asset_Deposited if successful\n @dev ERC20 approve function should be run before running this\n @notice ERC20 approve function should be run before running this"
+            "attributes": {
+              "functionSelector": "f7683932",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "deposit_asset",
+              "scope": 1138,
+              "stateMutability": "nonpayable",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "f7683932",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This function allows a user to deposit given ERC20 tokens into Vega\n @param asset_source Contract address for given ERC20 token\n @param amount Amount of tokens to be deposited into Vega\n @param vega_public_key Target vega public key to be credited with this deposit\n @dev MUST emit Asset_Deposited if successful\n @dev ERC20 approve function should be run before running this\n @notice ERC20 approve function should be run before running this"
+                },
+                "id": 1082,
+                "name": "StructuredDocumentation",
+                "src": "4525:494:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1091,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1083,
+                        "name": "ElementaryTypeName",
+                        "src": "5047:7:5"
+                      }
+                    ],
+                    "id": 1084,
+                    "name": "VariableDeclaration",
+                    "src": "5047:20:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "amount",
+                      "scope": 1091,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1085,
+                        "name": "ElementaryTypeName",
+                        "src": "5069:7:5"
+                      }
+                    ],
+                    "id": 1086,
+                    "name": "VariableDeclaration",
+                    "src": "5069:14:5"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "vega_public_key",
+                      "scope": 1091,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 1087,
+                        "name": "ElementaryTypeName",
+                        "src": "5085:7:5"
+                      }
+                    ],
+                    "id": 1088,
+                    "name": "VariableDeclaration",
+                    "src": "5085:23:5"
+                  }
+                ],
+                "id": 1089,
+                "name": "ParameterList",
+                "src": "5046:63:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1090,
+                "name": "ParameterList",
+                "src": "5124:0:5"
+              }
+            ],
             "id": 1091,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "deposit_asset",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1089,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1084,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1091,
-                  "src": "5047:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1083,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5047:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1086,
-                  "mutability": "mutable",
-                  "name": "amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1091,
-                  "src": "5069:14:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1085,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5069:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1088,
-                  "mutability": "mutable",
-                  "name": "vega_public_key",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1091,
-                  "src": "5085:23:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes32",
-                    "typeString": "bytes32"
-                  },
-                  "typeName": {
-                    "id": 1087,
-                    "name": "bytes32",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5085:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes32",
-                      "typeString": "bytes32"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "5046:63:5"
-            },
-            "returnParameters": {
-              "id": 1090,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "5124:0:5"
-            },
-            "scope": 1138,
-            "src": "5024:101:5",
-            "stateMutability": "nonpayable",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "5024:101:5"
           },
           {
-            "documentation": {
-              "id": 1092,
-              "nodeType": "StructuredDocumentation",
-              "src": "5199:209:5",
-              "text": "@notice This view returns true if the given ERC20 token contract has been listed valid for deposit\n @param asset_source Contract address for given ERC20 token\n @return True if asset is listed"
+            "attributes": {
+              "functionSelector": "7fd27b7f",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "is_asset_listed",
+              "scope": 1138,
+              "stateMutability": "view",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "7fd27b7f",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This view returns true if the given ERC20 token contract has been listed valid for deposit\n @param asset_source Contract address for given ERC20 token\n @return True if asset is listed"
+                },
+                "id": 1092,
+                "name": "StructuredDocumentation",
+                "src": "5199:209:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1099,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1093,
+                        "name": "ElementaryTypeName",
+                        "src": "5438:7:5"
+                      }
+                    ],
+                    "id": 1094,
+                    "name": "VariableDeclaration",
+                    "src": "5438:20:5"
+                  }
+                ],
+                "id": 1095,
+                "name": "ParameterList",
+                "src": "5437:22:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 1099,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1096,
+                        "name": "ElementaryTypeName",
+                        "src": "5488:4:5"
+                      }
+                    ],
+                    "id": 1097,
+                    "name": "VariableDeclaration",
+                    "src": "5488:4:5"
+                  }
+                ],
+                "id": 1098,
+                "name": "ParameterList",
+                "src": "5487:6:5"
+              }
+            ],
             "id": 1099,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "is_asset_listed",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1095,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1094,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1099,
-                  "src": "5438:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1093,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5438:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "5437:22:5"
-            },
-            "returnParameters": {
-              "id": 1098,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1097,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1099,
-                  "src": "5488:4:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bool",
-                    "typeString": "bool"
-                  },
-                  "typeName": {
-                    "id": 1096,
-                    "name": "bool",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5488:4:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bool",
-                      "typeString": "bool"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "5487:6:5"
-            },
-            "scope": 1138,
-            "src": "5413:81:5",
-            "stateMutability": "view",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "5413:81:5"
           },
           {
-            "documentation": {
-              "id": 1100,
-              "nodeType": "StructuredDocumentation",
-              "src": "5500:177:5",
-              "text": "@notice This view returns minimum valid deposit\n @param asset_source Contract address for given ERC20 token\n @return Minimum valid deposit of given ERC20 token"
+            "attributes": {
+              "functionSelector": "4322b1f2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "get_deposit_minimum",
+              "scope": 1138,
+              "stateMutability": "view",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "4322b1f2",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This view returns minimum valid deposit\n @param asset_source Contract address for given ERC20 token\n @return Minimum valid deposit of given ERC20 token"
+                },
+                "id": 1100,
+                "name": "StructuredDocumentation",
+                "src": "5500:177:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1107,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1101,
+                        "name": "ElementaryTypeName",
+                        "src": "5711:7:5"
+                      }
+                    ],
+                    "id": 1102,
+                    "name": "VariableDeclaration",
+                    "src": "5711:20:5"
+                  }
+                ],
+                "id": 1103,
+                "name": "ParameterList",
+                "src": "5710:22:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 1107,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1104,
+                        "name": "ElementaryTypeName",
+                        "src": "5761:7:5"
+                      }
+                    ],
+                    "id": 1105,
+                    "name": "VariableDeclaration",
+                    "src": "5761:7:5"
+                  }
+                ],
+                "id": 1106,
+                "name": "ParameterList",
+                "src": "5760:9:5"
+              }
+            ],
             "id": 1107,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "get_deposit_minimum",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1103,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1102,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1107,
-                  "src": "5711:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1101,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5711:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "5710:22:5"
-            },
-            "returnParameters": {
-              "id": 1106,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1105,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1107,
-                  "src": "5761:7:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1104,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5761:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "5760:9:5"
-            },
-            "scope": 1138,
-            "src": "5682:88:5",
-            "stateMutability": "view",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "5682:88:5"
           },
           {
-            "documentation": {
-              "id": 1108,
-              "nodeType": "StructuredDocumentation",
-              "src": "5776:177:5",
-              "text": "@notice This view returns maximum valid deposit\n @param asset_source Contract address for given ERC20 token\n @return Maximum valid deposit of given ERC20 token"
+            "attributes": {
+              "functionSelector": "1d501b5d",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "get_deposit_maximum",
+              "scope": 1138,
+              "stateMutability": "view",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "1d501b5d",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@notice This view returns maximum valid deposit\n @param asset_source Contract address for given ERC20 token\n @return Maximum valid deposit of given ERC20 token"
+                },
+                "id": 1108,
+                "name": "StructuredDocumentation",
+                "src": "5776:177:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1115,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1109,
+                        "name": "ElementaryTypeName",
+                        "src": "5987:7:5"
+                      }
+                    ],
+                    "id": 1110,
+                    "name": "VariableDeclaration",
+                    "src": "5987:20:5"
+                  }
+                ],
+                "id": 1111,
+                "name": "ParameterList",
+                "src": "5986:22:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 1115,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 1112,
+                        "name": "ElementaryTypeName",
+                        "src": "6037:7:5"
+                      }
+                    ],
+                    "id": 1113,
+                    "name": "VariableDeclaration",
+                    "src": "6037:7:5"
+                  }
+                ],
+                "id": 1114,
+                "name": "ParameterList",
+                "src": "6036:9:5"
+              }
+            ],
             "id": 1115,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "get_deposit_maximum",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1111,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1110,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1115,
-                  "src": "5987:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1109,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "5987:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "5986:22:5"
-            },
-            "returnParameters": {
-              "id": 1114,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1113,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1115,
-                  "src": "6037:7:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 1112,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "6037:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "6036:9:5"
-            },
-            "scope": 1138,
-            "src": "5958:88:5",
-            "stateMutability": "view",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "5958:88:5"
           },
           {
-            "documentation": {
-              "id": 1116,
-              "nodeType": "StructuredDocumentation",
-              "src": "6052:44:5",
-              "text": "@return current multisig_control_address"
+            "attributes": {
+              "functionSelector": "c58dc3b9",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "get_multisig_control_address",
+              "scope": 1138,
+              "stateMutability": "view",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "c58dc3b9",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@return current multisig_control_address"
+                },
+                "id": 1116,
+                "name": "StructuredDocumentation",
+                "src": "6052:44:5"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1117,
+                "name": "ParameterList",
+                "src": "6138:2:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 1121,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1118,
+                        "name": "ElementaryTypeName",
+                        "src": "6169:7:5"
+                      }
+                    ],
+                    "id": 1119,
+                    "name": "VariableDeclaration",
+                    "src": "6169:7:5"
+                  }
+                ],
+                "id": 1120,
+                "name": "ParameterList",
+                "src": "6168:9:5"
+              }
+            ],
             "id": 1121,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "get_multisig_control_address",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1117,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "6138:2:5"
-            },
-            "returnParameters": {
-              "id": 1120,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1119,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1121,
-                  "src": "6169:7:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1118,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "6169:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "6168:9:5"
-            },
-            "scope": 1138,
-            "src": "6101:77:5",
-            "stateMutability": "view",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "6101:77:5"
           },
           {
-            "documentation": {
-              "id": 1122,
-              "nodeType": "StructuredDocumentation",
-              "src": "6184:127:5",
-              "text": "@param asset_source Contract address for given ERC20 token\n @return The assigned Vega Asset Id for given ERC20 token"
+            "attributes": {
+              "functionSelector": "a06b5d39",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "get_vega_asset_id",
+              "scope": 1138,
+              "stateMutability": "view",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "a06b5d39",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@param asset_source Contract address for given ERC20 token\n @return The assigned Vega Asset Id for given ERC20 token"
+                },
+                "id": 1122,
+                "name": "StructuredDocumentation",
+                "src": "6184:127:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "asset_source",
+                      "scope": 1129,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1123,
+                        "name": "ElementaryTypeName",
+                        "src": "6343:7:5"
+                      }
+                    ],
+                    "id": 1124,
+                    "name": "VariableDeclaration",
+                    "src": "6343:20:5"
+                  }
+                ],
+                "id": 1125,
+                "name": "ParameterList",
+                "src": "6342:22:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 1129,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 1126,
+                        "name": "ElementaryTypeName",
+                        "src": "6393:7:5"
+                      }
+                    ],
+                    "id": 1127,
+                    "name": "VariableDeclaration",
+                    "src": "6393:7:5"
+                  }
+                ],
+                "id": 1128,
+                "name": "ParameterList",
+                "src": "6392:9:5"
+              }
+            ],
             "id": 1129,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "get_vega_asset_id",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1125,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1124,
-                  "mutability": "mutable",
-                  "name": "asset_source",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1129,
-                  "src": "6343:20:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1123,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "6343:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "6342:22:5"
-            },
-            "returnParameters": {
-              "id": 1128,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1127,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1129,
-                  "src": "6393:7:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes32",
-                    "typeString": "bytes32"
-                  },
-                  "typeName": {
-                    "id": 1126,
-                    "name": "bytes32",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "6393:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes32",
-                      "typeString": "bytes32"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "6392:9:5"
-            },
-            "scope": 1138,
-            "src": "6316:86:5",
-            "stateMutability": "view",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "6316:86:5"
           },
           {
-            "documentation": {
-              "id": 1130,
-              "nodeType": "StructuredDocumentation",
-              "src": "6408:165:5",
-              "text": "@param vega_asset_id Vega-assigned asset ID for which you want the ERC20 token address\n @return The ERC20 token contract address for a given Vega Asset Id"
+            "attributes": {
+              "functionSelector": "786b0bc0",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "get_asset_source",
+              "scope": 1138,
+              "stateMutability": "view",
+              "virtual": true,
+              "visibility": "public"
             },
-            "functionSelector": "786b0bc0",
+            "children": [
+              {
+                "attributes": {
+                  "text": "@param vega_asset_id Vega-assigned asset ID for which you want the ERC20 token address\n @return The ERC20 token contract address for a given Vega Asset Id"
+                },
+                "id": 1130,
+                "name": "StructuredDocumentation",
+                "src": "6408:165:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "vega_asset_id",
+                      "scope": 1137,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 1131,
+                        "name": "ElementaryTypeName",
+                        "src": "6604:7:5"
+                      }
+                    ],
+                    "id": 1132,
+                    "name": "VariableDeclaration",
+                    "src": "6604:21:5"
+                  }
+                ],
+                "id": 1133,
+                "name": "ParameterList",
+                "src": "6603:23:5"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 1137,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 1134,
+                        "name": "ElementaryTypeName",
+                        "src": "6655:7:5"
+                      }
+                    ],
+                    "id": 1135,
+                    "name": "VariableDeclaration",
+                    "src": "6655:7:5"
+                  }
+                ],
+                "id": 1136,
+                "name": "ParameterList",
+                "src": "6654:9:5"
+              }
+            ],
             "id": 1137,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "get_asset_source",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 1133,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1132,
-                  "mutability": "mutable",
-                  "name": "vega_asset_id",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1137,
-                  "src": "6604:21:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes32",
-                    "typeString": "bytes32"
-                  },
-                  "typeName": {
-                    "id": 1131,
-                    "name": "bytes32",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "6604:7:5",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bytes32",
-                      "typeString": "bytes32"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "6603:23:5"
-            },
-            "returnParameters": {
-              "id": 1136,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1135,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1137,
-                  "src": "6655:7:5",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1134,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "6655:7:5",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "6654:9:5"
-            },
-            "scope": 1138,
-            "src": "6578:86:5",
-            "stateMutability": "view",
-            "virtual": true,
-            "visibility": "public"
+            "name": "FunctionDefinition",
+            "src": "6578:86:5"
           }
         ],
-        "scope": 1139,
+        "id": 1138,
+        "name": "ContractDefinition",
         "src": "330:6337:5"
       }
     ],
+    "id": 1139,
+    "name": "SourceUnit",
     "src": "38:8467:5"
   },
   "compiler": {
@@ -4407,9 +4580,8 @@
     "version": "0.7.6+commit.7338295f.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.3.2",
-  "updatedAt": "2021-02-09T17:11:31.414Z",
-  "networkType": "ethereum",
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-06-24T14:04:39.164Z",
   "devdoc": {
     "author": "Vega Protocol",
     "kind": "dev",
