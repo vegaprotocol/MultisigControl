@@ -73,7 +73,7 @@ contract MultisigControl is IMultisigControl {
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
     /// @notice message to hash to sign follows this pattern:
     /// @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);
-    /// @notice Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
+    /// @notice Note that validating_contract_or_submitter_address is the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return Returns true if valid signatures are over the threshold
