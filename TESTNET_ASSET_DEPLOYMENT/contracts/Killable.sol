@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.7.6;
+pragma solidity 0.8.1;
 import "./Ownable.sol";
 
 /*
@@ -8,7 +8,7 @@ import "./Ownable.sol";
  */
 contract Killable is Ownable {
     function kill() public onlyOwner {
-        address payable wallet =address(uint160(owner()));
+        address payable wallet = payable(owner());
         selfdestruct(wallet);
     }
 }

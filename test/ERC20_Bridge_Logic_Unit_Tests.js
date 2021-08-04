@@ -128,7 +128,7 @@ async function list_asset(bridge_logic_instance, from_address){
 
   //NOTE Sig tests are in MultisigControl
   let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
-  console.log(receipt.logs)
+  //console.log(receipt.logs)
 }
 
 
