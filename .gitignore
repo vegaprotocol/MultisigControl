@@ -9,6 +9,8 @@ lerna-debug.log*
 .idea/
 /build/contracts/*.json
 
+/ropsten_deploy_details/local/
+
 .secret
 
 # Diagnostic reports (https://nodejs.org/api/report.html)

@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.7.6;
+pragma solidity 0.8.1;
 
 /// @title ERC20 Bridge Logic Interface
 /// @author Vega Protocol

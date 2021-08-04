@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.7.6;
+pragma solidity 0.8.1;
 
 import "./ERC20Detailed.sol";
 import "./Ownable.sol";
@@ -41,13 +41,12 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
 
     function admin_deposit_bulk(uint256 amount, address bridge_address,  bytes32[] memory vega_public_keys) public onlyOwner {
         uint256 final_amt = amount * vega_public_keys.length;
-        _allowances[address(this)][bridge_address] = uint256(-1);
+        _allowances[address(this)][bridge_address] = uint256(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
         _totalSupply = _totalSupply.add(final_amt);
         _balances[address(this)] = _balances[address(this)].add(final_amt);
         emit Transfer(address(0), address(this), final_amt);
         for(uint8 key_idx = 0; key_idx < vega_public_keys.length; key_idx++){
             IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), amount, vega_public_keys[key_idx]);
         }
-
     }
 }
