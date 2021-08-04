@@ -62,8 +62,6 @@ async function add_signer(multisigControl_instance, new_signer) {
 
 //function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
 contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
-    console.log();
-    console.log("verify_signatures(bytes memory signatures, bytes memory message, uint nonce)")
     it("verify_signatures - happy path 1 signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
@@ -310,8 +308,7 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
 
 //function set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures) public{
 contract("MultisigControl -- Function: set_threshold",  (accounts) => {
-    console.log();
-    console.log("set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures)")
+
     it("set_threshold", async () => {
         // set 2 signers
         let multisigControl_instance = await MultisigControl.deployed();
@@ -398,8 +395,6 @@ contract("MultisigControl -- Function: set_threshold",  (accounts) => {
 
 //function add_signer(address new_signer, uint nonce, bytes memory signatures) public {
 contract("MultisigControl -- Function: add_signer",  (accounts) => {
-    console.log();
-    console.log("add_signer(address new_signer, uint nonce, bytes memory signatures)");
     it("add_signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -487,8 +482,6 @@ contract("MultisigControl -- Function: add_signer",  (accounts) => {
 
 // function remove_signer(address old_signer, uint nonce, bytes memory signatures) public {
 contract("MultisigControl -- Function: remove_signer",  (accounts) => {
-    console.log();
-    console.log("remove_signer(address old_signer, uint nonce, bytes memory signatures)");
     it("remove signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -559,8 +552,6 @@ contract("MultisigControl -- Function: remove_signer",  (accounts) => {
 contract("MultisigControl -- Function: is_nonce_used",  async (accounts) => {
 
     let multisigControl_instance = await MultisigControl.deployed();
-    console.log();
-    console.log("get_current_threshold(uint nonce)");
     it("unused nonce returns false", async () => {
 
         let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
@@ -626,8 +617,6 @@ contract("MultisigControl -- Function: get_valid_signer_count",  async (accounts
 
     it("signer count is valid after add signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
-        //console.log();
-        //console.log("get_valid_signer_count()");
         let signer_count = await multisigControl_instance.get_valid_signer_count();
         assert.equal(
             signer_count,
@@ -721,8 +710,6 @@ contract("MultisigControl -- Function: get_valid_signer_count",  async (accounts
 
 //function get_current_threshold() public view returns(uint16) {
 contract("MultisigControl -- Function: get_current_threshold",  (accounts) => {
-    console.log();
-    console.log("get_current_threshold()");
     it("get_current_threshold is correct after setting", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
@@ -761,12 +748,8 @@ contract("MultisigControl -- Function: get_current_threshold",  (accounts) => {
 
 //function is_valid_signer(address signer_address) public view returns(bool){
 contract("MultisigControl -- Function: is_valid_signer",  (accounts) => {
-    console.log();
-    console.log("is_valid_signer(address signer_address)");
     it("previously unknown signer is valid after setting", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
-        //console.log();
-        //console.log("get_valid_signer_count()");
         let signer_count = await multisigControl_instance.get_valid_signer_count();
         assert.equal(
             signer_count,
