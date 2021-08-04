@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.7.6;
+pragma solidity 0.8.1;
 
 import "./IERC20.sol";
 import "./IERC20_Bridge_Logic.sol";
