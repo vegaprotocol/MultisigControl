@@ -2,9 +2,12 @@
 pragma solidity 0.8.1;
 
 import "./IMultisigControl.sol";
+
+/// @title MultisigControl
+/// @author Vega Protocol
+/// @notice This contract enables validators, through a multisignature process, to run functions on contracts by consensus
 contract MultisigControl is IMultisigControl {
     constructor () {
-
         // set initial threshold to 50%
         threshold = 500;
         signers[msg.sender] = true;
