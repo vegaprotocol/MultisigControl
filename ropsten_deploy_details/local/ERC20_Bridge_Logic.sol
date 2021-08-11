@@ -4,7 +4,7 @@ pragma solidity 0.8.1;
 import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IERC20_Bridge_Logic.sol";
-import "./MultisigControl.sol";
+import "./IMultisigControl.sol";
 import "./ERC20_Asset_Pool.sol";
 
 /// @title ERC20 Bridge Logic
@@ -47,7 +47,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function list_asset(address asset_source, bytes32 vega_asset_id, uint256 nonce, bytes memory signatures) public override {
         require(!listed_tokens[asset_source], "asset already listed");
         bytes memory message = abi.encode(asset_source, vega_asset_id, nonce, 'list_asset');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         listed_tokens[asset_source] = true;
         vega_asset_ids_to_source[vega_asset_id] = asset_source;
         asset_source_to_vega_asset_id[asset_source] = vega_asset_id;
@@ -63,7 +63,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function remove_asset(address asset_source, uint256 nonce, bytes memory signatures) public override {
         require(listed_tokens[asset_source], "asset not listed");
         bytes memory message = abi.encode(asset_source, nonce, 'remove_asset');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         listed_tokens[asset_source] = false;
         emit Asset_Removed(asset_source, nonce);
     }
@@ -78,7 +78,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
         require(listed_tokens[asset_source], "asset not listed");
         bytes memory message = abi.encode(asset_source, minimum_amount, nonce, 'set_deposit_minimum');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         minimum_deposits[asset_source] = minimum_amount;
         emit Asset_Deposit_Minimum_Set(asset_source, minimum_amount, nonce);
     }
@@ -93,7 +93,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public override {
         require(listed_tokens[asset_source], "asset not listed");
         bytes memory message = abi.encode(asset_source, maximum_amount, nonce, 'set_deposit_maximum');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         maximum_deposits[asset_source] = maximum_amount;
         emit Asset_Deposit_Maximum_Set(asset_source, maximum_amount, nonce);
     }
@@ -110,7 +110,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, address target, uint256 nonce, bytes memory signatures) public  override{
         require(expiry > block.timestamp, "withdrawal has expired");
         bytes memory message = abi.encode(asset_source, amount, expiry, target,  nonce, 'withdraw_asset');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         require(ERC20_Asset_Pool(erc20_asset_pool_address).withdraw(asset_source, target, amount), "token didn't transfer, rejected by asset pool.");
         emit Asset_Withdrawn(target, asset_source, amount, nonce);
     }
