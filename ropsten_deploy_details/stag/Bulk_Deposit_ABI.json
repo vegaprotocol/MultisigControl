@@ -1,1 +1,0 @@
-[{"inputs":[{"internalType":"address","name":"bridge","type":"address"},{"internalType":"address","name":"token","type":"address"},{"internalType":"bytes32[]","name":"vega_public_keys","type":"bytes32[]"},{"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"bulk_deposit","outputs":[],"stateMutability":"nonpayable","type":"function"}]

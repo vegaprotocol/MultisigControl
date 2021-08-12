@@ -1,10 +1,13 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.7.6;
+pragma solidity 0.8.1;
 
 import "./IMultisigControl.sol";
+
+/// @title MultisigControl
+/// @author Vega Protocol
+/// @notice This contract enables validators, through a multisignature process, to run functions on contracts by consensus
 contract MultisigControl is IMultisigControl {
     constructor () {
-
         // set initial threshold to 50%
         threshold = 500;
         signers[msg.sender] = true;
@@ -73,7 +76,7 @@ contract MultisigControl is IMultisigControl {
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
     /// @notice message to hash to sign follows this pattern:
     /// @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);
-    /// @notice Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
+    /// @notice Note that validating_contract_or_submitter_address is the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return Returns true if valid signatures are over the threshold
@@ -98,6 +101,16 @@ contract MultisigControl is IMultisigControl {
             // final byte (first byte of the next 32 bytes)
                 v := byte(0, mload(add(signatures, add(msg_idx, 64))))
             }
+            // EIP-2 still allows signature malleability for ecrecover(). Remove this possibility and make the signature
+            // unique. Appendix F in the Ethereum Yellow paper (https://ethereum.github.io/yellowpaper/paper.pdf), defines
+            // the valid range for s in (281): 0 < s < secp256k1n ÷ 2 + 1, and for v in (282): v ∈ {27, 28}. Most
+            // signatures from current libraries generate a unique signature with an s-value in the lower half order.
+            //
+            // If your library generates malleable signatures, such as s-values in the upper range, calculate a new s-value
+            // with 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141 - s1 and flip v from 27 to 28 or
+            // vice versa. If your library also generates signatures with 0/1 for v instead 27/28, add 27 to v to accept
+            // these malleable signatures as well.
+            require(uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0, "Mallable signature error");
             if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
