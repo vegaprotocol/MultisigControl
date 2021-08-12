@@ -1,5 +1,5 @@
-//SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.7.6;
+//SPDX-License-Identifier: MIT
+pragma solidity 0.8.1;
 
 /// @title ERC20 Bridge Logic Interface
 /// @author Vega Protocol
@@ -25,7 +25,7 @@ abstract contract IERC20_Bridge_Logic {
     /// @dev MUST emit Asset_Listed if successful
     function list_asset(address asset_source, bytes32 vega_asset_id, uint256 nonce, bytes memory signatures) public virtual;
 
-    /// @notice This function removes from listing the given ERC20 token contract. This marks the token as valid for deposit to this bridge
+    /// @notice This function removes from listing the given ERC20 token contract. This marks the token as invalid for deposit to this bridge
     /// @param asset_source Contract address for given ERC20 token
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
@@ -51,7 +51,7 @@ abstract contract IERC20_Bridge_Logic {
     /// @dev MUST emit Asset_Deposit_Maximum_Set if successful
     function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
 
-    /// @notice This function sets the maximum allowable deposit for the given ERC20 token
+    /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
     /// @param expiry Vega-assigned timestamp of withdrawal order expiration
@@ -65,7 +65,7 @@ abstract contract IERC20_Bridge_Logic {
     /// @notice This function allows a user to deposit given ERC20 tokens into Vega
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of tokens to be deposited into Vega
-    /// @param vega_public_key Target vega public key to be credited with this deposit
+    /// @param vega_public_key Target Vega public key to be credited with this deposit
     /// @dev MUST emit Asset_Deposited if successful
     /// @dev ERC20 approve function should be run before running this
     /// @notice ERC20 approve function should be run before running this
@@ -91,11 +91,11 @@ abstract contract IERC20_Bridge_Logic {
     function get_multisig_control_address() public virtual view returns(address);
 
     /// @param asset_source Contract address for given ERC20 token
-    /// @return The assigned Vega Asset Id for given ERC20 token
+    /// @return The assigned Vega Asset ID for given ERC20 token
     function get_vega_asset_id(address asset_source) public virtual view returns(bytes32);
 
     /// @param vega_asset_id Vega-assigned asset ID for which you want the ERC20 token address
-    /// @return The ERC20 token contract address for a given Vega Asset Id
+    /// @return The ERC20 token contract address for a given Vega Asset ID
     function get_asset_source(bytes32 vega_asset_id) public virtual view returns(address);
 
 }
