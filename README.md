@@ -28,7 +28,7 @@ See below for instructions on how to complete step 1.
 Terminal 1:
 
 1. `npm install`
-1. `ganache-cli -m "cherry manage trip absorb logic half number test shed logic purpose rifle"`
+1. `ganache-cli -m "mnemonic used in .secret file"`
 
 
 Terminal 2:
