@@ -3,6 +3,9 @@ const path = require('path')
 const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
 const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+const ETH_Asset_Pool = artifacts.require("ETH_Asset_Pool");
+const ETH_Bridge_Logic = artifacts.require("ETH_Bridge_Logic");
+
 console.log(__dirname);
 console.log();
 const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
@@ -63,13 +66,21 @@ module.exports = async function(deployer) {
     let erc20_asset_pool_instance = await ERC20_Asset_Pool.deployed();
     let erc20_bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
 
+    /****** ETH Bridge*/
+    await deployer.deploy(ETH_Asset_Pool, MultisigControl.address);
+    await deployer.deploy(ETH_Bridge_Logic, ETH_Asset_Pool.address, MultisigControl.address);
+
+    /*********/
+
     //save logic addresses and ABIs
     let bridge_addresses = {
         multisig_control: MultisigControl.address,
         asset_pool: ERC20_Asset_Pool.address,
         logic_1:logic_1.address,
         logic_2:logic_2.address,
-        test_token_address:test_token_address
+        test_token_address:test_token_address,
+        eth_asset_pool: ETH_Asset_Pool.address,
+        eth_bridge_logic: ETH_Bridge_Logic.address
     };
 
 
