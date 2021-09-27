@@ -81,17 +81,17 @@ async function deposit_asset(bridge_logic_instance, test_token_instance, account
   return token_balance;
 }
 
-async function withdraw_asset(bridge_logic_instance, test_token_instance, account, expire, bad_params, bad_user){
+async function withdraw_asset(bridge_logic_instance, test_token_instance, account, bad_params){
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
-  let expiry = Math.floor(Date.now()/1000) + 2; // 2 seconds
+
   let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
   let target = account;
 
   //create signature
   let encoded_message = get_message_to_sign(
-      ["address", "uint256", "uint256", "address"],
-      [test_token_instance.address, to_withdraw, expiry, target],
+      ["address", "uint256", "address"],
+      [test_token_instance.address, to_withdraw, target],
       nonce,
       "withdraw_asset",
       ERC20_Bridge_Logic.address);
@@ -99,15 +99,12 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
 
   let sig_string = to_signature_string(signature);
-  if(expire){
-    //wait 3 seconds
-    await timeout(3000);
-  }
+  
   //NOTE Sig tests are in MultisigControl
   if(bad_params){
     to_withdraw = "1"
   }
-  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, target, nonce, sig_string);
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, nonce, sig_string);
 }
 
 
@@ -479,7 +476,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
       let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
 
       //withdraw asset
-      await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false, false);
+      await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false);
 
       let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
       let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
@@ -497,38 +494,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
       );
 
     });
-    it("withdraw_asset fails due to expired withdrawal order", async () => {
-      let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-      let test_token_instance = await Base_Faucet_Token.deployed();
-      let asset_pool_instance = await ERC20_Asset_Pool.deployed();
-      //list asset
-      try {
-        await list_asset(bridge_logic_instance, accounts[0]);
-      } catch(e){/*ignore if already listed*/}
 
-      //new asset ID is listed
-      assert.equal(
-          await bridge_logic_instance.is_asset_listed(test_token_instance.address),
-          true,
-          "token isn't listed, should be"
-      );
-
-      await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
-
-      //deposit asset
-      await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
-
-      //withdraw asset
-      try{
-        await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], true, false);
-        assert.equal(
-            true,
-            false,
-            "expired withdrawal worked, shouldn't have"
-        );
-      } catch(e){}
-
-    });
     it("withdraw_asset fails due to amount mismatch between signature and function params", async () => {
       let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
       let test_token_instance = await Base_Faucet_Token.deployed();
@@ -552,7 +518,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset",   (accounts) => {
 
       //withdraw asset
       try{
-        await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false, true);
+        await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], true);
         assert.equal(
             true,
             false,
