@@ -54,13 +54,12 @@ abstract contract IERC20_Bridge_Logic {
     /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
-    /// @param expiry Vega-assigned timestamp of withdrawal order expiration
     /// @param target Target Ethereum address to receive withdrawn ERC20 tokens
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Withdrawn if successful
-    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, address target, uint256 nonce, bytes memory signatures) public virtual;
+    function withdraw_asset(address asset_source, uint256 amount, address target, uint256 nonce, bytes memory signatures) public virtual;
 
     /// @notice This function allows a user to deposit given ERC20 tokens into Vega
     /// @param asset_source Contract address for given ERC20 token

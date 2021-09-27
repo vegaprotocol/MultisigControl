@@ -101,15 +101,13 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
-    /// @param expiry Vega-assigned timestamp of withdrawal order expiration
     /// @param target Target Ethereum address to receive withdrawn ERC20 tokens
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits Asset_Withdrawn if successful
-    function withdraw_asset(address asset_source, uint256 amount, uint256 expiry, address target, uint256 nonce, bytes memory signatures) public  override{
-        require(expiry > block.timestamp, "withdrawal has expired");
-        bytes memory message = abi.encode(asset_source, amount, expiry, target,  nonce, 'withdraw_asset');
+    function withdraw_asset(address asset_source, uint256 amount, address target, uint256 nonce, bytes memory signatures) public  override{
+        bytes memory message = abi.encode(asset_source, amount, target,  nonce, 'withdraw_asset');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         require(ERC20_Asset_Pool(erc20_asset_pool_address).withdraw(asset_source, target, amount), "token didn't transfer, rejected by asset pool.");
         emit Asset_Withdrawn(target, asset_source, amount, nonce);
