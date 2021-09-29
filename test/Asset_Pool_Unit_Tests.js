@@ -45,7 +45,6 @@ async function init_private_keys(){
 /****** note, add:
 beforeEach(async()=>{
   await init_private_keys()
-
 });
 *** to each "contract" section before tests */
 
@@ -54,10 +53,12 @@ beforeEach(async()=>{
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
 function get_message_to_sign(param_types, params, nonce, function_name, sender){
+
     params.push(nonce);
     param_types.push("uint256");
     params.push(function_name);
     param_types.push("string");
+
     //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
     let encoded_a = abi.rawEncode(param_types, params);
     //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
@@ -135,19 +136,20 @@ async function deposit_asset(bridge_logic_instance, test_token_instance, account
   return token_balance;
 }
 
-async function withdraw_asset(bridge_logic_instance, test_token_instance, account, expire, bad_params, bad_user){
+async function withdraw_asset(bridge_logic_instance, test_token_instance, account, bad_params, bad_user){
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
-  let expiry = Math.floor(Date.now()/1000) + 2; // 2 seconds
   let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
   let target = account;
+
   if(bad_user !== undefined){
     target = bad_user;
   }
+
   //create signature
   let encoded_message = get_message_to_sign(
-      ["address", "uint256", "uint256", "address"],
-      [test_token_instance.address, to_withdraw, expiry, target],
+      ["address", "uint256", "address"],
+      [test_token_instance.address, to_withdraw, target],
       nonce,
       "withdraw_asset",
       ERC20_Bridge_Logic.address);
@@ -155,15 +157,12 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
 
   let sig_string = to_signature_string(signature);
-  if(expire){
-    //wait 3 seconds
-    await timeout(3000);
-  }
+
   //NOTE Sig tests are in MultisigControl
   if(bad_params){
     to_withdraw = "1"
   }
-  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, expiry, target, nonce, sig_string);
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, nonce, sig_string);
 }
 
 
@@ -256,7 +255,7 @@ contract("Asset_Pool Function: withdraw",  (accounts) => {
       let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
 
       //withdraw asset
-      await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false, false);
+      await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false);
 
       let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
       let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
