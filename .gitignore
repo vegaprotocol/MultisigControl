@@ -11,7 +11,7 @@ lerna-debug.log*
 
 /ropsten_deploy_details/local/
 
-.txt
+notes.txt
 
 .secret
 
