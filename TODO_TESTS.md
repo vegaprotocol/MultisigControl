@@ -21,7 +21,6 @@
 * remove_asset should trigger bad signatures
 * remove_asset should only be callable by?
 * remove_asset should update listed_tokens[asset_source] mapping
-* remove_asset should emit correct event and parameters
 * remove_asset should fail with invalid function parameters, e.g., address(0)
 * set_deposit_minimum should trigger asset not listed
 * set_deposit_minimum should fail with invalid function parameters
