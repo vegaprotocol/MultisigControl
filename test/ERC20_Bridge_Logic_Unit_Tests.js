@@ -2,7 +2,10 @@ const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
 const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
 const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
 const MultisigControl = artifacts.require("MultisigControl");
-const {shouldFailWithMessage} = require("../helpers/utils");
+
+const {shouldFailWithMessage, bytesToHex} = require("../helpers/utils");
+const {expectBignumberEqual} = require("../helpers/index");
+const {findEventInTransaction} = require("../helpers/events");
 
 var abi = require('ethereumjs-abi');
 var crypto = require("crypto");
@@ -19,6 +22,7 @@ const mnemonic = fs.readFileSync(".secret").toString().trim();
 const bip39 = require('bip39');
 const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
+const { expect } = require("chai");
 
 let private_keys ={};
 async function init_private_keys(){
@@ -145,6 +149,7 @@ async function list_asset(bridge_logic_instance, from_address){
   //NOTE Sig tests are in MultisigControl
   let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
   //console.log(receipt.logs)
+  return [nonce, receipt];
 }
 
 
@@ -180,7 +185,7 @@ contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
 
   });
 
-  it("list_asset should trigger bad signatures with invalid signature", async () => {
+  it("list_asset should trigger bad signatures with invalid signature string", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -238,7 +243,15 @@ contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
       } catch(e){}
 
       //list new asset
-      await list_asset(bridge_logic_instance, accounts[0]);
+      const [nonce, receipt] = await list_asset(bridge_logic_instance, accounts[0]);
+
+      // check event parameters
+      const {args} = await findEventInTransaction(receipt, "Asset_Listed");
+
+      expectBignumberEqual(args.nonce, nonce);
+      expect(args.asset_source).to.be.equal(bridge_addresses.test_token_address);
+      expect(args.vega_asset_id).to.be.equal(bytesToHex(new_asset_id));
+
       //new asset ID is listed
       assert.equal(
           await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),

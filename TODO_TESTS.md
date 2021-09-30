@@ -17,11 +17,6 @@
 # ERC20_Bridge_Logic.sol
 * contract should be deployed correctly with valid parameters
 * list_asset should only be callable by ?
-* list_asset should trigger bad signatures
-* emit correct event and parameters
-* list_asset should set listed_tokens mapping for asset to true
-* list_asset should update vega_asset_ids_to_source[vega_asset_id] mapping
-* list_asset should update asset_source_to_vega_asset_id[asset_source] mapping
 * remove_asset should trigger asset not listed
 * remove_asset should trigger bad signatures
 * remove_asset should only be callable by?
