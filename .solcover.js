@@ -3,6 +3,7 @@ const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
     providerOptions: {
-      mnemonic: mnemonic
+      mnemonic: mnemonic,
+      network_id: "*"
     }
 };
