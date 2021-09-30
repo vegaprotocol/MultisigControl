@@ -66,6 +66,9 @@ See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/d
 4. `Copy the TESTNET_ASSET_DEPLOYMENT/build/contract/Base_Fauset_Token.json to root/build/contracts folder`
 5. `From root run truffle test`
 
+## Code Coverage Checks
+1. `truffle run coverage`
+
 
 # See Also
 
