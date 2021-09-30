@@ -26,7 +26,6 @@
 * set_deposit_minimum should fail with invalid function parameters
 * set_deposit_minimum should trigger bad signatures
 * set_deposit_minimum should update minimum_deposits[asset_source] mapping
-* set_deposit_minimum should emit correct event and parameters
 * set_deposit_maximum should trigger asset not listed
 * set_deposit_maximum should trigger bad signatures
 * set_deposit_maximum should update maximum_deposits[asset_source] mapping
