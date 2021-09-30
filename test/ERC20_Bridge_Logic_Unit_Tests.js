@@ -172,7 +172,8 @@ async function remove_asset(bridge_logic_instance, from_address){
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  await bridge_logic_instance.remove_asset(bridge_addresses.test_token_address, nonce, sig_string);
+  let receipt = await bridge_logic_instance.remove_asset(bridge_addresses.test_token_address, nonce, sig_string);
+  return [nonce, receipt];
 }
 
 
@@ -320,7 +321,13 @@ contract("ERC20_Bridge_Logic Function: remove_asset",   (accounts) => {
       let amount_deposited = await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
       //remove new asset
-      await remove_asset(bridge_logic_instance, accounts[0]);
+      const [nonce, receipt] = await remove_asset(bridge_logic_instance, accounts[0]);;
+
+      // check event parameters
+      const {args} = await findEventInTransaction(receipt, "Asset_Removed");
+
+      expectBignumberEqual(args.nonce, nonce);
+      expect(args.asset_source).to.be.equal(bridge_addresses.test_token_address);
 
       //deposit fails
       try {
