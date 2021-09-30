@@ -25,6 +25,8 @@ const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
+  plugins: ["solidity-coverage"],
+
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle
@@ -81,6 +83,8 @@ module.exports = {
   mocha: {
     // timeout: 100000
   },
+
+  
 
   // Configure your compilers
   compilers: {
