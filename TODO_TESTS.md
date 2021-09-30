@@ -17,7 +17,6 @@
 # ERC20_Bridge_Logic.sol
 * contract should be deployed correctly with valid parameters
 * list_asset should only be callable by ?
-* list_asset should trigger asset already listed
 * list_asset should trigger bad signatures
 * emit correct event and parameters
 * list_asset should set listed_tokens mapping for asset to true
@@ -55,3 +54,6 @@
 * get_multisig_control_address should not return address(0)
 * get_vega_asset_id should return asset id for asset if set
 * get_asset_source should return asset info/source if set
+
+# MultisigControl
+* nonces should check correctly

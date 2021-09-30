@@ -7,6 +7,8 @@
     "test": "test"
   },
   "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.13",
+    "@openzeppelin/truffle-upgrades": "^1.9.1",
     "@truffle/hdwallet-provider": "^1.2.0",
     "bip39": "^3.0.4",
     "elliptic": "^6.5.3",
