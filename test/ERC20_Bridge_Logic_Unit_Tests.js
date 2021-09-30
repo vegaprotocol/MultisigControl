@@ -23,6 +23,7 @@ const bip39 = require('bip39');
 const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { expect } = require("chai");
+const { find } = require("lodash");
 
 let private_keys ={};
 async function init_private_keys(){
@@ -377,7 +378,13 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum",   (accounts) => {
       let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
       let sig_string = to_signature_string(signature);
 
-      await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, "500", nonce, sig_string);
+      const tx = await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, "500", nonce, sig_string);
+      
+      const {args} = await findEventInTransaction(tx, "Asset_Deposit_Minimum_Set");
+
+      expect(args.asset_source).to.be.equal(test_token_instance.address);
+      expectBignumberEqual(args.new_minimum, "500");
+      expectBignumberEqual(args.nonce, nonce);
 
       //Get minimum deposit, should be updated
       deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(test_token_instance.address)).toString();
@@ -437,7 +444,13 @@ contract("ERC20_Bridge_Logic Function: set_deposit_maximum",   (accounts) => {
       let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
       let sig_string = to_signature_string(signature);
 
-      await bridge_logic_instance.set_deposit_maximum(test_token_instance.address, "500", nonce, sig_string);
+      const tx = await bridge_logic_instance.set_deposit_maximum(test_token_instance.address, "500", nonce, sig_string);
+
+      const {args} = await findEventInTransaction(tx, "Asset_Deposit_Maximum_Set");
+
+      expect(args.asset_source).to.be.equal(test_token_instance.address);
+      expectBignumberEqual(args.new_maximum, "500");
+      expectBignumberEqual(args.nonce, nonce);
 
       //Get maximum deposit, should be updated
       deposit_maximum = (await bridge_logic_instance.get_deposit_maximum(test_token_instance.address)).toString();
