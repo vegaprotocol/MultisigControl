@@ -24,7 +24,9 @@
     "truffle-contract": "^4.0.31",
     "web3": "^1.2.11"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "solidity-coverage": "^0.7.17"
+  },
   "scripts": {
     "ecc_test": "node ecc_test.js",
     "ganache": "ganache-cli -h 0.0.0.0 -p 8545 -m \"cherry manage trip absorb logic half number test shed logic purpose rifle\"",
