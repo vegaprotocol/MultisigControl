@@ -11,6 +11,8 @@ lerna-debug.log*
 
 /ropsten_deploy_details/local/
 
+.txt
+
 .secret
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
