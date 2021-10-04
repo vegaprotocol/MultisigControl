@@ -1,14 +1,9 @@
 # ERC20_Asset_Pool.sol
 * contract should be deployed correctly with valid parameters
 * set_bridge_address should only be callable by ?
-* set_bridge_address should trigger bad signatures
-* set_bridge_address should emit correct event and parameters
 * set_bridge_address with invalid function parameters should fail or trigger bad signatures
 * set_multisig_control should only be callable by ?
-* set_multisig_control should trigger bad signatures
-* set_multisig_control should emit correct event and parameters
 * set_multisig_control with invalid function parameters should fail or trigger bad signatures
-* withdraw should trigger msg.sender not authorized bridge
 * withdraw should trigger token transfer failed
 * withdraw should transfer correct amount to function caller 
 * withdraw should return true if successful
@@ -29,7 +24,6 @@
 * set_deposit_maximum should trigger asset not listed
 * set_deposit_maximum should trigger bad signatures
 * set_deposit_maximum should update maximum_deposits[asset_source] mapping
-* set_deposit_maximum should emit correct event and parameters
 * set_deposit_maximum should fail with invalid function parameters
 * withdraw_asset should trigger bad signatures
 * withdraw_asset should trigger token didn't transfer, rejected by asset pool.
@@ -49,4 +43,4 @@
 * get_asset_source should return asset info/source if set
 
 # MultisigControl
-* nonces should check correctly
+* nonces should check correctly in verify_signatures
