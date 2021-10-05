@@ -1,9 +1,19 @@
-# ERC20_Asset_Pool.sol
+
+# Replicate all tests for ETH_Asset_Pool and ETH_Bridge_Logic
+
+# ERC20_Asset_Pool.sol (done)
 * contract should be deployed correctly with valid parameters
 * set_bridge_address should only be callable by ?
-* set_bridge_address should not set address(0)?
+* set_bridge_address should trigger bad signatures
+* set_bridge_address should emit correct event and parameters
+* set_bridge_address with invalid function parameters should fail or trigger bad signatures
 * set_multisig_control should only be callable by ?
-* set_multisig_control should not set address(0)?
+* set_multisig_control should trigger bad signatures
+* set_multisig_control should emit correct event and parameters even if amount withdrawn is 0
+* set_multisig_control with invalid function parameters should fail or trigger bad signatures
+* withdraw should trigger msg.sender not authorized bridge
+* withdraw should transfer correct amount to function caller 
+
 
 # ERC20_Bridge_Logic.sol
 * contract should be deployed correctly with valid parameters
@@ -37,7 +47,6 @@
 * get_multisig_control_address should not return address(0)
 * get_vega_asset_id should return asset id for asset if set
 * get_asset_source should return asset info/source if set
-
 
 # MultisigControl
 * nonces should check correctly in verify_signatures
