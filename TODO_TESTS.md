@@ -4,8 +4,6 @@
 * set_bridge_address should not set address(0)?
 * set_multisig_control should only be callable by ?
 * set_multisig_control should not set address(0)?
-* withdraw should transfer correct amount to function caller 
-* withdraw should emit correct event and parameters
 
 # ERC20_Bridge_Logic.sol
 * contract should be deployed correctly with valid parameters
