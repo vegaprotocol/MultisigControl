@@ -27,6 +27,8 @@ const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { ZERO_ADDRESS } = require('@openzeppelin/test-helpers/src/constants');
 const { findEventInTransaction } = require('../helpers/events');
+const { expectBignumberEqual } = require("../helpers");
+const { web3 } = require("@openzeppelin/test-helpers/src/setup");
 
 let private_keys = {};
 async function init_private_keys() {
@@ -379,7 +381,13 @@ contract("Asset_Pool Function: withdraw", (accounts) => {
     let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
 
     //withdraw asset
-    await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false);
+    let receipt = await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0], false);
+
+    // should emit correct event and parameters from ERC20_Bridge_Logic
+    const {args} = await findEventInTransaction(receipt, 'Asset_Withdrawn');
+    expect(args.user_address).to.be.equal(accounts[0])
+    expect(args.asset_source).to.be.equal(test_token_instance.address)
+    expectBignumberEqual(args.amount, 0)
 
     let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
     let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
