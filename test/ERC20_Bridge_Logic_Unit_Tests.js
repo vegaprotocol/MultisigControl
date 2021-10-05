@@ -249,7 +249,6 @@ contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
 
       // check event parameters
       const {args} = await findEventInTransaction(receipt, "Asset_Listed");
-
       expectBignumberEqual(args.nonce, nonce);
       expect(args.asset_source).to.be.equal(bridge_addresses.test_token_address);
       expect(args.vega_asset_id).to.be.equal(bytesToHex(new_asset_id));
