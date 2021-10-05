@@ -85,7 +85,8 @@ async function list_asset(bridge_logic_instance, from_address) {
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+  let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+  return receipt
 }
 
 function to_signature_string(sig) {
@@ -108,7 +109,7 @@ async function set_multisig_control(asset_pool_instance, multisig_control_addres
 
   //NOTE Sig tests are in MultisigControl
   let receipt = await asset_pool_instance.set_multisig_control(multisig_control_address, nonce, sig_string);
-    return receipt;
+  return receipt;
 }
 
 async function set_bridge_address(asset_pool_instance, bridge_logic_address, account) {
@@ -127,7 +128,6 @@ async function set_bridge_address(asset_pool_instance, bridge_logic_address, acc
 
   //NOTE Sig tests are in MultisigControl
   let receipt = await asset_pool_instance.set_bridge_address(bridge_logic_address, nonce, sig_string);
-
   return receipt;
 }
 
