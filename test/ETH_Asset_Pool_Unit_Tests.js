@@ -8,12 +8,10 @@ const abi = require('ethereumjs-abi');
 const crypto = require("crypto");
 const ethUtil = require('ethereumjs-util');
 
-
-let new_asset_id = crypto.randomBytes(32);
-
 let root_path = "../ropsten_deploy_details/local/";
 
 let bridge_addresses = require(root_path + "bridge_addresses.json");
+// {"eth_asset_pool":"0xc6a6000d740707edc35f75f42447320B60450c04","eth_bridge_logic":"0xE25F12E386Cd7F84c41B5210504d9743A35Badda"}
 
 /*The following will generate 10 addresses from the mnemonic located in the .secret file*/
 const fs = require("fs");
@@ -150,3 +148,36 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
     let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account});
     return receipt;
 }
+
+
+contract("Asset_Pool Function: set_bridge_address", (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
+    
+    });
+
+    it("should change multisig control address", async () => {
+        let multisig_control_instance = await MultisigControl.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //set new multisig_control_address
+        assert.equal(
+          await asset_pool_instance.multisig_control_address(),
+          multisig_control_instance.address,
+          "unexpected initial multisig_control_address"
+        );
+    
+        let receipt = await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
+    
+        // should emit correct event and parameters
+        const {args} = await findEventInTransaction(receipt, 'Multisig_Control_Set');
+        expect(args.new_address).to.not.equal(ZERO_ADDRESS);
+    
+        assert.equal(
+          await asset_pool_instance.multisig_control_address(),
+          accounts[1],
+          "unexpected multisig_control_address"
+        );
+    
+    });
+
+})
