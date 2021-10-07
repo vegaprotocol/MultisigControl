@@ -289,4 +289,36 @@ contract("ETH_Asset_Pool Function: withdraw", (accounts) => {
         );
     })
 
+    it("should fail to withdraw target asset without deposit", async () => {
+        let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+
+        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+
+        await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+        let account_bal_before = await web3.eth.getBalance(accounts[0]);
+        let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
+
+        //withdraw asset
+        let now = await latest();
+        let expiry = now.add(await duration.minutes(1));
+        await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), false);
+
+        let account_bal_after = await web3.eth.getBalance(accounts[0]);
+        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+
+        expect(account_bal_before.sub(pool_bal_before)).to.be.bignumber.greaterThan(account_bal_after)
+
+        expectBignumberEqual(pool_bal_before, 0);
+
+        assert.equal(
+            pool_bal_after.toString(),
+            "0",
+            "pool should be empty, isn't"
+        );
+        
+    })
+
 })
