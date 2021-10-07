@@ -2,7 +2,7 @@ const ETH_Asset_Pool = artifacts.require("ETH_Asset_Pool");
 const MultisigControl = artifacts.require("MultisigControl");
 const ETH_Bridge_Logic = artifacts.require("ETH_Bridge_Logic");
 
-const { shouldFailWithMessage } = require("../helpers/utils");
+const { shouldFailWithMessage, parseEther, duration, latest } = require("../helpers/utils");
 
 const abi = require('ethereumjs-abi');
 const crypto = require("crypto");
@@ -23,8 +23,10 @@ const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { ZERO_ADDRESS } = require('@openzeppelin/test-helpers/src/constants');
 const { findEventInTransaction } = require('../helpers/events');
-const { expectBignumberEqual } = require("../helpers");
+const { expectBignumberEqual, expect } = require("../helpers");
 const { web3 } = require("@openzeppelin/test-helpers/src/setup");
+const { formatEther } = require("@ethersproject/units");
+const exp = require("constants");
 
 let private_keys = {};
 async function init_private_keys() {
@@ -120,8 +122,7 @@ async function deposit_asset(bridge_logic_instance, account, amount) {
 
 async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params, bad_user) {
     let nonce = new ethUtil.BN(crypto.randomBytes(32));
-    let to_withdraw = (await test_token_instance.balanceOf(ETH_Asset_Pool.address)).toString();
-
+    let to_withdraw = (await web3.eth.getBalance(ETH_Asset_Pool.address)).toString();
     let target = account;
 
     if (bad_user !== undefined) {
@@ -130,8 +131,8 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
 
     //create signature
     let encoded_message = get_message_to_sign(
-        ["address", "uint256", "address"],
-        [test_token_instance.address, to_withdraw, target],
+        ["uint256", "uint256", "address"],
+        [to_withdraw, expiry, account],
         nonce,
         "withdraw_asset",
         ETH_Bridge_Logic.address);
@@ -145,15 +146,15 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
         to_withdraw = "1"
     }
 
-    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account});
+    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account });
     return receipt;
 }
 
 
-contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
+contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
     beforeEach(async () => {
         await init_private_keys()
-    
+
     });
 
     it("should change multisig control address", async () => {
@@ -161,83 +162,131 @@ contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
         let asset_pool_instance = await ETH_Asset_Pool.deployed();
         //set new multisig_control_address
         assert.equal(
-          await asset_pool_instance.multisig_control_address(),
-          multisig_control_instance.address,
-          "unexpected initial multisig_control_address"
+            await asset_pool_instance.multisig_control_address(),
+            multisig_control_instance.address,
+            "unexpected initial multisig_control_address"
         );
-    
+
         let receipt = await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
-    
+
         // should emit correct event and parameters
-        const {args} = await findEventInTransaction(receipt, 'Multisig_Control_Set');
+        const { args } = await findEventInTransaction(receipt, 'Multisig_Control_Set');
         expect(args.new_address).to.not.equal(ZERO_ADDRESS);
-    
+
         assert.equal(
-          await asset_pool_instance.multisig_control_address(),
-          accounts[1],
-          "unexpected multisig_control_address"
+            await asset_pool_instance.multisig_control_address(),
+            accounts[1],
+            "unexpected multisig_control_address"
+        );
+    });
+})
+
+contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
+    });
+
+    it("should trigger bad signatures with invalid signature string", async () => {
+        let multisig_control_instance = await MultisigControl.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+
+        assert.equal(
+            await asset_pool_instance.ETH_bridge_address(),
+            "0x0000000000000000000000000000000000000000",
+            "unexpected initial ETH_bridge_address"
+        );
+
+        //set bridge address should fail
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+        await shouldFailWithMessage(
+            asset_pool_instance.set_bridge_address(
+                bridge_addresses.eth_bridge_logic,
+                nonce,
+                "0x"
+            ),
+            "bad signatures"
+        );
+
+        // await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
+
+        assert.equal(
+            await asset_pool_instance.ETH_bridge_address(),
+            //bridge_addresses.logic_1,
+            ZERO_ADDRESS,
+            "unexpected ETH_bridge_address"
         );
     });
 
+    it("should change the bridge address to a new address, should now ignore old address", async () => {
+        let multisig_control_instance = await MultisigControl.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
 
-    contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
-        beforeEach(async () => {
-            await init_private_keys()
-        });
+        assert.equal(
+            await asset_pool_instance.ETH_bridge_address(),
+            "0x0000000000000000000000000000000000000000",
+            "unexpected initial ETH_bridge_address"
+        );
 
-        it("should trigger bad signatures with invalid signature string", async () => {
-            let multisig_control_instance = await MultisigControl.deployed();
-            let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        
-            assert.equal(
-              await asset_pool_instance.ETH_bridge_address(),
-              "0x0000000000000000000000000000000000000000",
-              "unexpected initial ETH_bridge_address"
-            );
-        
-            //set bridge address should fail
-            let nonce = new ethUtil.BN(crypto.randomBytes(32));
-        
-            await shouldFailWithMessage(
-              asset_pool_instance.set_bridge_address(
-                bridge_addresses.eth_bridge_logic, 
-                nonce,
-                "0x"
-              ),
-              "bad signatures"
-            );
-        
-            // await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
-        
-            assert.equal(
-              await asset_pool_instance.ETH_bridge_address(),
-              //bridge_addresses.logic_1,
-              ZERO_ADDRESS,
-              "unexpected ETH_bridge_address"
-            );
-        });
+        let receipt = await set_bridge_address(asset_pool_instance, bridge_addresses.eth_bridge_logic, accounts[0]);
 
-        it("should change the bridge address to a new address, should now ignore old address", async () => {
-            let multisig_control_instance = await MultisigControl.deployed();
-            let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        
-            assert.equal(
-              await asset_pool_instance.ETH_bridge_address(),
-              "0x0000000000000000000000000000000000000000",
-              "unexpected initial ETH_bridge_address"
+        // should emit correct event and parameters
+        const { args } = await findEventInTransaction(receipt, "Bridge_Address_Set");
+        expect(args.new_address).to.not.equal(ZERO_ADDRESS);
+
+        assert.equal(
+            await asset_pool_instance.ETH_bridge_address(),
+            bridge_addresses.eth_bridge_logic,
+            "unexpected ETH_bridge_address"
+        );
+    });
+})
+
+contract("ETH_Asset_Pool Function: withdraw", (accounts) => {
+    //function withdraw(address token_address, address target, uint256 amount) public returns(bool){
+    beforeEach(async () => {
+        await init_private_keys()
+    });
+
+    it("should allow bridge to withdraw target asset", async () => {
+        let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+
+        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+
+        await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+        // deposit asset
+        const depositAmount = web3.utils.toWei('10', 'ether');
+        // check user has enough ETH in wallet
+        expect(
+            parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+            .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
             );
-        
-            let receipt = await set_bridge_address(asset_pool_instance, bridge_addresses.eth_bridge_logic, accounts[0]);
-              
-            // should emit correct event and parameters
-            const {args} = await findEventInTransaction(receipt, "Bridge_Address_Set");
-            expect(args.new_address).to.not.equal(ZERO_ADDRESS);
-        
-            assert.equal(
-              await asset_pool_instance.ETH_bridge_address(),
-              bridge_addresses.eth_bridge_logic,
-              "unexpected ETH_bridge_address"
-            );
-        });
+        await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+
+        let account_bal_before = await web3.eth.getBalance(accounts[0]);
+        let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
+
+        //withdraw asset
+        let now = await latest();
+        let expiry = now.add(await duration.minutes(1));
+        await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), false);
+
+        let account_bal_after = await web3.eth.getBalance(accounts[0]);
+        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+
+        expect(account_bal_after).to.be.bignumber.greaterThan(account_bal_before);
+
+        expectBignumberEqual(pool_bal_before, depositAmount);
+
+        assert.equal(
+            pool_bal_after.toString(),
+            "0",
+            "pool should be empty, isn't"
+        );
     })
+
 })
