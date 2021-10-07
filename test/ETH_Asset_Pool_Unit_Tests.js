@@ -150,7 +150,7 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
 }
 
 
-contract("Asset_Pool Function: set_bridge_address", (accounts) => {
+contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
     beforeEach(async () => {
         await init_private_keys()
     
@@ -177,7 +177,67 @@ contract("Asset_Pool Function: set_bridge_address", (accounts) => {
           accounts[1],
           "unexpected multisig_control_address"
         );
-    
     });
 
+
+    contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
+        beforeEach(async () => {
+            await init_private_keys()
+        });
+
+        it("should trigger bad signatures with invalid signature string", async () => {
+            let multisig_control_instance = await MultisigControl.deployed();
+            let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        
+            assert.equal(
+              await asset_pool_instance.ETH_bridge_address(),
+              "0x0000000000000000000000000000000000000000",
+              "unexpected initial ETH_bridge_address"
+            );
+        
+            //set bridge address should fail
+            let nonce = new ethUtil.BN(crypto.randomBytes(32));
+        
+            await shouldFailWithMessage(
+              asset_pool_instance.set_bridge_address(
+                bridge_addresses.eth_bridge_logic, 
+                nonce,
+                "0x"
+              ),
+              "bad signatures"
+            );
+        
+            // await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
+        
+            assert.equal(
+              await asset_pool_instance.ETH_bridge_address(),
+              //bridge_addresses.logic_1,
+              ZERO_ADDRESS,
+              "unexpected ETH_bridge_address"
+            );
+        });
+
+        it("should change the bridge address to a new address, should now ignore old address", async () => {
+            let multisig_control_instance = await MultisigControl.deployed();
+            let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        
+            assert.equal(
+              await asset_pool_instance.ETH_bridge_address(),
+              "0x0000000000000000000000000000000000000000",
+              "unexpected initial ETH_bridge_address"
+            );
+        
+            let receipt = await set_bridge_address(asset_pool_instance, bridge_addresses.eth_bridge_logic, accounts[0]);
+              
+            // should emit correct event and parameters
+            const {args} = await findEventInTransaction(receipt, "Bridge_Address_Set");
+            expect(args.new_address).to.not.equal(ZERO_ADDRESS);
+        
+            assert.equal(
+              await asset_pool_instance.ETH_bridge_address(),
+              bridge_addresses.eth_bridge_logic,
+              "unexpected ETH_bridge_address"
+            );
+        });
+    })
 })
