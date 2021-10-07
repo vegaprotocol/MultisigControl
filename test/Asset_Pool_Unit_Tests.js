@@ -398,12 +398,6 @@ contract("Asset_Pool Function: withdraw", (accounts) => {
       "account balance increased, but should not have as no deposit was made"
     );
 
-    /* assert.equal(
-      account_bal_before.add(pool_bal_before).toString(),
-      account_bal_after.toString(),
-      "account balance didn't go up"
-    );
- */
     assert.equal(
       pool_bal_after.toString(),
       "0",
