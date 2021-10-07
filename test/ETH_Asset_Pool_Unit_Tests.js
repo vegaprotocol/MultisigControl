@@ -289,7 +289,7 @@ contract("ETH_Asset_Pool Function: withdraw", (accounts) => {
         );
     })
 
-    it("should fail to withdraw target asset without deposit", async () => {
+    it("should fail to withdraw eth asset without deposit", async () => {
         let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
         let asset_pool_instance = await ETH_Asset_Pool.deployed();
 
@@ -318,7 +318,30 @@ contract("ETH_Asset_Pool Function: withdraw", (accounts) => {
             "0",
             "pool should be empty, isn't"
         );
-        
+    })
+
+
+    it("withdraw function should fail to run from any address but the current bridge", async () => {
+        let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+
+        await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+        // deposit asset
+        const depositAmount = web3.utils.toWei('10', 'ether');
+        // check user has enough ETH in wallet
+        expect(
+            parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+            .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
+        );
+
+        await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+
+        //withdraw asset
+        try {
+            await asset_pool_instance.withdraw(accounts[0], depositAmount);
+            assert.equal(true, false, "Withdrawal worked from unauthorized bridge address")
+        } catch (e) { }
     })
 
 })
