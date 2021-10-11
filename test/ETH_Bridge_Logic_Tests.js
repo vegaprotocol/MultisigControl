@@ -359,6 +359,22 @@ let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
         expect(parseInt(wallet_balance_after)).to.be.bignumber.lessThanOrEqual(parseInt(wallet_balance_before));
   })
   
+
+  /* it("should fail to deposit eth above max deposit", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+
+        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+
+    await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+    
+    //deposit asset
+     console.log(await bridge_logic_instance.get_deposit_maximum())
+  }) */
+  
   //NOTE signature tests are covered in MultisigControl
 });
 
