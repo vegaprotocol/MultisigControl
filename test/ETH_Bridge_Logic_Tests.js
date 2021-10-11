@@ -130,7 +130,8 @@ async function set_bridge_address(asset_pool_instance, bridge_logic_address, acc
 
 ////FUNCTIONS
 contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
-  //function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
+  //    function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
+
   beforeEach(async () => {
     await init_private_keys()
 
@@ -165,7 +166,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
 
     //Get minimum deposit, should be updated
     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
-    assert.equal(deposit_minimum, web3.utils.toWei('5', 'ether'), "deposit min should be 500, isn't");
+    assert.equal(deposit_minimum, web3.utils.toWei('5', 'ether'), "deposit min should be 5 eth, isn't");
 
     //deposit less that min should fail
     const depositAmount = web3.utils.toWei('2', 'ether');
@@ -198,7 +199,8 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
 
 
 contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
-  //function set_deposit_maximum(address asset_source, uint256 asset_id, uint256 nonce, uint256 maximum_amount, bytes memory signatures) public;
+  //    function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, bytes memory signatures) public override {
+
   beforeEach(async () => {
     await init_private_keys()
 
@@ -234,7 +236,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     //Get maximum deposit, should be updated
     deposit_maximum = (await bridge_logic_instance.get_deposit_maximum()).toString();
-    assert.equal(deposit_maximum, web3.utils.toWei('5', 'ether'), "deposit min should be 5, isn't");
+    assert.equal(deposit_maximum, web3.utils.toWei('5', 'ether'), "deposit max should be 5 eth, isn't");
 
     const depositAmount = web3.utils.toWei('4', 'ether')
 
@@ -274,9 +276,97 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 });
 
 
+contract("ETH_Bridge_Logic Function: deposit_asset",   (accounts) => {
+  //    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public  override {
+beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+  it("happy path - should allow deposit from a wallet with sufficient eth balance", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+
+        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+
+    await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+    
+    //deposit asset
+    const depositAmount = web3.utils.toWei('5', 'ether')
+
+    expect(
+      parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+      .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
+      );
+
+    await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+
+
+        assert.equal(
+            pool_bal_after.toString(),
+            depositAmount.toString(),
+            "pool should not be empty, it is"
+        );
+
+  });
+
+  it("should fail to deposit eth with insufficient balance", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+
+        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+
+    await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+    
+    //deposit asset
+     const depositAmount = web3.utils.toWei('500', 'ether')
+
+    expect(
+      parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+      .to.be.lessThanOrEqual(parseInt(formatEther(depositAmount))
+      );
+
+      let wallet_balance_before = await web3.eth.getBalance(accounts[0]);
+ 
+    let now = await latest();
+        let expiry = now.add(await duration.minutes(1));
+        try{
+          await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+          assert.equal(
+              true,
+              false,
+              "deposit worked without sufficient balance, shouldn't have"
+          );
+        } catch(e){}
+
+        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+        let wallet_balance_after = await web3.eth.getBalance(accounts[0]);
+
+        assert.equal(
+            pool_bal_after.toString(),
+            web3.utils.toWei('5', 'ether'),
+            "pool should be empty, isn't"
+        );
+
+        expect(parseInt(pool_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(depositAmount));
+
+        expect(parseInt(wallet_balance_after)).to.be.bignumber.lessThanOrEqual(parseInt(wallet_balance_before));
+  })
+  
+  //NOTE signature tests are covered in MultisigControl
+});
+
+
+
 contract("ETH_Bridge_Logic Function: withdraw_asset",   (accounts) => {
-  //function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
-  beforeEach(async()=>{
+  //    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public  override {
+beforeEach(async()=>{
     await init_private_keys()
 
   });
@@ -433,4 +523,127 @@ contract("ETH_Bridge_Logic Function: withdraw_asset",   (accounts) => {
         );
   });
   //NOTE signature tests are covered in MultisigControl
+});
+
+
+/////VIEWS
+
+contract("ETH_Bridge_Logic Function: get_deposit_minimum",   (accounts) => {
+  //    function get_deposit_minimum() public override view returns(uint256){
+beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+  it("minimum deposit updates after set_deposit_minimum", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+
+    //Get minimum deposit
+     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
+     assert.equal(deposit_minimum, '0', "deposit min should be 5 eth, isn't");
+
+    //Set minimum deposit
+    //NOTE signature tests are in MultisigControl
+    let nonce = new ethUtil.BN(crypto.randomBytes(32));
+    let encoded_message = get_message_to_sign(
+      ["uint256"],
+      [(1 * Math.pow(10, 18)).toString()],
+      nonce,
+      "set_deposit_minimum",
+      ETH_Bridge_Logic.address);
+    let encoded_hash = ethUtil.keccak256(encoded_message);
+
+    let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+    let sig_string = to_signature_string(signature);
+
+    const tx = await bridge_logic_instance.set_deposit_minimum(parseEther('1'), nonce, sig_string);
+
+    const { args } = await findEventInTransaction(tx, "ETH_Deposit_Minimum_Set");
+
+    expectBignumberEqual(args.new_minimum, web3.utils.toWei('1', 'ether'));
+    expectBignumberEqual(args.nonce, nonce);
+
+    //Get minimum deposit, should be updated
+    deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
+    assert.equal(deposit_minimum, web3.utils.toWei('1', 'ether'), "deposit min should be 1 eth, isn't");
+
+  });
+});
+
+
+contract("ETH_Bridge_Logic Function: get_deposit_maximum",   (accounts) => {
+  //    function get_deposit_maximum() public override view returns(uint256){
+
+  beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+  it("maximum deposit updates after set_deposit_maximum", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+
+    //Get minimum deposit
+     deposit_maximum = (await bridge_logic_instance.get_deposit_maximum()).toString();
+     assert.equal(deposit_maximum, '0', "deposit max should be 5 eth, isn't");
+
+    //Set maximum deposit
+    //NOTE signature tests are in MultisigControl
+    let nonce = new ethUtil.BN(crypto.randomBytes(32));
+    let encoded_message = get_message_to_sign(
+      ["uint256"],
+      [(10 * Math.pow(10, 18)).toString()],
+      nonce,
+      "set_deposit_maximum",
+      ETH_Bridge_Logic.address);
+    let encoded_hash = ethUtil.keccak256(encoded_message);
+
+    let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+    let sig_string = to_signature_string(signature);
+
+    const tx = await bridge_logic_instance.set_deposit_maximum(parseEther('10'), nonce, sig_string);
+
+    const { args } = await findEventInTransaction(tx, "ETH_Deposit_Maximum_Set");
+
+    expectBignumberEqual(args.new_maximum, web3.utils.toWei('10', 'ether'));
+    expectBignumberEqual(args.nonce, nonce);
+
+    //Get minimum deposit, should be updated
+    deposit_maximum = (await bridge_logic_instance.get_deposit_maximum()).toString();
+    assert.equal(deposit_maximum, web3.utils.toWei('10', 'ether'), "deposit max should be 10 eth, isn't");
+
+  });
+});
+
+contract("ETH_Bridge_Logic Function: get_multisig_control_address",   (accounts) => {
+//    function get_multisig_control_address() public override view returns(address) {
+
+beforeEach(async()=>{
+  await init_private_keys()
+
+});
+  //function get_multisig_control_address() public view returns(address);
+  it("get_multisig_control_address returns the address it was initialized with", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+    let asset_pool_instance = await ETH_Asset_Pool.deployed();
+
+    let multisig_control_address = await bridge_logic_instance.get_multisig_control_address();
+    assert.equal(multisig_control_address, MultisigControl.address, "Multisig control shows the wrong address");
+  });
+});
+
+contract("ETH_Bridge_Logic Function: get_vega_asset_id",  (accounts) => {
+//    function get_vega_asset_id() public override view returns(bytes32){
+
+beforeEach(async()=>{
+  await init_private_keys()
+
+});
+  //function get_vega_asset_id(address asset_source) public view returns(bytes32);
+  it("get_vega_asset_id returns proper vega id for newly listed assets", async () => {
+    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+    
+    let vega_asset_id = await bridge_logic_instance.get_vega_asset_id();
+
+    assert.equal(vega_asset_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "incorrect vega asset id")
+    
+  });
+
 });
