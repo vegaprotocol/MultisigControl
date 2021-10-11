@@ -54,7 +54,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         emit ETH_Deposit_Maximum_Set(maximum_amount, nonce);
     }
 
-    /// @notice This function sets the maximum allowable deposit for ETH
+    /// @notice This function allows the withdrawal of ETH
     /// @param amount Amount of ETH to withdraw
     /// @param expiry Vega-assigned timestamp of withdrawal order expiration
     /// @param target Target Ethereum address to receive withdrawn ETH
