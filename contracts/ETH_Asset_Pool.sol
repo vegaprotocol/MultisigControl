@@ -31,6 +31,7 @@ contract ETH_Asset_Pool {
     /// @notice See MultisigControl for more about signatures
     /// @notice Emits Multisig_Control_Set event
     function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
+        require(new_address != address(0));
         bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         multisig_control_address = new_address;
@@ -56,20 +57,23 @@ contract ETH_Asset_Pool {
     /// @return true if transfer was successful.
     function withdraw(address payable target, uint256 amount) public returns(bool) {
         require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
-        target.transfer(amount);
+        require(address(this).balance >= amount, "insufficient balance");
+        /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
+        (bool success,) = target.call{value: amount}("");
+        require(success, "eth transfer failed");
         return true;
     }
 
-    /// @notice A contract can have at most one receive function, 
-    /// declared using receive() external payable { ... } 
-    /// (without the function keyword). This function cannot have arguments, 
-    /// cannot return anything and must have external visibility and payable state 
-    /// mutability. It is executed on a call to the contract with empty calldata. 
-    /// This is the function that is executed on plain Ether transfers (e.g. via .send() 
-    /// or .transfer()). If no such function exists, but a payable fallback 
-    /// function exists, the fallback function will be called on a plain Ether 
-    /// transfer. If neither a receive Ether nor a payable fallback function is 
-    /// present, the contract cannot receive Ether through regular transactions 
+    /// @notice A contract can have at most one receive function,
+    /// declared using receive() external payable { ... }
+    /// (without the function keyword). This function cannot have arguments,
+    /// cannot return anything and must have external visibility and payable state
+    /// mutability. It is executed on a call to the contract with empty calldata.
+    /// This is the function that is executed on plain Ether transfers (e.g. via .send()
+    /// or .transfer()). If no such function exists, but a payable fallback
+    /// function exists, the fallback function will be called on a plain Ether
+    /// transfer. If neither a receive Ether nor a payable fallback function is
+    /// present, the contract cannot receive Ether through regular transactions
     /// and throws an exception.
     receive() external payable {
         emit Received(msg.sender, msg.value);

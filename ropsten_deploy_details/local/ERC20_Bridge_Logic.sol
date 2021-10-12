@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.8;
 
-import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IERC20_Bridge_Logic.sol";
 import "./IMultisigControl.sol";
@@ -13,11 +12,8 @@ import "./ERC20_Asset_Pool.sol";
 // @notice All funds deposited/withdrawn are to/from the assigned ERC20_Asset_Pool
 contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
 
-    //stops overflow
-    using SafeMath for uint256;
-
     address multisig_control_address;
-    address erc20_asset_pool_address;
+    address payable erc20_asset_pool_address;
     // asset address => is listed
     mapping(address => bool) listed_tokens;
     // asset address => minimum deposit amt
@@ -31,7 +27,7 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
 
     /// @param erc20_asset_pool Initial Asset Pool contract address
     /// @param multisig_control Initial MultisigControl contract address
-    constructor(address erc20_asset_pool, address multisig_control) {
+    constructor(address payable erc20_asset_pool, address multisig_control) {
         erc20_asset_pool_address = erc20_asset_pool;
         multisig_control_address = multisig_control;
     }
