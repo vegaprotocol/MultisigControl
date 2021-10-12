@@ -8,9 +8,9 @@ pragma solidity 0.8.8;
 abstract contract IMultisigControl {
 
     /***************************EVENTS****************************/
-    event SignerAdded(address new_signer);
-    event SignerRemoved(address old_signer);
-    event ThresholdSet(uint16 new_threshold);
+    event SignerAdded(address new_signer, uint256 nonce);
+    event SignerRemoved(address old_signer, uint256 nonce);
+    event ThresholdSet(uint16 new_threshold, uint256 nonce);
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
@@ -21,7 +21,7 @@ abstract contract IMultisigControl {
     /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev MUST emit ThresholdSet event
-    function set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures) public virtual;
+    function set_threshold(uint16 new_threshold, uint nonce, bytes calldata signatures) public virtual;
 
     /// @notice Adds new valid signer and adjusts signer count.
     /// @param new_signer New signer address
@@ -29,7 +29,7 @@ abstract contract IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit 'SignerAdded' event
-    function add_signer(address new_signer, uint nonce, bytes memory signatures) public virtual;
+    function add_signer(address new_signer, uint nonce, bytes calldata signatures) public virtual;
 
     /// @notice Removes currently valid signer and adjusts signer count.
     /// @param old_signer Address of signer to be removed.
@@ -37,7 +37,7 @@ abstract contract IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit 'SignerRemoved' event
-    function remove_signer(address old_signer, uint nonce, bytes memory signatures) public virtual;
+    function remove_signer(address old_signer, uint nonce, bytes calldata signatures) public virtual;
 
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
@@ -47,7 +47,7 @@ abstract contract IMultisigControl {
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return MUST return true if valid signatures are over the threshold
-    function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public virtual returns(bool);
+    function verify_signatures(bytes calldata signatures, bytes memory message, uint nonce) public virtual returns(bool);
 
     /**********************VIEWS*********************/
     /// @return Number of valid signers

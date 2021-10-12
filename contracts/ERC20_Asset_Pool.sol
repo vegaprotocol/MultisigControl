@@ -25,12 +25,18 @@ contract ERC20_Asset_Pool {
         emit Multisig_Control_Set(multisig_control);
     }
 
+    /// @notice this contract is not intended to accept ether directly
+    receive() external payable {
+      revert("this contract does not accept ETH");
+    }
+
     /// @param new_address The new MultisigControl contract address.
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed set_multisig_control order
     /// @notice See MultisigControl for more about signatures
     /// @notice Emits Multisig_Control_Set event
     function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
+        require(new_address != address(0));
         bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         multisig_control_address = new_address;
@@ -57,8 +63,24 @@ contract ERC20_Asset_Pool {
     /// @return true if transfer was successful.
     function withdraw(address token_address, address target, uint256 amount) public returns(bool) {
         require(msg.sender == erc20_bridge_address, "msg.sender not authorized bridge");
-        require(IERC20(token_address).transfer(target, amount), "token transfer failed");
-        return true;
+
+        IERC20(token_address).transfer(target, amount);
+        /// @dev the following is a test for non-standard ERC20 tokens IE ones without a return value
+        bool result;
+        assembly {
+           switch returndatasize()
+               case 0 {                      // no return value but didn't revert
+                   result := true
+               }
+               case 32 {                     // standard ERC20, has return value
+                   returndatacopy(0, 0, 32)
+                   result := mload(0)        // result is result of transfer call
+               }
+               default {}
+       }
+       require(result, "token transfer failed"); // revert() if result is false
+
+      return true;
     }
 }
 
