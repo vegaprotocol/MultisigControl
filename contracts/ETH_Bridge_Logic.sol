@@ -66,7 +66,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         require(expiry > block.timestamp, "withdrawal has expired");
         bytes memory message = abi.encode(amount, expiry, target,  nonce, 'withdraw_asset');
         require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
-        require(ETH_Asset_Pool(ETH_asset_pool_address).withdraw(target, amount), "token didn't transfer, rejected by asset pool.");
+        require(ETH_Asset_Pool(ETH_asset_pool_address).withdraw(target, amount), "token did not transfer, rejected by asset pool.");
         emit ETH_Withdrawn(target, amount, nonce);
     }
 

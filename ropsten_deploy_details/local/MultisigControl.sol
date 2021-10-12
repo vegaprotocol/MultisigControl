@@ -20,11 +20,7 @@ contract MultisigControl is IMultisigControl {
     mapping(address => bool) signers;
     mapping(uint => bool) used_nonces;
     mapping(bytes32 => mapping(address => bool)) has_signed;
-
-    event SignerAdded(address new_signer, uint256 nonce);
-    event SignerRemoved(address old_signer, uint256 nonce);
-    event ThresholdSet(uint16 new_threshold, uint256 nonce);
-
+    
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
     /// @param new_threshold New threshold value
@@ -34,7 +30,7 @@ contract MultisigControl is IMultisigControl {
     /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev Emits ThresholdSet event
-    function set_threshold(uint16 new_threshold, uint256 nonce, bytes memory signatures) public override{
+    function set_threshold(uint16 new_threshold, uint256 nonce, bytes calldata signatures) public override{
         require(new_threshold <= 1000 && new_threshold > 0, "new threshold outside range");
         bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
@@ -48,7 +44,7 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'SignerAdded' event
-    function add_signer(address new_signer, uint256 nonce, bytes memory signatures) public override{
+    function add_signer(address new_signer, uint256 nonce, bytes calldata signatures) public override{
         bytes memory message = abi.encode(new_signer, nonce, "add_signer");
         require(!signers[new_signer], "signer already exists");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
@@ -63,7 +59,7 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'SignerRemoved' event
-    function remove_signer(address old_signer, uint256 nonce, bytes memory signatures) public override {
+    function remove_signer(address old_signer, uint256 nonce, bytes calldata signatures) public override {
         bytes memory message = abi.encode(old_signer, nonce, "remove_signer");
         require(signers[old_signer], "signer doesn't exist");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
@@ -80,26 +76,26 @@ contract MultisigControl is IMultisigControl {
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return Returns true if valid signatures are over the threshold
-    function verify_signatures(bytes memory signatures, bytes memory message, uint256 nonce) public override returns(bool) {
+    function verify_signatures(bytes calldata signatures, bytes memory message, uint256 nonce) public override returns(bool) {
         require(signatures.length % 65 == 0, "bad sig length");
         require(!used_nonces[nonce], "nonce already used");
         uint8 sig_count = 0;
 
         bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
 
-        for(uint256 msg_idx = 32; msg_idx < signatures.length + 32; msg_idx+= 65){
+        for(uint256 msg_idx = 0; msg_idx < signatures.length; msg_idx+= 65){
             //recover address from that msg
             bytes32 r;
             bytes32 s;
             uint8 v;
-
             assembly {
+
             // first 32 bytes, after the length prefix
-                r := mload(add(signatures, msg_idx))
+                r := calldataload(add(signatures.offset,msg_idx))
             // second 32 bytes
-                s := mload(add(signatures, add(msg_idx, 32)))
+                s := calldataload(add(add(signatures.offset,msg_idx), 32))
             // final byte (first byte of the next 32 bytes)
-                v := byte(0, mload(add(signatures, add(msg_idx, 64))))
+                v := byte(0, calldataload(add(add(signatures.offset,msg_idx), 64)))
             }
             // EIP-2 still allows signature malleability for ecrecover(). Remove this possibility and make the signature
             // unique. Appendix F in the Ethereum Yellow paper (https://ethereum.github.io/yellowpaper/paper.pdf), defines
