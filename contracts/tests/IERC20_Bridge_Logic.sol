@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.1;
+pragma solidity 0.8.8;
 
 /// @title ERC20 Bridge Logic Interface
 /// @author Vega Protocol
