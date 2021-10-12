@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.1;
+pragma solidity 0.8.8;
 
 import "./IMultisigControl.sol";
 
@@ -10,6 +10,7 @@ contract ETH_Asset_Pool {
 
     event Multisig_Control_Set(address indexed new_address);
     event Bridge_Address_Set(address indexed new_address);
+    event Received(address indexed sender, uint amount);
 
     /// @return Current MultisigControl contract address
     address public multisig_control_address;
@@ -58,6 +59,22 @@ contract ETH_Asset_Pool {
         target.transfer(amount);
         return true;
     }
+
+    /// @notice A contract can have at most one receive function, 
+    /// declared using receive() external payable { ... } 
+    /// (without the function keyword). This function cannot have arguments, 
+    /// cannot return anything and must have external visibility and payable state 
+    /// mutability. It is executed on a call to the contract with empty calldata. 
+    /// This is the function that is executed on plain Ether transfers (e.g. via .send() 
+    /// or .transfer()). If no such function exists, but a payable fallback 
+    /// function exists, the fallback function will be called on a plain Ether 
+    /// transfer. If neither a receive Ether nor a payable fallback function is 
+    /// present, the contract cannot receive Ether through regular transactions 
+    /// and throws an exception.
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
+    }
+
 }
 
 /**
