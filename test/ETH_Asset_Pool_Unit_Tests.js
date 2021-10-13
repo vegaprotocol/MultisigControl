@@ -151,6 +151,36 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
 }
 
 
+async function withdraw_asset_reentry(bridge_logic_instance, account, expiry, nonce, bad_params, bad_user) {
+    //let nonce = new ethUtil.BN(crypto.randomBytes(32));
+    let to_withdraw = (await web3.eth.getBalance(ETH_Asset_Pool.address)).toString();
+    let target = account;
+
+    if (bad_user !== undefined) {
+        target = bad_user;
+    }
+
+    //create signature
+    let encoded_message = get_message_to_sign(
+        ["uint256", "uint256", "address"],
+        [to_withdraw, expiry, account],
+        nonce,
+        "withdraw_asset",
+        ETH_Bridge_Logic.address);
+    let encoded_hash = ethUtil.keccak256(encoded_message);
+    let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
+
+    let sig_string = to_signature_string(signature);
+
+    //NOTE Sig tests are in MultisigControl
+    if (bad_params) {
+        to_withdraw = "1"
+    }
+
+    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account });
+    return receipt;
+}
+
 contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
     beforeEach(async () => {
         await init_private_keys()
@@ -319,6 +349,73 @@ contract("ETH_Asset_Pool Function: withdraw", (accounts) => {
             "pool should be empty, isn't"
         );
     })
+
+    it("should revert on reentry with the same nonce", async () => {
+        let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+
+        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+
+        await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
+
+        // deposit asset
+        const depositAmount = web3.utils.toWei('10', 'ether');
+        // check user has enough ETH in wallet
+        expect(
+            parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+            .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
+            );
+
+        await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+
+        // balance before withdrawal
+        let account_bal_before = await web3.eth.getBalance(accounts[0]);
+        let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
+
+        //withdraw asset
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+        let now = await latest();
+        let expiry = now.add(await duration.minutes(1));
+        await withdraw_asset_reentry(bridge_logic_instance, accounts[0], expiry.toString(), nonce, false);
+
+        let account_bal_after = await web3.eth.getBalance(accounts[0]);
+        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+
+        expect(account_bal_after).to.be.bignumber.greaterThan(account_bal_before);
+
+        expectBignumberEqual(pool_bal_before, depositAmount);
+
+        assert.equal(
+            pool_bal_after.toString(),
+            "0",
+            "pool should be empty, isn't"
+        );
+
+        // second withdrawal with used nonce
+        expect(
+            parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+            .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
+            );
+
+        await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+
+        await shouldFailWithMessage(
+            withdraw_asset_reentry(bridge_logic_instance, accounts[0], expiry.toString(), nonce, false),
+            "revert nonce already used -- Reason given: nonce already used"
+        );
+
+        nonce = new ethUtil.BN(crypto.randomBytes(32));
+        await withdraw_asset_reentry(bridge_logic_instance, accounts[0], expiry.toString(), nonce, false);
+        assert.equal(
+            (await web3.eth.getBalance(asset_pool_instance.address)).toString(),
+            "0",
+            "pool should be empty, isn't"
+        );
+    })
+
 
     it("should fail to withdraw eth asset without deposit", async () => {
         let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
