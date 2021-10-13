@@ -157,6 +157,37 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
 
     });
 
+    it("should revert if new address is address(0)", async () => {
+        let multisig_control_instance = await MultisigControl.deployed();
+        let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        //set new multisig_control_address
+        assert.equal(
+          await asset_pool_instance.multisig_control_address(),
+          multisig_control_instance.address,
+          "unexpected initial multisig_control_address"
+        );
+    
+        //set multisig control address should fail
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));
+    
+        //await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
+    
+        await shouldFailWithMessage(
+          asset_pool_instance.set_multisig_control(
+            ZERO_ADDRESS, 
+            nonce,
+            "0x"
+          ),
+          "invalid MultisigControl address"
+        );
+    
+        assert.equal(
+          await asset_pool_instance.multisig_control_address(),
+          multisig_control_instance.address, // should remain unchanged
+          "unexpected multisig_control_address"
+        );
+      });
+
     it("should change multisig control address", async () => {
         let multisig_control_instance = await MultisigControl.deployed();
         let asset_pool_instance = await ETH_Asset_Pool.deployed();
