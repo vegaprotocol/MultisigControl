@@ -3,7 +3,9 @@ const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
 const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
 
-const {shouldFailWithMessage} = require("../helpers/utils");
+const {shouldFailWithMessage, formatEther} = require("../helpers/utils");
+const {expect} = require("../helpers/index");
+
 
 var abi = require('ethereumjs-abi');
 var crypto = require("crypto");
@@ -186,6 +188,37 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
 
   });
 
+  it("should revert if new address is address(0)", async () => {
+    let multisig_control_instance = await MultisigControl.deployed();
+    let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+    //set new multisig_control_address
+    assert.equal(
+      await asset_pool_instance.multisig_control_address(),
+      multisig_control_instance.address,
+      "unexpected initial multisig_control_address"
+    );
+
+    //set multisig control address should fail
+    let nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+    //await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
+
+    await shouldFailWithMessage(
+      asset_pool_instance.set_multisig_control(
+        ZERO_ADDRESS, 
+        nonce,
+        "0x"
+      ),
+      "invalid MultisigControl address"
+    );
+
+    assert.equal(
+      await asset_pool_instance.multisig_control_address(),
+      multisig_control_instance.address, // should remain unchanged
+      "unexpected multisig_control_address"
+    );
+  });
+
   it("should trigger bad signatures with invalid signature string", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -311,6 +344,31 @@ contract("Asset_Pool Function: withdraw", (accounts) => {
   beforeEach(async () => {
     await init_private_keys()
   });
+
+  it("asset pool contract should revert upon receiving ether", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+    let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+
+    //send eth
+    const depositAmount = web3.utils.toWei('5', 'ether')
+
+    expect(
+      parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
+      .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
+      );
+
+    expectBignumberEqual(
+      await web3.eth.getBalance(asset_pool_instance.address),
+      0
+    );
+
+    await shouldFailWithMessage(
+      web3.eth.sendTransaction({from: accounts[0], to: asset_pool_instance.address, value: depositAmount}),
+      "this contract does not accept ETH"
+    );
+  });
+
 
   it("should allow bridge to withdraw target asset", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();

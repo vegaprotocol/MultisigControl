@@ -31,7 +31,7 @@ contract ETH_Asset_Pool {
     /// @notice See MultisigControl for more about signatures
     /// @notice Emits Multisig_Control_Set event
     function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
-        require(new_address != address(0));
+        require(new_address != address(0), "invalid MultisigControl address");
         bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         multisig_control_address = new_address;
