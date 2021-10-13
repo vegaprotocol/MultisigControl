@@ -37,6 +37,11 @@ contract ERC20_Asset_Pool {
     /// @notice Emits Multisig_Control_Set event
     function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
         require(new_address != address(0), "invalid MultisigControl address");
+        uint256 size;
+        assembly {
+           size := extcodesize(new_address)
+        }
+        require(size > 0, "new address must be contract");
         bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         multisig_control_address = new_address;

@@ -172,7 +172,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
   if (bad_params) {
     to_withdraw = "1"
   }
-  
+
   let receipt = await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, nonce, sig_string);
   return receipt;
 }
@@ -205,7 +205,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
 
     await shouldFailWithMessage(
       asset_pool_instance.set_multisig_control(
-        ZERO_ADDRESS, 
+        ZERO_ADDRESS,
         nonce,
         "0x"
       ),
@@ -222,6 +222,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
   it("should trigger bad signatures with invalid signature string", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     //set new multisig_control_address
     assert.equal(
       await asset_pool_instance.multisig_control_address(),
@@ -236,7 +237,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
 
     await shouldFailWithMessage(
       asset_pool_instance.set_multisig_control(
-        accounts[1], 
+        bridge_logic_instance.address,
         nonce,
         "0x"
       ),
@@ -254,6 +255,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
   it("should change multisig control address", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     //set new multisig_control_address
     assert.equal(
       await asset_pool_instance.multisig_control_address(),
@@ -261,7 +263,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
       "unexpected initial multisig_control_address"
     );
 
-    let receipt = await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
+    let receipt = await set_multisig_control(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
     // should emit correct event and parameters
     const {args} = await findEventInTransaction(receipt, 'Multisig_Control_Set');
@@ -269,7 +271,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
 
     assert.equal(
       await asset_pool_instance.multisig_control_address(),
-      accounts[1],
+      bridge_logic_instance.address,
       "unexpected multisig_control_address"
     );
 
@@ -298,7 +300,7 @@ contract("Asset_Pool Function: set_bridge_address", (accounts) => {
 
     await shouldFailWithMessage(
       asset_pool_instance.set_bridge_address(
-        bridge_addresses.logic_1, 
+        bridge_addresses.logic_1,
         nonce,
         "0x"
       ),
@@ -326,7 +328,7 @@ contract("Asset_Pool Function: set_bridge_address", (accounts) => {
     );
 
     let receipt = await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
-      
+
     // should emit correct event and parameters
     const {args} = await findEventInTransaction(receipt, "Bridge_Address_Set");
     expect(args.new_address).to.not.equal(ZERO_ADDRESS);

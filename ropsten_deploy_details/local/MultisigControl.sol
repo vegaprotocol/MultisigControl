@@ -20,7 +20,7 @@ contract MultisigControl is IMultisigControl {
     mapping(address => bool) signers;
     mapping(uint => bool) used_nonces;
     mapping(bytes32 => mapping(address => bool)) has_signed;
-    
+
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
     /// @param new_threshold New threshold value
@@ -82,7 +82,10 @@ contract MultisigControl is IMultisigControl {
         uint8 sig_count = 0;
 
         bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
-
+        uint256 offset;
+        assembly {
+          offset := signatures.offset
+        }
         for(uint256 msg_idx = 0; msg_idx < signatures.length; msg_idx+= 65){
             //recover address from that msg
             bytes32 r;
@@ -91,11 +94,11 @@ contract MultisigControl is IMultisigControl {
             assembly {
 
             // first 32 bytes, after the length prefix
-                r := calldataload(add(signatures.offset,msg_idx))
+                r := calldataload(add(offset,msg_idx))
             // second 32 bytes
-                s := calldataload(add(add(signatures.offset,msg_idx), 32))
+                s := calldataload(add(add(offset,msg_idx), 32))
             // final byte (first byte of the next 32 bytes)
-                v := byte(0, calldataload(add(add(signatures.offset,msg_idx), 64)))
+                v := byte(0, calldataload(add(add(offset,msg_idx), 64)))
             }
             // EIP-2 still allows signature malleability for ecrecover(). Remove this possibility and make the signature
             // unique. Appendix F in the Ethereum Yellow paper (https://ethereum.github.io/yellowpaper/paper.pdf), defines
@@ -106,7 +109,7 @@ contract MultisigControl is IMultisigControl {
             // with 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141 - s1 and flip v from 27 to 28 or
             // vice versa. If your library also generates signatures with 0/1 for v instead 27/28, add 27 to v to accept
             // these malleable signatures as well.
-            require(uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0, "Mallable signature error");
+            require(uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0, "Malleable signature error");
             if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
