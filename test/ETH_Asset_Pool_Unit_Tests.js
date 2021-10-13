@@ -196,21 +196,21 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
           multisig_control_instance.address,
           "unexpected initial multisig_control_address"
         );
-    
+
         //set multisig control address should fail
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
-    
+
         //await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
-    
+
         await shouldFailWithMessage(
           asset_pool_instance.set_multisig_control(
-            ZERO_ADDRESS, 
+            ZERO_ADDRESS,
             nonce,
             "0x"
           ),
           "invalid MultisigControl address"
         );
-    
+
         assert.equal(
           await asset_pool_instance.multisig_control_address(),
           multisig_control_instance.address, // should remain unchanged
@@ -221,6 +221,7 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
     it("should change multisig control address", async () => {
         let multisig_control_instance = await MultisigControl.deployed();
         let asset_pool_instance = await ETH_Asset_Pool.deployed();
+        let eth_bridge_logic_instance = await ETH_Bridge_Logic.deployed();
         //set new multisig_control_address
         assert.equal(
             await asset_pool_instance.multisig_control_address(),
@@ -228,7 +229,7 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
             "unexpected initial multisig_control_address"
         );
 
-        let receipt = await set_multisig_control(asset_pool_instance, accounts[1], accounts[0]);
+        let receipt = await set_multisig_control(asset_pool_instance, eth_bridge_logic_instance.address, accounts[0]);
 
         // should emit correct event and parameters
         const { args } = await findEventInTransaction(receipt, 'Multisig_Control_Set');
@@ -236,7 +237,7 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
 
         assert.equal(
             await asset_pool_instance.multisig_control_address(),
-            accounts[1],
+            eth_bridge_logic_instance.address,
             "unexpected multisig_control_address"
         );
     });
