@@ -113,10 +113,16 @@ async function go(){
   /*********Remove to revert to .secret mnemonic***********/
   private_keys =
       {
-          "0x6aD570cB22d9c1A5EC5aBA5B6eBEA12AE6f08e97":Buffer.from("59ad6b67fd8014f4a434f0c88b605dc922eceaff3161275bc08018179c6093cc",'hex')
+        "0xddDFA1974b156336b9c49579A2bC4e0a7059CAD0":Buffer.from("5b569f098b150a70a1dbe3603d54560bda4d0c22e5754977d21e35e12c5bcf62",'hex'),
+        "0xcf3e68E25FbD0F4bA0bCD862bFED00274F705668":Buffer.from("577d78eb8da82145b0fbbb193045d94c91abc0b94ca5ea7407aa4713fe33a8f9",'hex'),
+        "0x0bcB473865e28D9e4F13851633da33C9064e8029":Buffer.from("17b1a04d2f8295843f1b29f07534be55fa15723554574f34b1a2ae38f380fde8",'hex'),
+        "0xEDE59e0dF4D3319191Af449a9FcF757C1C0392d5":Buffer.from("76dc4d459e7b5c6f2c8521f14e7dd87902631feec7bbde4411d5a379cc0f10ff",'hex')
       };
   accounts = [
-  "0x6aD570cB22d9c1A5EC5aBA5B6eBEA12AE6f08e97"
+  "0xddDFA1974b156336b9c49579A2bC4e0a7059CAD0",
+  "0xcf3e68E25FbD0F4bA0bCD862bFED00274F705668",
+  "0x0bcB473865e28D9e4F13851633da33C9064e8029",
+  "0xEDE59e0dF4D3319191Af449a9FcF757C1C0392d5"
   ]
 
   /********************/
@@ -126,8 +132,13 @@ async function go(){
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   for(let sig_idx = 0; sig_idx < accounts.length; sig_idx++){
 
-    //let sig = sign_thing(["address"],["0xfF36d24276c411A5Ca270DF22e7d38FB216f7e50"],"remove_asset","0x898b9F9f9Cab971d9Ceb809F93799109Abbe2D10", nonce, pks[sig_idx]);
-    let sig = sign_thing(["address", "bytes32"],["0xcB84d72e61e383767C4DFEb2d8ff7f4FB89abc6e", "0x020ba7143206012cb6d005425da10de9f5a0757a8f573ac9a29b87d144f2992a"],"list_asset","0x4149257d844Ef09f11b02f2e73CbDfaB4c911a73", nonce, private_keys[accounts[sig_idx]]);
+    //let sig = sign_thing(["address"],["0x0c2b46b7C0BCc7a1d696078506Fb4Ff9C0aF123d"],"remove_asset","0xb4E6cF254B61332BC93ffE96bD836561F7D8F37c", nonce, private_keys[accounts[sig_idx]]);
+
+
+    let sig = sign_thing(["address", "bytes32"],["0x547cbA83a7eb82b546ee5C7ff0527F258Ba4546D", "0xf11862be7fc37c47372439f982a8f09912c4f995434120ff43ff51d9c34ef71a"],"list_asset","0xb4E6cF254B61332BC93ffE96bD836561F7D8F37c", nonce, private_keys[accounts[sig_idx]]);
+
+
+
     //let sig = sign_thing(["uint16"],["1"],"set_threshold","0x6aD570cB22d9c1A5EC5aBA5B6eBEA12AE6f08e97",nonce, private_keys[accounts[sig_idx]]);
     //let sig = sign_thing(["address"],["0x4149257d844Ef09f11b02f2e73CbDfaB4c911a73"],"set_bridge_address","0xdee027072f42eE88bf6920b0d0C271af4e8ff8fb",nonce, private_keys[accounts[sig_idx]]);
     //let sig = sign_thing(["address"],["0x0Ff52da611960E9155078cB5d81EF55C8DbF620E"],"add_signer","0xb89a165ea8b619c14312db316baaa80d2a98b493",nonce, private_keys[accounts[sig_idx]]);

@@ -2,7 +2,7 @@
 pragma solidity 0.8.8;
 
 import "./IERC20.sol";
-import "./IERC20_Bridge_Logic.sol";
+import "./IERC20_Bridge_Logic_Restricted.sol";
 import "./IMultisigControl.sol";
 import "./ERC20_Asset_Pool.sol";
 
@@ -10,7 +10,7 @@ import "./ERC20_Asset_Pool.sol";
 /// @author Vega Protocol
 /// @notice This contract is used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.
 // @notice All funds deposited/withdrawn are to/from the assigned ERC20_Asset_Pool
-contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
+contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
 
     address multisig_control_address;
     address payable erc20_asset_pool_address;
@@ -36,17 +36,21 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     /// @notice This function lists the given ERC20 token contract as valid for deposit to this bridge
     /// @param asset_source Contract address for given ERC20 token
     /// @param vega_asset_id Vega-generated asset ID for internal use in Vega Core
+    /// @param lifetime_limit Initial lifetime deposit limit *RESTRICTION FEATURE*
+    /// @param withdraw_threshold Amount at which the withdraw delay goes into effect *RESTRICTION FEATURE*
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits Asset_Listed if successful
-    function list_asset(address asset_source, bytes32 vega_asset_id, uint256 nonce, bytes memory signatures) public override {
+    function list_asset(address asset_source, bytes32 vega_asset_id, uint256 lifetime_limit, uint256 withdraw_threshold, uint256 nonce, bytes memory signatures) public override {
         require(!listed_tokens[asset_source], "asset already listed");
-        bytes memory message = abi.encode(asset_source, vega_asset_id, nonce, 'list_asset');
+        bytes memory message = abi.encode(asset_source, vega_asset_id, lifetime_limit, withdraw_threshold, nonce, 'list_asset');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         listed_tokens[asset_source] = true;
         vega_asset_ids_to_source[vega_asset_id] = asset_source;
         asset_source_to_vega_asset_id[asset_source] = vega_asset_id;
+        asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
+        withdraw_thresholds[asset_source] = withdraw_threshold;
         emit Asset_Listed(asset_source, vega_asset_id, nonce);
     }
 
@@ -94,16 +98,106 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
         emit Asset_Deposit_Maximum_Set(asset_source, maximum_amount, nonce);
     }
 
+    /************************RESTRICTIONS***************************/
+    // user => asset_source => deposit total
+    mapping(address => mapping(address => uint256)) user_lifetime_deposits;
+    // asset_source => deposit_limit
+    mapping(address => uint256) asset_deposit_lifetime_limit;
+    uint256 public default_withdraw_delay = 432000;
+    // asset_source => threshold
+    mapping(address => uint256) withdraw_thresholds;
+    bool public is_stopped;
+
+    /// @notice This function sets the lifetime maximum deposit for a given asset
+    /// @param asset_source Contract address for given ERC20 token
+    /// @param lifetime_limit Deposit limit for a given ethereum address
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @dev asset must first be listed
+    function set_lifetime_deposit_max(address asset_source, uint256 lifetime_limit, uint256 nonce, bytes calldata signatures) public override {
+      require(listed_tokens[asset_source], "asset not listed");
+      bytes memory message = abi.encode(asset_source, lifetime_limit, nonce, 'set_lifetime_deposit_max');
+      require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+      asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
+    }
+
+    /// @notice This view returns the lifetime deposit limit for the given asset
+    /// @param asset_source Contract address for given ERC20 token
+    /// @return Lifetime limit for the given asset
+    function get_asset_deposit_limit(address asset_source) public override view returns(uint256) {
+      return asset_deposit_lifetime_limit[asset_source];
+    }
+
+    /// @notice This function sets the withdraw delay for withdrawals over the per-asset set thresholds
+    /// @param delay Amount of time to delay a withdrawal
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    function set_withdraw_delay(uint256 delay, uint256 nonce, bytes calldata signatures) public override {
+      bytes memory message = abi.encode(delay, nonce, 'set_withdraw_delay');
+      require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+      default_withdraw_delay = delay;
+    }
+
+    /// @notice This function sets the withdraw threshold above which the withdraw delay goes into effect
+    /// @param asset_source Contract address for given ERC20 token
+    /// @param threshold Withdraw size above which the withdraw delay goes into effect
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @dev asset must first be listed
+    function set_withdraw_threshold(address asset_source, uint256 threshold, uint256 nonce, bytes calldata signatures) public override {
+      require(listed_tokens[asset_source], "asset not listed");
+      bytes memory message = abi.encode(asset_source, threshold, nonce, 'set_withdraw_threshold');
+      require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+      withdraw_thresholds[asset_source] = threshold;
+    }
+
+    /// @notice This view returns the given token's withdraw threshold above which the withdraw delay goes into effect
+    /// @param asset_source Contract address for given ERC20 token
+    /// @return Withdraw threshold
+    function get_withdraw_threshold(address asset_source) public override view returns(uint256) {
+      return withdraw_thresholds[asset_source];
+    }
+
+    /// @notice This function triggers the global bridge stop that halts all withdrawals and deposits until it is resumed
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @dev bridge must not be stopped already
+    /// @dev emits Bridge_Stopped if successful
+    function global_stop(uint256 nonce, bytes calldata signatures) public override {
+      require(!is_stopped, "bridge already stopped");
+      bytes memory message = abi.encode(nonce, 'global_stop');
+      require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+      is_stopped = true;
+      emit Bridge_Stopped();
+    }
+
+    /// @notice This function resumes bridge operations from the stopped state
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @dev bridge must be stopped
+    /// @dev emits Bridge_Resumed if successful
+    function global_resume(uint256 nonce, bytes calldata signatures) public override {
+      require(is_stopped, "bridge not stopped");
+      bytes memory message = abi.encode(nonce, 'global_resume');
+      require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+      is_stopped = false;
+      emit Bridge_Resumed();
+    }
+    /***********************END RESTRICTIONS*************************/
+
     /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
     /// @param target Target Ethereum address to receive withdrawn ERC20 tokens
+    /// @param creation Timestamp of when requestion was created *RESTRICTION FEATURE*
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits Asset_Withdrawn if successful
-    function withdraw_asset(address asset_source, uint256 amount, address target, uint256 nonce, bytes memory signatures) public  override{
-        bytes memory message = abi.encode(asset_source, amount, target,  nonce, 'withdraw_asset');
+    function withdraw_asset(address asset_source, uint256 amount, address target, uint256 creation, uint256 nonce, bytes memory signatures) public override{
+        require(!is_stopped, "bridge stopped");
+        require(withdraw_thresholds[asset_source] > amount || creation + default_withdraw_delay <= block.timestamp, "large withdraw is not old enough");
+        bytes memory message = abi.encode(asset_source, amount, target, creation,  nonce, 'withdraw_asset');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         require(ERC20_Asset_Pool(erc20_asset_pool_address).withdraw(asset_source, target, amount), "token didn't transfer, rejected by asset pool.");
         emit Asset_Withdrawn(target, asset_source, amount, nonce);
@@ -113,10 +207,12 @@ contract ERC20_Bridge_Logic is IERC20_Bridge_Logic {
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of tokens to be deposited into Vega
     /// @param vega_public_key Target Vega public key to be credited with this deposit
-    /// @dev MUST emit Asset_Deposited if successful
+    /// @dev emits Asset_Deposited if successful
     /// @dev ERC20 approve function should be run before running this
     /// @notice ERC20 approve function should be run before running this
     function deposit_asset(address asset_source, uint256 amount, bytes32 vega_public_key) public override {
+        require(!is_stopped, "bridge stopped");
+        require(user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
         require(listed_tokens[asset_source], "asset not listed");
         //User must run approve before deposit
         require(maximum_deposits[asset_source] == 0 || amount <= maximum_deposits[asset_source], "deposit above maximum");
