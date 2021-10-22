@@ -49,12 +49,16 @@
 * get_asset_source should return asset info/source if set
 
 
-
-# Restricted functions
-* set_lifetime_deposit_max
-* get_asset_deposit_limit
+# Restricted function tests
+* set_lifetime_deposit_max throws asset not listed
 * set_withdraw_delay
-* set_withdraw_threshold
-* get_withdraw_threshold
-* global_stop
-* global_resume
+* get_asset_deposit_limit for asset source should return correct limit set
+* get_asset_deposit_limit for non existing asset returns 0
+* get_withdraw_threshold for asset source should return correct threshold set using set_withdraw_threshold throws asset not listed
+* global_stop should set is_stopped to true and emit correct event
+* global_stop throws bridge already stopped
+* deposit asset should revert when is_stopped
+* withdraw asset should revert when is_stopped
+* withdraw asset should revert if large withdraw is not old enough
+* global_resume should set is_stopped to false and emit correct event
+* global_resume throws bridge not stopped
