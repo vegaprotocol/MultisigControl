@@ -329,6 +329,72 @@ contract("ERC20_Bridge_Logic Function: global_stop",  (accounts) => {
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
   })
 
+  it("deposit asset should revert when is_stopped", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
+
+    //new asset ID is not listed
+    assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      false,
+      "token is listed, shouldn't be"
+  );
+
+  //list new asset
+  await list_asset(bridge_logic_instance, accounts[0]);
+
+  //new asset ID is listed
+  assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      true,
+      "token isn't listed, should be"
+  );
+
+  await shouldFailWithMessage(
+    deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]),
+    "bridge stopped"
+  )
+
+  })
+
+
+  it("withdraw asset should revert when is_stopped", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
+
+  //new asset ID is listed
+  assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      true,
+      "token isn't listed, should be"
+  );
+
+  await global_resume(bridge_logic_instance, accounts[0]);
+
+  await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+  //user balance deducted
+  assert.equal(
+    await test_token_instance.balanceOf(accounts[0]),
+    0,
+    "token balance was not deposited, balance should be zero"
+);
+
+await global_stop(bridge_logic_instance, accounts[0]);
+
+  await shouldFailWithMessage(
+    withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0]),
+    "bridge stopped"
+  )
+
+  
+
+  })
+
 
 })
 
