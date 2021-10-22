@@ -322,7 +322,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold",  (accounts) => {
   })
 
 
-  it("set_withdraw_threshold should update threshold in contract", async () => {
+  it("set_withdraw_threshold should update asset threshold in contract if listed", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
