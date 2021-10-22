@@ -49,3 +49,12 @@
 * get_asset_source should return asset info/source if set
 
 
+
+# Restricted functions
+* set_lifetime_deposit_max
+* get_asset_deposit_limit
+* set_withdraw_delay
+* set_withdraw_threshold
+* get_withdraw_threshold
+* global_stop
+* global_resume

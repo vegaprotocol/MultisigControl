@@ -160,9 +160,7 @@ async function list_asset(bridge_logic_instance, from_address) {
 
 async function remove_asset(bridge_logic_instance, from_address){
   //bridge_addresses.test_token_address
-
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
-
 
   //create signature
   let encoded_message = get_message_to_sign(
@@ -179,6 +177,113 @@ async function remove_asset(bridge_logic_instance, from_address){
   //NOTE Sig tests are in MultisigControl
   let receipt = await bridge_logic_instance.remove_asset(bridge_addresses.test_token_address, nonce, sig_string);
   return [nonce, receipt];
+}
+
+
+async function global_stop(bridge_logic_instance, from_address){
+  //bridge_addresses.test_token_address
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+  //create signature
+  let encoded_message = get_message_to_sign(
+      nonce,
+      "global_stop",
+      ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.global_stop(nonce, sig_string);
+  return [nonce, receipt];
+}
+
+
+async function global_resume(bridge_logic_instance, from_address){
+  //bridge_addresses.test_token_address
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+  //create signature
+  let encoded_message = get_message_to_sign(
+      nonce,
+      "global_resume",
+      ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.global_resume(nonce, sig_string);
+  return [nonce, receipt];
+}
+
+
+
+async function set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit) {
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  
+  //create signature
+  let encoded_message = get_message_to_sign(
+    ["address", "uint256",],
+    [bridge_addresses.test_token_address, lifetime_limit.toString()],
+    nonce,
+    "set_lifetime_deposit_max",
+    ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.set_lifetime_deposit_max(bridge_addresses.test_token_address, lifetime_limit, nonce, sig_string);
+  //console.log(receipt.logs)
+  return [nonce, receipt]
+}
+
+
+async function set_withdraw_delay(bridge_logic_instance, delay) {
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  
+  //create signature
+  let encoded_message = get_message_to_sign(
+    ["uint256",],
+    [delay.toString()],
+    nonce,
+    "set_withdraw_delay",
+    ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.set_withdraw_delay(delay.toString(), nonce, sig_string);
+  //console.log(receipt.logs)
+  return [nonce, receipt]
+}
+
+
+async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold) {
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  
+  //create signature
+  let encoded_message = get_message_to_sign(
+    ["address", "uint256",],
+    [bridge_addresses.test_token_address, withdraw_threshold.toString()],
+    nonce,
+    "set_withdraw_threshold",
+    ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.set_withdraw_threshold(bridge_addresses.test_token_address, withdraw_threshold, nonce, sig_string);
+  //console.log(receipt.logs)
+  return [nonce, receipt]
 }
 
 
