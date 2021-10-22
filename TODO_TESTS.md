@@ -15,7 +15,7 @@
 * withdraw should transfer correct amount to function caller 
 
 
-# ERC20_Bridge_Logic.sol
+# ERC20_Bridge_Logic.sol (done)
 * contract should be deployed correctly with valid parameters
 * list_asset should only be callable by ?
 * remove_asset should trigger asset not listed
@@ -48,5 +48,4 @@
 * get_vega_asset_id should return asset id for asset if set
 * get_asset_source should return asset info/source if set
 
-# MultisigControl
-* nonces should check correctly in verify_signatures
+

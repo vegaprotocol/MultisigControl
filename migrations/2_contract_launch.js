@@ -2,7 +2,7 @@ const path = require('path')
 
 const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
-const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic_Restricted");
 const ETH_Asset_Pool = artifacts.require("ETH_Asset_Pool");
 const ETH_Bridge_Logic = artifacts.require("ETH_Bridge_Logic");
 

@@ -1,9 +1,9 @@
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
 const MultisigControl = artifacts.require("MultisigControl");
-const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic_Restricted");
 const Base_Faucet_Token = artifacts.require("Base_Faucet_Token");
 
-const {shouldFailWithMessage, formatEther} = require("../helpers/utils");
+const {shouldFailWithMessage, formatEther, parseEther, latest} = require("../helpers/utils");
 const {expect} = require("../helpers/index");
 
 
@@ -74,10 +74,12 @@ function get_message_to_sign(param_types, params, nonce, function_name, sender) 
 }
 async function list_asset(bridge_logic_instance, from_address) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  let lifetime_limit = parseEther("1000");
+  let withdraw_threshold = parseEther("100"); 
   //create signature
   let encoded_message = get_message_to_sign(
-    ["address", "bytes32"],
-    [bridge_addresses.test_token_address, new_asset_id],
+    ["address", "bytes32", "uint256", "uint256"],
+    [bridge_addresses.test_token_address, new_asset_id, lifetime_limit.toString(), withdraw_threshold.toString()],
     nonce,
     "list_asset",
     ERC20_Bridge_Logic.address);
@@ -87,7 +89,7 @@ async function list_asset(bridge_logic_instance, from_address) {
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+  let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, lifetime_limit, withdraw_threshold, nonce, sig_string);
   return receipt
 }
 
@@ -149,6 +151,7 @@ async function deposit_asset(bridge_logic_instance, test_token_instance, account
 async function withdraw_asset(bridge_logic_instance, test_token_instance, account, bad_params, bad_user) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
+  let now = creation = await latest();
 
   let target = account;
 
@@ -158,8 +161,8 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
 
   //create signature
   let encoded_message = get_message_to_sign(
-    ["address", "uint256", "address"],
-    [test_token_instance.address, to_withdraw, target],
+    ["address", "uint256", "address", "uint256"],
+    [test_token_instance.address, to_withdraw, target, now.toString()],
     nonce,
     "withdraw_asset",
     ERC20_Bridge_Logic.address);
@@ -173,7 +176,7 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
     to_withdraw = "1"
   }
 
-  let receipt = await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, nonce, sig_string);
+  let receipt = await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, creation, nonce, sig_string);
   return receipt;
 }
 

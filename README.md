@@ -60,11 +60,10 @@ All addresses, ABIs, and smart contract files will be available in `./ropsten_de
 See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/doc/dockerisedvega.md).
 
 ## Run Tests Locally
-1. `Start local Ganache deployment on seperate terminal`
-2. `cd TESTNET_ASSET_DEPLOYMENT`
-3. `Run command truffle build`
-4. `Copy the TESTNET_ASSET_DEPLOYMENT/build/contract/Base_Fauset_Token.json to root/build/contracts folder`
-5. `From root run truffle test`
+1. `npm i`
+2. `Start local Ganache deployment on the project root folder in a seperate terminal using npm run ganache`
+3. `From root run command truffle build`
+4. `From root run truffle test`
 
 ## Code Coverage Checks
 1. `truffle run coverage`
