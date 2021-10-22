@@ -186,6 +186,8 @@ async function global_stop(bridge_logic_instance, from_address){
 
   //create signature
   let encoded_message = get_message_to_sign(
+      [],
+      [],
       nonce,
       "global_stop",
       ERC20_Bridge_Logic.address);
@@ -206,6 +208,8 @@ async function global_resume(bridge_logic_instance, from_address){
 
   //create signature
   let encoded_message = get_message_to_sign(
+      [],
+      [],
       nonce,
       "global_resume",
       ERC20_Bridge_Logic.address);
@@ -289,6 +293,54 @@ async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold)
 
 
 ////FUNCTIONS
+contract("ERC20_Bridge_Logic Function: global_stop",  (accounts) => {
+  //function global_stop(uint256 nonce, bytes calldata signatures) public;
+  beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+
+  it("global_stop should set is_stopped to true and emit correct event", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
+    let [nonce, receipt] = await global_stop(bridge_logic_instance, accounts[0]);
+
+    const {args} = await findEventInTransaction(receipt, "Bridge_Stopped");
+    
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
+  })
+
+
+})
+
+
+contract("ERC20_Bridge_Logic Function: global_resume",  (accounts) => {
+  //function global_stop(uint256 nonce, bytes calldata signatures) public;
+  beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+
+  it("global_resume should set is_stopped to false and emit correct event", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
+    
+    await global_stop(bridge_logic_instance, accounts[0]);
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
+
+    let [nonce, receipt] = await global_resume(bridge_logic_instance, accounts[0]);
+    const {args} = await findEventInTransaction(receipt, "Bridge_Resumed");
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
+  })
+
+
+})
+
 contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
   //function list_asset(address asset_source, uint256 asset_id, bytes32 vega_id, uint256 nonce, bytes memory signatures) public;
   beforeEach(async()=>{
