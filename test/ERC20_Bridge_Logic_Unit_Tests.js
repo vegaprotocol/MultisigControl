@@ -300,9 +300,26 @@ contract("ERC20_Bridge_Logic Function: global_stop",  (accounts) => {
 
   });
 
+  it("global_stop throws bridge already stopped", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
+    await global_stop(bridge_logic_instance, accounts[0]);
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
+    
+    await shouldFailWithMessage(
+      global_stop(bridge_logic_instance, accounts[0]),
+      "bridge already stopped"
+    );
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
+  })
+
   it("global_stop should set is_stopped to true and emit correct event", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
+
+    await global_resume(bridge_logic_instance, accounts[0]);
 
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
     let [nonce, receipt] = await global_stop(bridge_logic_instance, accounts[0]);
@@ -328,13 +345,27 @@ contract("ERC20_Bridge_Logic Function: global_resume",  (accounts) => {
     let test_token_instance = await Base_Faucet_Token.deployed();
 
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
-    
+
     await global_stop(bridge_logic_instance, accounts[0]);
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
 
     let [nonce, receipt] = await global_resume(bridge_logic_instance, accounts[0]);
     const {args} = await findEventInTransaction(receipt, "Bridge_Resumed");
 
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
+  })
+
+  it("global_resume throws bridge not stopped if it is not stopped", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
+
+    await shouldFailWithMessage(
+      global_resume(bridge_logic_instance, accounts[0]),
+      "bridge not stopped"
+    );
+    
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
   })
 
