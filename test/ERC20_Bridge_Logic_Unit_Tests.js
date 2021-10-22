@@ -225,7 +225,7 @@ async function global_resume(bridge_logic_instance, from_address){
 
 
 
-async function set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit) {
+async function set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, from_address) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   
   //create signature
@@ -247,7 +247,7 @@ async function set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit) {
 }
 
 
-async function set_withdraw_delay(bridge_logic_instance, delay) {
+async function set_withdraw_delay(bridge_logic_instance, delay, from_address) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   
   //create signature
@@ -269,7 +269,7 @@ async function set_withdraw_delay(bridge_logic_instance, delay) {
 }
 
 
-async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold) {
+async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, from_address) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   
   //create signature
@@ -293,6 +293,100 @@ async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold)
 
 
 ////FUNCTIONS
+contract("ERC20_Bridge_Logic Function: set_withdraw_delay",  (accounts) => {
+  //function set_withdraw_delay(uint256 delay, uint256 nonce, bytes calldata signatures) public
+  beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+
+  it("set_withdraw_delay callable via bridge", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let delay = 432001;
+    
+    expectBignumberEqual(await bridge_logic_instance.default_withdraw_delay(), 432000);
+
+    await set_withdraw_delay(bridge_logic_instance, delay, accounts[0]);
+
+    expectBignumberEqual(await bridge_logic_instance.default_withdraw_delay(), 432001);
+
+  })
+})
+
+contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max",  (accounts) => {
+  //function set_lifetime_deposit_max(address asset_source, uint256 lifetime_limit, uint256 nonce, bytes calldata signatures) public;
+  beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+
+  it("set_lifetime_deposit_max throws asset not listed", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lifetime_limit = parseEther("100");
+
+    //new asset ID is not listed
+    assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      false,
+      "token is listed, shouldn't be"
+  );
+
+    await shouldFailWithMessage(
+      set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, accounts[0]),
+      "asset not listed"
+    )
+  })
+
+  it("set_lifetime_deposit_max should not revert if asset is listed", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lifetime_limit = parseEther("100");
+
+    //new asset ID is not listed
+    assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      false,
+      "token is listed, shouldn't be"
+  );
+
+  //list new asset
+  await list_asset(bridge_logic_instance, accounts[0]);
+
+  //new asset ID is listed
+  assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      true,
+      "token isn't listed, should be"
+  );
+
+  await set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, accounts[0]);
+
+  //get_asset_deposit_limit for asset source should return correct limit set
+  expectBignumberEqual(await bridge_logic_instance.get_asset_deposit_limit(test_token_instance.address), lifetime_limit);
+
+  })
+})
+
+
+contract("ERC20_Bridge_Logic Function: get_asset_deposit_limit", (accounts) => {
+  beforeEach(async()=>{
+    await init_private_keys()
+  });
+
+  it("get_asset_deposit_limit for non existing asset returns 0", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+    
+    expectBignumberEqual(await bridge_logic_instance.get_asset_deposit_limit(accounts[1]), 0);
+
+  })
+})
+
 contract("ERC20_Bridge_Logic Function: global_stop",  (accounts) => {
   //function global_stop(uint256 nonce, bytes calldata signatures) public;
   beforeEach(async()=>{
