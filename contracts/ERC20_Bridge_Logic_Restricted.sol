@@ -108,6 +108,10 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     mapping(address => uint256) withdraw_thresholds;
     bool public is_stopped;
 
+    // depositor => is exempt from deposit limits
+    mapping(address => bool) exempt_depositors;
+    address exemption_lister;
+
     /// @notice This function sets the lifetime maximum deposit for a given asset
     /// @param asset_source Contract address for given ERC20 token
     /// @param lifetime_limit Deposit limit for a given ethereum address
@@ -183,6 +187,53 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
       is_stopped = false;
       emit Bridge_Resumed();
     }
+
+    /// @notice this function allows MultisigControl to set the address that can exempt depositors from the deposit limits
+    /// @notice this feature is specifically for liquidity and rewards providers
+    /// @param lister The address that can exempt depositors
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @dev emits Exemption_Lister_Set if successful
+    function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public override{
+      bytes memory message = abi.encode(lister, nonce, 'set_exemption_lister');
+      require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+      exemption_lister = lister;
+      emit Exemption_Lister_Set(lister);
+    }
+
+    /// @notice this function allows the exemption_lister to exempt a depositor from the deposit limits
+    /// @notice this feature is specifically for liquidity and rewards providers
+    /// @param depositor The depositor to exempt from limits
+    /// @dev emits Depositor_Exempted if successful
+    function exempt_depositor(address depositor) public override {
+      require(msg.sender == exemption_lister, "unauthorized exemption lister");
+      exempt_depositors[depositor] = true;
+      emit Depositor_Exempted(depositor);
+    }
+
+    /// @notice this function allows the exemption_lister to revoke a depositor's exemption from deposit limits
+    /// @notice this feature is specifically for liquidity and rewards providers
+    /// @param depositor The depositor from which to revoke deposit exemptions
+    /// @dev emits Depositor_Exemption_Revoked if successful
+    function revoke_exempt_depositor(address depositor) public override {
+      require(msg.sender == exemption_lister, "unauthorized exemption lister");
+      require(exempt_depositors[depositor], "depositor not exempt");
+      exempt_depositors[depositor] = false;
+      emit Depositor_Exemption_Revoked(depositor);
+    }
+
+    /// @notice this view returns the address that can exempt depositors from deposit limits
+    /// @return the address can exempt depositors from deposit limits
+    function get_exemption_lister() public override view returns(address) {
+      return exemption_lister;
+    }
+
+    /// @notice this view returns true if the given despoitor address has been exempted from deposit limits
+    /// @param depositor The depositor to check
+    /// @return true if depositor is exempt
+    function is_exempt_depositor(address depositor) public override view returns(bool) {
+      return exempt_depositors[depositor];
+    }
     /***********************END RESTRICTIONS*************************/
 
     /// @notice This function withdrawals assets to the target Ethereum address
@@ -203,6 +254,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         emit Asset_Withdrawn(target, asset_source, amount, nonce);
     }
 
+
     /// @notice This function allows a user to deposit given ERC20 tokens into Vega
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of tokens to be deposited into Vega
@@ -212,7 +264,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     /// @notice ERC20 approve function should be run before running this
     function deposit_asset(address asset_source, uint256 amount, bytes32 vega_public_key) public override {
         require(!is_stopped, "bridge stopped");
-        require(user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
+        require(exempt_depositors[msg.sender] || user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
         require(listed_tokens[asset_source], "asset not listed");
         //User must run approve before deposit
         require(maximum_deposits[asset_source] == 0 || amount <= maximum_deposits[asset_source], "deposit above maximum");

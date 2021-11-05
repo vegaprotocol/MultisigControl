@@ -16,6 +16,9 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     event Asset_Removed(address indexed asset_source,  uint256 nonce);
     event Bridge_Stopped();
     event Bridge_Resumed();
+    event Exemption_Lister_Set(address indexed lister);
+    event Depositor_Exempted(address indexed depositor);
+    event Depositor_Exemption_Revoked(address indexed depositor);
 
     /***************************FUNCTIONS*************************/
     /// @notice This function lists the given ERC20 token contract as valid for deposit to this bridge
@@ -91,6 +94,26 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @dev MUST emit Bridge_Resumed if successful
     function global_resume(uint256 nonce, bytes calldata signatures) public virtual;
 
+    /// @notice this function allows MultisigControl to set the address that can exempt depositors from the deposit limits
+    /// @notice this feature is specifically for liquidity and rewards providers
+    /// @param lister The address that can exempt depositors
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @dev MUST emit Exemption_Lister_Set if successful
+    function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public virtual;
+
+    /// @notice this function allows the exemption_lister to exempt a depositor from the deposit limits
+    /// @notice this feature is specifically for liquidity and rewards providers
+    /// @param depositor The depositor to exempt from limits
+    /// @dev MUST emit Depositor_Exempted if successful
+    function exempt_depositor(address depositor) public virtual;
+
+    /// @notice this function allows the exemption_lister to revoke a depositor's exemption from deposit limits
+    /// @notice this feature is specifically for liquidity and rewards providers
+    /// @param depositor The depositor from which to revoke deposit exemptions
+    /// @dev MUST emit Depositor_Exemption_Revoked if successful
+    function revoke_exempt_depositor(address depositor) public virtual;
+
     /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
@@ -136,6 +159,15 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @param asset_source Contract address for given ERC20 token
     /// @return Withdraw threshold
     function get_withdraw_threshold(address asset_source) public virtual view returns(uint256);
+
+    /// @notice this view returns the address that can exempt depositors from deposit limits
+    /// @return the address can exempt depositors from deposit limits
+    function get_exemption_lister() public virtual view returns(address);
+
+    /// @notice this view returns true if the given despoitor address has been exempted from deposit limits
+    /// @param depositor The depositor to check
+    /// @return true if depositor is exempt
+    function is_exempt_depositor(address depositor) public virtual view returns(bool);
 
     /// @return current multisig_control_address
     function get_multisig_control_address() public virtual view returns(address);
