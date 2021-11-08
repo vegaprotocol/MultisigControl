@@ -61,7 +61,7 @@ See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/d
 
 ## Run Tests Locally
 1. `npm i`
-2. `Start local Ganache deployment on the project root folder in a seperate terminal using npm run ganache`
+2. `Start local Ganache deployment on the project root folder in a seperate terminal using: npm run ganache`
 3. `From root run command truffle build`
 4. `From root run truffle test`
 
