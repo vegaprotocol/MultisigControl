@@ -598,6 +598,20 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
     expect(args.depositor).to.be.equal(accounts[2]);
   })
 
+  it("exempt_depositor does not revert for zero address", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_exempt_depositor(ZERO_ADDRESS)).to.be.equal(false);
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    const tx = await bridge_logic_instance.exempt_depositor(ZERO_ADDRESS, {from: accounts[1]});
+
+    expect(await bridge_logic_instance.is_exempt_depositor(ZERO_ADDRESS)).to.be.equal(true);
+  })
+
   it("is_exempt_depositor should return true if exempted", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
