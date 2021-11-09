@@ -538,7 +538,6 @@ contract("ERC20_Bridge_Logic Function: revoke_exempt_depositor", (accounts) => {
 
     let lister = accounts[1];
     await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
-    await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
     expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(accounts[1]);
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
     await bridge_logic_instance.revoke_exempt_depositor(accounts[2], {from: accounts[1]});
@@ -598,7 +597,7 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
     expect(args.depositor).to.be.equal(accounts[2]);
   })
 
-  it("exempt_depositor does not revert for zero address", async () => {
+  it("exempt_depositor should revert for zero address", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -607,9 +606,12 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
     let lister = accounts[1];
     await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
 
-    const tx = await bridge_logic_instance.exempt_depositor(ZERO_ADDRESS, {from: accounts[1]});
+    await shouldFailWithMessage(
+      bridge_logic_instance.exempt_depositor(ZERO_ADDRESS, {from: accounts[1]}),
+      "cannot exempt zero address"
+    );
 
-    expect(await bridge_logic_instance.is_exempt_depositor(ZERO_ADDRESS)).to.be.equal(true);
+    expect(await bridge_logic_instance.is_exempt_depositor(ZERO_ADDRESS)).to.be.equal(false);
   })
 
   it("is_exempt_depositor should return true if exempted", async () => {
@@ -618,11 +620,8 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
 
     let lister = accounts[1];
     await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
-
-    const tx = await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
-
+    
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
-
   })
 
   it("is_exempt_depositor should return false if not exempted", async () => {
@@ -632,7 +631,7 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[8])).to.be.equal(false);
   })
 
-  it("exempt_depositor should be callable multiple time for the same depositor", async () => {
+  it("exempt_depositor should not be callable multiple time for the same depositor", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -648,7 +647,10 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
 
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
 
-    await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
+    await shouldFailWithMessage(
+      bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]}),
+      "depositor already exempt"
+    );
 
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);    
   })
