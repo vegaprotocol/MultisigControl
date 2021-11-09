@@ -24,6 +24,7 @@ const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { expect } = require("chai");
 const { find } = require("lodash");
+const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 let private_keys = {};
 async function init_private_keys() {
@@ -160,6 +161,26 @@ async function set_bridge_address(bridge_logic_instance, asset_pool_instance, ac
   await asset_pool_instance.set_bridge_address(bridge_logic_instance.address, nonce, sig_string);
 }
 
+
+async function set_exemption_lister(bridge_logic_instance, account, listerAccount) {
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  //create signature
+  let encoded_message = get_message_to_sign(
+    ["address"],
+    [listerAccount],
+    nonce,
+    "set_exemption_lister",
+    ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.set_exemption_lister(listerAccount, nonce, sig_string);
+  //console.log(receipt.logs)
+  return [nonce, receipt]
+}
 
 
 async function list_asset(bridge_logic_instance, from_address) {
@@ -453,6 +474,28 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
 })
 
 
+
+contract("ERC20_Bridge_Logic Function: set_exemption_lister", (accounts) => {
+  //function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public override
+  beforeEach(async () => {
+    await init_private_keys()
+
+  });
+
+  it("set_exemption_lister should update delay in contract", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(ZERO_ADDRESS);
+
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(lister);
+
+  })
+})
 
 contract("ERC20_Bridge_Logic Function: set_withdraw_delay", (accounts) => {
   //function set_withdraw_delay(uint256 delay, uint256 nonce, bytes calldata signatures) public
