@@ -735,6 +735,35 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max", (accounts) => 
       "deposit over lifetime limit"
     );
   })
+
+
+  it("deposit asset should not revert if depositor is exempted and total deposited by user is > maximum lifetime deposit", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let faucetAmount = "10000000000"; // 100 thousand in 5 decimals
+    let lifetime_limit = parseInt(faucetAmount) / 2;
+
+    await set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, accounts[0]);
+
+    expectBignumberEqual(await bridge_logic_instance.get_asset_deposit_limit(test_token_instance.address), lifetime_limit);
+
+    await shouldFailWithMessage(
+      deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]),
+      "deposit over lifetime limit"
+    );
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+    await bridge_logic_instance.exempt_depositor(accounts[0], {from: accounts[1]});
+
+    // balance before deposit
+    let balanceBefore = await test_token_instance.balanceOf(accounts[0]);
+    await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+    // balance after deposit
+    let balanceAfter = await test_token_instance.balanceOf(accounts[0]);
+    expect(balanceAfter).to.be.bignumber.lessThan(balanceBefore);
+  })
 })
 
 
