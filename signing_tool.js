@@ -113,10 +113,10 @@ async function go(){
   /*********Remove to revert to .secret mnemonic***********/
   private_keys =
       {
-          "0x6aD570cB22d9c1A5EC5aBA5B6eBEA12AE6f08e97":Buffer.from("59ad6b67fd8014f4a434f0c88b605dc922eceaff3161275bc08018179c6093cc",'hex')
+          "0xb89A165EA8b619c14312dB316BaAa80D2a98B493":Buffer.from("adef89153e4bd6b43876045efdd6818cec359340683edaec5e8588e635e8428b",'hex')
       };
   accounts = [
-  "0x6aD570cB22d9c1A5EC5aBA5B6eBEA12AE6f08e97"
+  "0xb89A165EA8b619c14312dB316BaAa80D2a98B493"
   ]
 
   /********************/
