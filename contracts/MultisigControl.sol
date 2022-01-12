@@ -110,7 +110,7 @@ contract MultisigControl is IMultisigControl {
         for(uint8 signer_idx = 0; signer_idx < signers.length; signer_idx++){
           delete(has_signed[signers[signer_idx]]);
         }
-        return ((uint256(sig_count) * 1000) / (uint256(signer_sequences[sequence_number].signer_count))) > signer_sequences[sequence_number].threshold;
+        return ((uint256(sig_count) * 1000) / (uint256(signer_sequences[sequence_number].signer_count))) >= signer_sequences[sequence_number].threshold;
     }
 
     function disable_sequence_number(uint256 sequence_to_disable, uint256 nonce, uint256 sequence_number, bytes calldata signatures) public override {
