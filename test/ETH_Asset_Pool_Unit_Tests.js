@@ -53,18 +53,18 @@ beforeEach(async()=>{
 
 
 
+
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
-function get_message_to_sign(param_types, params, nonce, function_name, sender) {
+function get_message_to_sign(param_types, params, nonce, function_name, sender, signer_sequence_number){
     params.push(nonce);
     param_types.push("uint256");
     params.push(function_name);
     param_types.push("string");
-
     //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
     let encoded_a = abi.rawEncode(param_types, params);
     //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
-    return abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+    return abi.rawEncode(["bytes", "address", "uint256"], [encoded_a, sender, signer_sequence_number]);
 }
 
 
@@ -83,14 +83,15 @@ async function set_multisig_control(asset_pool_instance, multisig_control_addres
         [multisig_control_address],
         nonce,
         "set_multisig_control",
-        asset_pool_instance.address);
+        asset_pool_instance.address,
+        0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
 
     let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
     let sig_string = to_signature_string(signature);
 
     //NOTE Sig tests are in MultisigControl
-    let receipt = await asset_pool_instance.set_multisig_control(multisig_control_address, nonce, sig_string);
+    let receipt = await asset_pool_instance.set_multisig_control(multisig_control_address, nonce, 0, sig_string);
     return receipt;
 }
 
@@ -103,14 +104,15 @@ async function set_bridge_address(asset_pool_instance, bridge_logic_address, acc
         [bridge_logic_address],
         nonce,
         "set_bridge_address",
-        asset_pool_instance.address);
+        asset_pool_instance.address,
+        0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
 
     let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
     let sig_string = to_signature_string(signature);
 
     //NOTE Sig tests are in MultisigControl
-    let receipt = await asset_pool_instance.set_bridge_address(bridge_logic_address, nonce, sig_string);
+    let receipt = await asset_pool_instance.set_bridge_address(bridge_logic_address, nonce, 0, sig_string);
     return receipt;
 }
 
@@ -135,7 +137,8 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
         [to_withdraw, expiry, account],
         nonce,
         "withdraw_asset",
-        ETH_Bridge_Logic.address);
+        ETH_Bridge_Logic.address,
+        0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
     let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
 
@@ -146,7 +149,7 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
         to_withdraw = "1"
     }
 
-    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account });
+    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, 0, sig_string, { from: account });
     return receipt;
 }
 
@@ -166,7 +169,8 @@ async function withdraw_asset_reentry(bridge_logic_instance, account, expiry, no
         [to_withdraw, expiry, account],
         nonce,
         "withdraw_asset",
-        ETH_Bridge_Logic.address);
+        ETH_Bridge_Logic.address,
+        0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
     let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
 
@@ -177,7 +181,7 @@ async function withdraw_asset_reentry(bridge_logic_instance, account, expiry, no
         to_withdraw = "1"
     }
 
-    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account });
+    let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce,0, sig_string, { from: account });
     return receipt;
 }
 
@@ -206,6 +210,7 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
           asset_pool_instance.set_multisig_control(
             ZERO_ADDRESS,
             nonce,
+            0,
             "0x"
           ),
           "invalid MultisigControl address"
@@ -238,6 +243,7 @@ contract("ETH_Asset_Pool Function: set_multisig_control", (accounts) => {
           asset_pool_instance.set_multisig_control(
             accounts[1],
             nonce,
+            0,
             "0x"
           ),
           "new address must be contract"
@@ -297,6 +303,7 @@ contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
             asset_pool_instance.set_bridge_address(
                 bridge_addresses.eth_bridge_logic,
                 nonce,
+                0,
                 "0x"
             ),
             "bad signatures"

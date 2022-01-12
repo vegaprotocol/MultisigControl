@@ -17,28 +17,31 @@ abstract contract IETH_Bridge_Logic {
     /// @notice This function sets the minimum allowable deposit for ETH
     /// @param minimum_amount Minimum deposit amount
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Deposit_Minimum_Set if successful
-    function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public virtual;
+    function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function sets the maximum allowable deposit for ETH
     /// @param maximum_amount Maximum deposit amount
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Deposit_Maximum_Set if successful
-    function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
+    function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function sets the maximum allowable deposit for the given ETH
     /// @param amount Amount of ETH to withdraw
     /// @param expiry Vega-assigned timestamp of withdrawal order expiration
     /// @param target Target Ethereum address to receive withdrawn ETH
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Withdrawn if successful
-    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public virtual;
+    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function allows a user to deposit ETH into Vega
     /// @param vega_public_key Target vega public key to be credited with this deposit

@@ -20,46 +20,51 @@ abstract contract IERC20_Bridge_Logic {
     /// @param asset_source Contract address for given ERC20 token
     /// @param vega_asset_id Vega-generated asset ID for internal use in Vega Core
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Listed if successful
-    function list_asset(address asset_source, bytes32 vega_asset_id, uint256 nonce, bytes memory signatures) public virtual;
+    function list_asset(address asset_source, bytes32 vega_asset_id, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function removes from listing the given ERC20 token contract. This marks the token as invalid for deposit to this bridge
     /// @param asset_source Contract address for given ERC20 token
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Removed if successful
-    function remove_asset(address asset_source, uint256 nonce, bytes memory signatures) public virtual;
+    function remove_asset(address asset_source, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function sets the minimum allowable deposit for the given ERC20 token
     /// @param asset_source Contract address for given ERC20 token
     /// @param minimum_amount Minimum deposit amount
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Deposit_Minimum_Set if successful
-    function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public virtual;
+    function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function sets the maximum allowable deposit for the given ERC20 token
     /// @param asset_source Contract address for given ERC20 token
     /// @param maximum_amount Maximum deposit amount
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Deposit_Maximum_Set if successful
-    function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
+    function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
     /// @param target Target Ethereum address to receive withdrawn ERC20 tokens
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param sequence_number Target signer set for given multisignature order
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Withdrawn if successful
-    function withdraw_asset(address asset_source, uint256 amount, address target, uint256 nonce, bytes memory signatures) public virtual;
+    function withdraw_asset(address asset_source, uint256 amount, address target, uint256 nonce, uint256 sequence_number, bytes memory signatures) public virtual;
 
     /// @notice This function allows a user to deposit given ERC20 tokens into Vega
     /// @param asset_source Contract address for given ERC20 token

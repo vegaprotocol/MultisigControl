@@ -8,80 +8,63 @@ import "./IMultisigControl.sol";
 /// @notice This contract enables validators, through a multisignature process, to run functions on contracts by consensus
 contract MultisigControl is IMultisigControl {
     constructor () {
-        // set initial threshold to 50%
-        threshold = 500;
-        signers[msg.sender] = true;
-        signer_count++;
-        emit SignerAdded(msg.sender, 0);
+        signer_sequences[signer_sequence_number].signer_count = 1;
+        signer_sequences[signer_sequence_number].threshold = 500;
+        signer_sequences[signer_sequence_number].signers[msg.sender] = true;
+        signer_sequence_number++;
     }
 
-    uint16 threshold;
-    uint8 signer_count;
-    mapping(address => bool) signers;
     mapping(uint => bool) used_nonces;
-    mapping(bytes32 => mapping(address => bool)) has_signed;
+
+    struct Signer_Sequence{
+      uint8 signer_count;
+      uint16 threshold;
+      mapping(address=>bool) signers;
+    }
+
+    uint256 public signer_sequence_number;
+    mapping(uint256 => Signer_Sequence) signer_sequences;
 
     /**************************FUNCTIONS*********************/
-    /// @notice Sets threshold of signatures that must be met before function is executed.
-    /// @param new_threshold New threshold value
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
-    /// @notice signatures are OK if they are >= threshold count of total valid signers
-    /// @dev Emits ThresholdSet event
-    function set_threshold(uint16 new_threshold, uint256 nonce, bytes calldata signatures) public override{
-        require(new_threshold <= 1000 && new_threshold > 0, "new threshold outside range");
-        bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
-        threshold = new_threshold;
-        emit ThresholdSet(new_threshold, nonce);
+
+    function update_signer_set(address[] calldata new_signers, uint16 new_threshold, uint256 nonce, uint256 sequence_number, bytes calldata signatures) public override {
+      bytes memory message = abi.encode(new_signers, new_threshold, nonce, "update_signer_set");
+      signer_sequences[signer_sequence_number].signer_count = uint8(new_signers.length);
+      signer_sequences[signer_sequence_number].threshold = new_threshold;
+
+      require(verify_signatures(signatures, message, nonce, sequence_number), "bad signatures");
+
+      uint8 signer_count = 0;
+      for(uint8 signer_idx = 0; signer_idx < new_signers.length; signer_idx++){
+        if(!signer_sequences[signer_sequence_number].signers[new_signers[signer_idx]]){
+          signer_sequences[signer_sequence_number].signers[new_signers[signer_idx]] = true;
+          signer_count++;
+        }
+      }
+      signer_sequence_number++;
+
     }
 
-    /// @notice Adds new valid signer and adjusts signer count.
-    /// @param new_signer New signer address
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @dev Emits 'SignerAdded' event
-    function add_signer(address new_signer, uint256 nonce, bytes calldata signatures) public override{
-        bytes memory message = abi.encode(new_signer, nonce, "add_signer");
-        require(!signers[new_signer], "signer already exists");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
-        signers[new_signer] = true;
-        signer_count++;
-        emit SignerAdded(new_signer, nonce);
-    }
 
-    /// @notice Removes currently valid signer and adjusts signer count.
-    /// @param old_signer Address of signer to be removed.
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @dev Emits 'SignerRemoved' event
-    function remove_signer(address old_signer, uint256 nonce, bytes calldata signatures) public override {
-        bytes memory message = abi.encode(old_signer, nonce, "remove_signer");
-        require(signers[old_signer], "signer doesn't exist");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
-        signers[old_signer] = false;
-        signer_count--;
-        emit SignerRemoved(old_signer, nonce);
-    }
+    mapping(bytes32=>bool) has_signed;
+    bytes32[] signers;
 
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
     /// @notice message to hash to sign follows this pattern:
-    /// @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);
+    /// @notice keccak256(abi.encode( keccak256(abi.encode(param1, param2, param3, ... , nonce, sequence_number, function_name_string)), validating_contract_or_submitter_address));
     /// @notice Note that validating_contract_or_submitter_address is the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return Returns true if valid signatures are over the threshold
-    function verify_signatures(bytes calldata signatures, bytes memory message, uint256 nonce) public override returns(bool) {
+    function verify_signatures(bytes calldata signatures, bytes memory message, uint256 nonce, uint256 sequence_number) public override returns(bool) {
+        require(signer_sequences[sequence_number].signer_count>0, "invalid sequence number");
         require(signatures.length % 65 == 0, "bad sig length");
         require(!used_nonces[nonce], "nonce already used");
         uint8 sig_count = 0;
 
-        bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
+        bytes32 message_hash = keccak256(abi.encode(message, msg.sender, sequence_number));
+        delete(signers);
         uint256 offset;
         assembly {
           offset := signatures.offset
@@ -113,30 +96,44 @@ contract MultisigControl is IMultisigControl {
             if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
+            bytes32 signer_hash = keccak256(abi.encode(nonce, recovered_address));
 
-            if(signers[recovered_address] && !has_signed[message_hash][recovered_address]){
-                has_signed[message_hash][recovered_address] = true;
+            if(signer_sequences[sequence_number].signers[recovered_address] && !has_signed[signer_hash]){
+                has_signed[signer_hash] = true;
                 sig_count++;
+                signers.push(signer_hash);
             }
         }
         used_nonces[nonce] = true;
-        return ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
+
+        /// @Dev fun fact, mappings don't work in functions
+        for(uint8 signer_idx = 0; signer_idx < signers.length; signer_idx++){
+          delete(has_signed[signers[signer_idx]]);
+        }
+        return ((uint256(sig_count) * 1000) / (uint256(signer_sequences[sequence_number].signer_count))) > signer_sequences[sequence_number].threshold;
+    }
+
+    function disable_sequence_number(uint256 sequence_to_disable, uint256 nonce, uint256 sequence_number, bytes calldata signatures) public override {
+      bytes memory message = abi.encode(sequence_to_disable, nonce, "disable_sequence_number");
+      require(verify_signatures(signatures, message, nonce, sequence_number), "bad signatures");
+
+      delete(signer_sequences[sequence_to_disable]);
     }
 
     /// @return Number of valid signers
-    function get_valid_signer_count() public override view returns(uint8){
-        return signer_count;
+    function get_signer_count(uint256 sequence_number) public override view returns(uint8){
+        return signer_sequences[sequence_number].signer_count;
     }
 
     /// @return Current threshold
-    function get_current_threshold() public override view returns(uint16) {
-        return threshold;
+    function get_threshold(uint256 sequence_number) public override view returns(uint16) {
+        return signer_sequences[sequence_number].threshold;
     }
 
     /// @param signer_address target potential signer address
     /// @return true if address provided is valid signer
-    function is_valid_signer(address signer_address) public override view returns(bool){
-        return signers[signer_address];
+    function is_valid_signer(address signer_address, uint256 sequence_number) public override view returns(bool){
+        return signer_sequences[sequence_number].signers[signer_address];
     }
 
     /// @param nonce Nonce to lookup

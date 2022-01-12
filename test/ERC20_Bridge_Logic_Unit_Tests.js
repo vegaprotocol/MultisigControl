@@ -52,7 +52,7 @@ beforeEach(async()=>{
 
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
-function get_message_to_sign(param_types, params, nonce, function_name, sender){
+function get_message_to_sign(param_types, params, nonce, function_name, sender, signer_sequence_number){
     params.push(nonce);
     param_types.push("uint256");
     params.push(function_name);
@@ -60,7 +60,7 @@ function get_message_to_sign(param_types, params, nonce, function_name, sender){
     //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
     let encoded_a = abi.rawEncode(param_types, params);
     //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
-    return abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+    return abi.rawEncode(["bytes", "address", "uint256"], [encoded_a, sender, signer_sequence_number]);
 }
 
 function to_signature_string(sig){
@@ -99,17 +99,18 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
       [test_token_instance.address, to_withdraw, target],
       nonce,
       "withdraw_asset",
-      ERC20_Bridge_Logic.address);
+      ERC20_Bridge_Logic.address,
+      0);
   let encoded_hash = ethUtil.keccak256(encoded_message);
   let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
 
   let sig_string = to_signature_string(signature);
-  
+
   //NOTE Sig tests are in MultisigControl
   if(bad_params){
     to_withdraw = "1"
   }
-  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, nonce, sig_string);
+  await bridge_logic_instance.withdraw_asset(test_token_instance.address, to_withdraw, target, nonce, 0, sig_string);
 }
 
 
@@ -121,14 +122,15 @@ async function set_bridge_address(bridge_logic_instance, asset_pool_instance, ac
       [bridge_logic_instance.address],
       nonce,
       "set_bridge_address",
-      asset_pool_instance.address);
+      asset_pool_instance.address,
+      0);
   let encoded_hash = ethUtil.keccak256(encoded_message);
 
   let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  await asset_pool_instance.set_bridge_address(bridge_logic_instance.address, nonce, sig_string);
+  await asset_pool_instance.set_bridge_address(bridge_logic_instance.address, nonce, 0, sig_string);
 }
 
 
@@ -141,14 +143,15 @@ async function list_asset(bridge_logic_instance, from_address){
       [bridge_addresses.test_token_address, new_asset_id],
       nonce,
       "list_asset",
-      ERC20_Bridge_Logic.address);
+      ERC20_Bridge_Logic.address,
+      0);
   let encoded_hash = ethUtil.keccak256(encoded_message);
 
   let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, sig_string);
+  let receipt = await bridge_logic_instance.list_asset(bridge_addresses.test_token_address, new_asset_id, nonce, 0, sig_string);
   //console.log(receipt.logs)
   return [nonce, receipt];
 }
@@ -166,14 +169,15 @@ async function remove_asset(bridge_logic_instance, from_address){
       [bridge_addresses.test_token_address],
       nonce,
       "remove_asset",
-      ERC20_Bridge_Logic.address);
+      ERC20_Bridge_Logic.address,
+      0);
   let encoded_hash = ethUtil.keccak256(encoded_message);
 
   let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  let receipt = await bridge_logic_instance.remove_asset(bridge_addresses.test_token_address, nonce, sig_string);
+  let receipt = await bridge_logic_instance.remove_asset(bridge_addresses.test_token_address, nonce, 0, sig_string);
   return [nonce, receipt];
 }
 
@@ -216,11 +220,12 @@ contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
         bridge_addresses.test_token_address,
         new_asset_id,
         nonce,
+         0,
         "0x"
       ),
       "bad signatures"
     );
-    
+
   });
 
     it("asset that was not listed is listed after running list_asset", async () => {
@@ -281,7 +286,7 @@ contract("ERC20_Bridge_Logic Function: list_asset",  (accounts) => {
           true,
           "token isn't listed, should be"
       );
-      
+
       //list new asset fails
       try {
         await list_asset(bridge_logic_instance, accounts[0]);
@@ -371,14 +376,15 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum",   (accounts) => {
           [test_token_instance.address, "500"],
           nonce,
           "set_deposit_minimum",
-          ERC20_Bridge_Logic.address);
+          ERC20_Bridge_Logic.address,
+          0);
       let encoded_hash = ethUtil.keccak256(encoded_message);
 
       let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
       let sig_string = to_signature_string(signature);
 
-      const tx = await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, "500", nonce, sig_string);
-      
+      const tx = await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, "500", nonce, 0, sig_string);
+
       const {args} = await findEventInTransaction(tx, "Asset_Deposit_Minimum_Set");
 
       expect(args.asset_source).to.be.equal(test_token_instance.address);
@@ -437,13 +443,14 @@ contract("ERC20_Bridge_Logic Function: set_deposit_maximum",   (accounts) => {
           [test_token_instance.address, "500"],
           nonce,
           "set_deposit_maximum",
-          ERC20_Bridge_Logic.address);
+          ERC20_Bridge_Logic.address,
+          0);
       let encoded_hash = ethUtil.keccak256(encoded_message);
 
       let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
       let sig_string = to_signature_string(signature);
 
-      const tx = await bridge_logic_instance.set_deposit_maximum(test_token_instance.address, "500", nonce, sig_string);
+      const tx = await bridge_logic_instance.set_deposit_maximum(test_token_instance.address, "500", nonce, 0, sig_string);
 
       const {args} = await findEventInTransaction(tx, "Asset_Deposit_Maximum_Set");
 
@@ -684,13 +691,14 @@ contract("ERC20_Bridge_Logic Function: get_deposit_minimum",   (accounts) => {
           [test_token_instance.address, "500"],
           nonce,
           "set_deposit_minimum",
-          ERC20_Bridge_Logic.address);
+          ERC20_Bridge_Logic.address,
+          0);
       let encoded_hash = ethUtil.keccak256(encoded_message);
 
       let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
       let sig_string = to_signature_string(signature);
 
-      await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, "500", nonce, sig_string);
+      await bridge_logic_instance.set_deposit_minimum(test_token_instance.address, "500", nonce, 0, sig_string);
 
       //Get minimum deposit, should be updated
       deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(test_token_instance.address)).toString();

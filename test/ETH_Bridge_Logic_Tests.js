@@ -51,18 +51,18 @@ beforeEach(async()=>{
 });
 *** to each "contract" section before tests */
 
+
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
-function get_message_to_sign(param_types, params, nonce, function_name, sender) {
-  params.push(nonce);
-  param_types.push("uint256");
-  params.push(function_name);
-  param_types.push("string");
-
-  //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
-  let encoded_a = abi.rawEncode(param_types, params);
-  //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
-  return abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+function get_message_to_sign(param_types, params, nonce, function_name, sender, signer_sequence_number){
+    params.push(nonce);
+    param_types.push("uint256");
+    params.push(function_name);
+    param_types.push("string");
+    //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
+    let encoded_a = abi.rawEncode(param_types, params);
+    //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
+    return abi.rawEncode(["bytes", "address", "uint256"], [encoded_a, sender, signer_sequence_number]);
 }
 
 
@@ -91,7 +91,8 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
     [to_withdraw, expiry, account],
     nonce,
     "withdraw_asset",
-    ETH_Bridge_Logic.address);
+    ETH_Bridge_Logic.address,
+    0);
   let encoded_hash = ethUtil.keccak256(encoded_message);
   let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
 
@@ -102,7 +103,7 @@ async function withdraw_asset(bridge_logic_instance, account, expiry, bad_params
     to_withdraw = "1"
   }
 
-  let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, sig_string, { from: account });
+  let receipt = await bridge_logic_instance.withdraw_asset(to_withdraw, expiry, target, nonce, 0, sig_string, { from: account });
   return receipt;
 }
 
@@ -115,14 +116,15 @@ async function set_bridge_address(asset_pool_instance, bridge_logic_address, acc
     [bridge_logic_address],
     nonce,
     "set_bridge_address",
-    asset_pool_instance.address);
+    asset_pool_instance.address,
+    0);
   let encoded_hash = ethUtil.keccak256(encoded_message);
 
   let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
   let sig_string = to_signature_string(signature);
 
   //NOTE Sig tests are in MultisigControl
-  let receipt = await asset_pool_instance.set_bridge_address(bridge_logic_address, nonce, sig_string);
+  let receipt = await asset_pool_instance.set_bridge_address(bridge_logic_address, nonce, 0, sig_string);
   return receipt;
 }
 
@@ -151,13 +153,14 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
       [(5 * Math.pow(10, 18)).toString()],
       nonce,
       "set_deposit_minimum",
-      ETH_Bridge_Logic.address);
+      ETH_Bridge_Logic.address,
+      0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
 
     let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
     let sig_string = to_signature_string(signature);
 
-    const tx = await bridge_logic_instance.set_deposit_minimum(parseEther('5'), nonce, sig_string);
+    const tx = await bridge_logic_instance.set_deposit_minimum(parseEther('5'), nonce, 0, sig_string);
 
     const { args } = await findEventInTransaction(tx, "ETH_Deposit_Minimum_Set");
 
@@ -221,13 +224,14 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
       [(5 * Math.pow(10, 18)).toString()],
       nonce,
       "set_deposit_maximum",
-      ETH_Bridge_Logic.address);
+      ETH_Bridge_Logic.address,
+      0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
 
     let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
     let sig_string = to_signature_string(signature);
 
-    const tx = await bridge_logic_instance.set_deposit_maximum(parseEther('5'), nonce, sig_string);
+    const tx = await bridge_logic_instance.set_deposit_maximum(parseEther('5'), nonce, 0, sig_string);
 
     const { args } = await findEventInTransaction(tx, "ETH_Deposit_Maximum_Set");
 
@@ -292,7 +296,7 @@ beforeEach(async()=>{
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -323,7 +327,7 @@ let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
      const depositAmount = web3.utils.toWei('500', 'ether')
 
@@ -333,7 +337,7 @@ let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
       );
 
       let wallet_balance_before = await web3.eth.getBalance(accounts[0]);
- 
+
     let now = await latest();
         let expiry = now.add(await duration.minutes(1));
         try{
@@ -358,7 +362,7 @@ let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
         expect(parseInt(wallet_balance_after)).to.be.bignumber.lessThanOrEqual(parseInt(wallet_balance_before));
   })
-  
+
 
   /* it("should fail to deposit eth above max deposit", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
@@ -370,11 +374,11 @@ let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
      console.log(await bridge_logic_instance.get_deposit_maximum())
   }) */
-  
+
   //NOTE signature tests are covered in MultisigControl
 });
 
@@ -396,7 +400,7 @@ beforeEach(async()=>{
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -440,7 +444,7 @@ beforeEach(async()=>{
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     /* const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -493,7 +497,7 @@ beforeEach(async()=>{
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     /* const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -510,7 +514,7 @@ beforeEach(async()=>{
 
     let now = await latest();
         let expiry = now.add(await duration.minutes(1));
-        
+
 
         // bad params true
     try{
@@ -565,13 +569,14 @@ beforeEach(async()=>{
       [(1 * Math.pow(10, 18)).toString()],
       nonce,
       "set_deposit_minimum",
-      ETH_Bridge_Logic.address);
+      ETH_Bridge_Logic.address,
+      0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
 
     let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
     let sig_string = to_signature_string(signature);
 
-    const tx = await bridge_logic_instance.set_deposit_minimum(parseEther('1'), nonce, sig_string);
+    const tx = await bridge_logic_instance.set_deposit_minimum(parseEther('1'), nonce, 0, sig_string);
 
     const { args } = await findEventInTransaction(tx, "ETH_Deposit_Minimum_Set");
 
@@ -608,13 +613,14 @@ contract("ETH_Bridge_Logic Function: get_deposit_maximum",   (accounts) => {
       [(10 * Math.pow(10, 18)).toString()],
       nonce,
       "set_deposit_maximum",
-      ETH_Bridge_Logic.address);
+      ETH_Bridge_Logic.address,
+      0);
     let encoded_hash = ethUtil.keccak256(encoded_message);
 
     let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
     let sig_string = to_signature_string(signature);
 
-    const tx = await bridge_logic_instance.set_deposit_maximum(parseEther('10'), nonce, sig_string);
+    const tx = await bridge_logic_instance.set_deposit_maximum(parseEther('10'), nonce, 0, sig_string);
 
     const { args } = await findEventInTransaction(tx, "ETH_Deposit_Maximum_Set");
 
@@ -655,11 +661,11 @@ beforeEach(async()=>{
   //function get_vega_asset_id(address asset_source) public view returns(bytes32);
   it("get_vega_asset_id returns proper vega id for newly listed assets", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-    
+
     let vega_asset_id = await bridge_logic_instance.get_vega_asset_id();
 
     assert.equal(vega_asset_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "incorrect vega asset id")
-    
+
   });
 
 });
