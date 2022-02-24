@@ -416,7 +416,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
-    let amountToWithdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
+    // let amountToWithdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
     await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
 
@@ -447,7 +447,76 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
       "pool should be empty, isn't"
     );
 
-    
+  })
+
+
+  it("withdrawal amount below the withdrawal delay threshold is accepted by the bridge smart contract", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+    let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+
+    let withdraw_threshold = "1000000000000";
+
+    await set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, accounts[0]);
+
+    await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+    await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
+
+    let account_bal_before = await test_token_instance.balanceOf(accounts[0]);
+    let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+    await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+    let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
+    let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+    assert.equal(
+      account_bal_before.add(pool_bal_before).toString(),
+      account_bal_after.toString(),
+      "account balance didn't go up"
+    );
+
+    assert.equal(
+      pool_bal_after.toString(),
+      "0",
+      "pool should be empty, isn't"
+    );
+
+  })
+
+  it("withdrawal amount equal to the withdrawal delay threshold is accepted by the bridge smart contract", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+    let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+
+    let withdraw_threshold = "100000000000";
+
+    await set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, accounts[0]);
+
+    await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+    await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
+
+    let account_bal_before = await test_token_instance.balanceOf(accounts[0]);
+    let pool_bal_before = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+    await withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+    let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
+    let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
+
+    assert.equal(
+      account_bal_before.add(pool_bal_before).toString(),
+      account_bal_after.toString(),
+      "account balance didn't go up"
+    );
+
+    assert.equal(
+      pool_bal_after.toString(),
+      "0",
+      "pool should be empty, isn't"
+    );
   })
 
 })
@@ -548,6 +617,41 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max", (accounts) => 
       "deposit over lifetime limit"
     );
   })
+
+  it("Withdrawing all funds after the first deposit transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed max lifetime deposit is still rejected", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+    let asset_pool_instance = await ERC20_Asset_Pool.deployed();
+
+    let faucetAmount = "10000000000"; // 5 decimals
+    let lifetime_limit = parseInt(faucetAmount) * 2;
+
+    await set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, accounts[0]);
+
+    expectBignumberEqual(await bridge_logic_instance.get_asset_deposit_limit(test_token_instance.address), lifetime_limit);
+
+    // console.log((await test_token_instance.balanceOf(accounts[0])).toString());
+
+    await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+
+    await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
+
+    expectBignumberEqual(await bridge_logic_instance.default_withdraw_delay(), 432000);
+
+    //withdraw should work if creation + default_withdraw_delay <= block.timestamp
+    let creation = (await latest()).sub(toBN(432000));
+
+    await withdraw_asset_with_creation(bridge_logic_instance, test_token_instance, accounts[0], creation);
+
+    lifetime_limit = faucetAmount;
+
+    await shouldFailWithMessage(
+      deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]),
+      "deposit over lifetime limit"
+    );
+
+  })
+
 })
 
 
