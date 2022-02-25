@@ -430,7 +430,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
     let creation = (await latest()).sub(toBN(432000));
 
     await withdraw_asset_with_creation(bridge_logic_instance, test_token_instance, accounts[0], creation);
-    
+
 
     let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
     let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);

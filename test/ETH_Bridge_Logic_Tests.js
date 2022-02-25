@@ -70,6 +70,7 @@ function to_signature_string(sig) {
   return "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') + "" + sig.v.toString(16);
 }
 
+// (0031-ETHM-004)
 async function deposit_asset(bridge_logic_instance, account, amount) {
   let wallet_pubkey = crypto.randomBytes(32);
   let receipt = await bridge_logic_instance.deposit_asset(wallet_pubkey, { from: account, value: amount });
@@ -129,8 +130,8 @@ async function set_bridge_address(asset_pool_instance, bridge_logic_address, acc
 
 
 ////FUNCTIONS
-contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
-  //    function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
+contract("ETH_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-002)", (accounts) => {
+  // function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
 
   beforeEach(async () => {
     await init_private_keys()
@@ -164,13 +165,13 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
     expectBignumberEqual(args.new_minimum, web3.utils.toWei('5', 'ether'));
     expectBignumberEqual(args.nonce, nonce);
 
-    //Get minimum deposit, should be updated
+    // Get minimum deposit, should be updated
     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
     assert.equal(deposit_minimum, web3.utils.toWei('5', 'ether'), "deposit min should be 5 eth, isn't");
 
-    //deposit less that min should fail
+    // deposit less than min should fail (0031-ETHM-003)
     const depositAmount = web3.utils.toWei('2', 'ether');
-    // check user has enough ETH in wallet
+    // check user has enough ETH in wallet to cover deposit amount
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
@@ -185,7 +186,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
       );
     } catch (e) { }
 
-    //deposit more that min should work
+    //deposit more than min should work
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('10', 'ether')))
@@ -240,7 +241,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     const depositAmount = web3.utils.toWei('4', 'ether')
 
-    //deposit less that max should work
+    //deposit less than max should work
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
@@ -258,7 +259,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, accounts[0], web3.utils.toWei('5', 'ether'));
 
-    //deposit more that max should fail
+    //deposit more than max should fail
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('6', 'ether')))
@@ -276,23 +277,23 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 });
 
 
-contract("ETH_Bridge_Logic Function: deposit_asset",   (accounts) => {
+contract("ETH_Bridge_Logic Function: deposit_asset", (accounts) => {
   //    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public  override {
-beforeEach(async()=>{
+  beforeEach(async () => {
     await init_private_keys()
 
   });
   it("happy path - should allow deposit from a wallet with sufficient eth balance", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-        let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+    let asset_pool_instance = await ETH_Asset_Pool.deployed();
+    //console.log(await bridge_logic_instance.ETH_asset_pool_address())
 
-        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
-        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+    expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+    // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -302,63 +303,63 @@ beforeEach(async()=>{
       );
 
     await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
-let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+    let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
 
-        assert.equal(
-            pool_bal_after.toString(),
-            depositAmount.toString(),
-            "pool should not be empty, it is"
-        );
+    assert.equal(
+      pool_bal_after.toString(),
+      depositAmount.toString(),
+      "pool should not be empty, it is"
+    );
 
   });
 
   it("should fail to deposit eth with insufficient balance", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-        let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+    let asset_pool_instance = await ETH_Asset_Pool.deployed();
+    //console.log(await bridge_logic_instance.ETH_asset_pool_address())
 
-        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
-        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+    expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+    // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
-     const depositAmount = web3.utils.toWei('500', 'ether')
+    const depositAmount = web3.utils.toWei('500', 'ether')
 
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.lessThanOrEqual(parseInt(formatEther(depositAmount))
       );
 
-      let wallet_balance_before = await web3.eth.getBalance(accounts[0]);
- 
+    let wallet_balance_before = await web3.eth.getBalance(accounts[0]);
+
     let now = await latest();
-        let expiry = now.add(await duration.minutes(1));
-        try{
-          await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
-          assert.equal(
-              true,
-              false,
-              "deposit worked without sufficient balance, shouldn't have"
-          );
-        } catch(e){}
+    let expiry = now.add(await duration.minutes(1));
+    try {
+      await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
+      assert.equal(
+        true,
+        false,
+        "deposit worked without sufficient balance, shouldn't have"
+      );
+    } catch (e) { }
 
-        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
-        let wallet_balance_after = await web3.eth.getBalance(accounts[0]);
+    let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+    let wallet_balance_after = await web3.eth.getBalance(accounts[0]);
 
-        assert.equal(
-            pool_bal_after.toString(),
-            web3.utils.toWei('5', 'ether'),
-            "pool should be empty, isn't"
-        );
+    assert.equal(
+      pool_bal_after.toString(),
+      web3.utils.toWei('5', 'ether'),
+      "pool should be empty, isn't"
+    );
 
-        expect(parseInt(pool_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(depositAmount));
+    expect(parseInt(pool_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(depositAmount));
 
-        expect(parseInt(wallet_balance_after)).to.be.bignumber.lessThanOrEqual(parseInt(wallet_balance_before));
+    expect(parseInt(wallet_balance_after)).to.be.bignumber.lessThanOrEqual(parseInt(wallet_balance_before));
   })
-  
+
 
   /* it("should fail to deposit eth above max deposit", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
@@ -374,29 +375,29 @@ let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
     //deposit asset
      console.log(await bridge_logic_instance.get_deposit_maximum())
   }) */
-  
+
   //NOTE signature tests are covered in MultisigControl
 });
 
 
 
-contract("ETH_Bridge_Logic Function: withdraw_asset",   (accounts) => {
+contract("ETH_Bridge_Logic Function: withdraw_asset", (accounts) => {
   //    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public  override {
-beforeEach(async()=>{
+  beforeEach(async () => {
     await init_private_keys()
 
   });
   it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-        let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+    let asset_pool_instance = await ETH_Asset_Pool.deployed();
+    //console.log(await bridge_logic_instance.ETH_asset_pool_address())
 
-        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
-        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+    expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+    // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -409,38 +410,38 @@ beforeEach(async()=>{
 
     //withdraw asset
     let account_bal_before = await web3.eth.getBalance(accounts[0]);
-        let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
+    let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
 
     let now = await latest();
-        let expiry = now.add(await duration.minutes(1));
-        await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), false);
+    let expiry = now.add(await duration.minutes(1));
+    await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), false);
 
-        let account_bal_after = await web3.eth.getBalance(accounts[0]);
-        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+    let account_bal_after = await web3.eth.getBalance(accounts[0]);
+    let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
-        expect(account_bal_after).to.be.bignumber.greaterThan(account_bal_before);
+    expect(account_bal_after).to.be.bignumber.greaterThan(account_bal_before);
 
-        expectBignumberEqual(pool_bal_before, depositAmount);
+    expectBignumberEqual(pool_bal_before, depositAmount);
 
-        assert.equal(
-            pool_bal_after.toString(),
-            "0",
-            "pool should be empty, isn't"
-        );
+    assert.equal(
+      pool_bal_after.toString(),
+      "0",
+      "pool should be empty, isn't"
+    );
 
   });
 
   it("should fail to withdraw eth asset without deposit", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-        let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+    let asset_pool_instance = await ETH_Asset_Pool.deployed();
+    //console.log(await bridge_logic_instance.ETH_asset_pool_address())
 
-        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
-        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+    expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+    // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     /* const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -453,47 +454,47 @@ beforeEach(async()=>{
  */
     //withdraw asset
     let account_bal_before = await web3.eth.getBalance(accounts[0]);
-        let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
+    let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
 
     let now = await latest();
-        let expiry = now.add(await duration.minutes(1));
-        try{
-          await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), false);
-          assert.equal(
-              true,
-              false,
-              "withdrawal worked without deposit, shouldn't have"
-          );
-        } catch(e){}
+    let expiry = now.add(await duration.minutes(1));
+    try {
+      await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), false);
+      assert.equal(
+        true,
+        false,
+        "withdrawal worked without deposit, shouldn't have"
+      );
+    } catch (e) { }
 
 
-        let account_bal_after = await web3.eth.getBalance(accounts[0]);
-        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+    let account_bal_after = await web3.eth.getBalance(accounts[0]);
+    let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
-        // should be less after gas fees
-        expect(parseInt(account_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(account_bal_before));
+    // should be less after gas fees
+    expect(parseInt(account_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(account_bal_before));
 
-        expectBignumberEqual(pool_bal_before, "0");
+    expectBignumberEqual(pool_bal_before, "0");
 
-        assert.equal(
-            pool_bal_after.toString(),
-            "0",
-            "pool should be empty, isn't"
-        );
+    assert.equal(
+      pool_bal_after.toString(),
+      "0",
+      "pool should be empty, isn't"
+    );
 
   })
 
   it("withdraw_asset fails due to amount mismatch between signature and function params", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-        let asset_pool_instance = await ETH_Asset_Pool.deployed();
-        //console.log(await bridge_logic_instance.ETH_asset_pool_address())
+    let asset_pool_instance = await ETH_Asset_Pool.deployed();
+    //console.log(await bridge_logic_instance.ETH_asset_pool_address())
 
-        expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
-        // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
+    expect(bridge_logic_instance.address).to.be.equal(bridge_addresses.eth_bridge_logic);
+    // console.log(bridge_logic_instance.address, bridge_addresses.eth_bridge_logic)
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0]);
 
-    
+
     //deposit asset
     /* const depositAmount = web3.utils.toWei('5', 'ether')
 
@@ -506,37 +507,37 @@ beforeEach(async()=>{
  */
     //withdraw asset
     let account_bal_before = await web3.eth.getBalance(accounts[0]);
-        let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
+    let pool_bal_before = await web3.eth.getBalance(asset_pool_instance.address);
 
     let now = await latest();
-        let expiry = now.add(await duration.minutes(1));
-        
+    let expiry = now.add(await duration.minutes(1));
 
-        // bad params true
-    try{
+
+    // bad params true
+    try {
       await withdraw_asset(bridge_logic_instance, accounts[0], expiry.toString(), true);
 
       assert.equal(
-          true,
-          false,
-          "pad params withdrawal worked, shouldn't have"
+        true,
+        false,
+        "pad params withdrawal worked, shouldn't have"
       );
-    } catch(e){}
+    } catch (e) { }
 
 
-        let account_bal_after = await web3.eth.getBalance(accounts[0]);
-        let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
+    let account_bal_after = await web3.eth.getBalance(accounts[0]);
+    let pool_bal_after = await web3.eth.getBalance(asset_pool_instance.address);
 
-        // should be less after gas fees
-        expect(parseInt(account_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(account_bal_before));
+    // should be less after gas fees
+    expect(parseInt(account_bal_after)).to.be.bignumber.lessThanOrEqual(parseInt(account_bal_before));
 
-        expectBignumberEqual(pool_bal_before, "0");
+    expectBignumberEqual(pool_bal_before, "0");
 
-        assert.equal(
-            pool_bal_after.toString(),
-            "0",
-            "pool should be empty, isn't"
-        );
+    assert.equal(
+      pool_bal_after.toString(),
+      "0",
+      "pool should be empty, isn't"
+    );
   });
   //NOTE signature tests are covered in MultisigControl
 });
@@ -544,9 +545,9 @@ beforeEach(async()=>{
 
 /////VIEWS
 
-contract("ETH_Bridge_Logic Function: get_deposit_minimum",   (accounts) => {
+contract("ETH_Bridge_Logic Function: get_deposit_minimum", (accounts) => {
   //    function get_deposit_minimum() public override view returns(uint256){
-beforeEach(async()=>{
+  beforeEach(async () => {
     await init_private_keys()
 
   });
@@ -554,8 +555,8 @@ beforeEach(async()=>{
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
 
     //Get minimum deposit
-     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
-     assert.equal(deposit_minimum, '0', "deposit min should be 5 eth, isn't");
+    deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
+    assert.equal(deposit_minimum, '0', "deposit min should be 5 eth, isn't");
 
     //Set minimum deposit
     //NOTE signature tests are in MultisigControl
@@ -586,10 +587,10 @@ beforeEach(async()=>{
 });
 
 
-contract("ETH_Bridge_Logic Function: get_deposit_maximum",   (accounts) => {
+contract("ETH_Bridge_Logic Function: get_deposit_maximum", (accounts) => {
   //    function get_deposit_maximum() public override view returns(uint256){
 
-  beforeEach(async()=>{
+  beforeEach(async () => {
     await init_private_keys()
 
   });
@@ -597,8 +598,8 @@ contract("ETH_Bridge_Logic Function: get_deposit_maximum",   (accounts) => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
 
     //Get minimum deposit
-     deposit_maximum = (await bridge_logic_instance.get_deposit_maximum()).toString();
-     assert.equal(deposit_maximum, '0', "deposit max should be 5 eth, isn't");
+    deposit_maximum = (await bridge_logic_instance.get_deposit_maximum()).toString();
+    assert.equal(deposit_maximum, '0', "deposit max should be 5 eth, isn't");
 
     //Set maximum deposit
     //NOTE signature tests are in MultisigControl
@@ -628,13 +629,13 @@ contract("ETH_Bridge_Logic Function: get_deposit_maximum",   (accounts) => {
   });
 });
 
-contract("ETH_Bridge_Logic Function: get_multisig_control_address",   (accounts) => {
-//    function get_multisig_control_address() public override view returns(address) {
+contract("ETH_Bridge_Logic Function: get_multisig_control_address", (accounts) => {
+  //    function get_multisig_control_address() public override view returns(address) {
 
-beforeEach(async()=>{
-  await init_private_keys()
+  beforeEach(async () => {
+    await init_private_keys()
 
-});
+  });
   //function get_multisig_control_address() public view returns(address);
   it("get_multisig_control_address returns the address it was initialized with", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
@@ -645,21 +646,21 @@ beforeEach(async()=>{
   });
 });
 
-contract("ETH_Bridge_Logic Function: get_vega_asset_id",  (accounts) => {
-//    function get_vega_asset_id() public override view returns(bytes32){
+contract("ETH_Bridge_Logic Function: get_vega_asset_id", (accounts) => {
+  //    function get_vega_asset_id() public override view returns(bytes32){
 
-beforeEach(async()=>{
-  await init_private_keys()
+  beforeEach(async () => {
+    await init_private_keys()
 
-});
+  });
   //function get_vega_asset_id(address asset_source) public view returns(bytes32);
   it("get_vega_asset_id returns proper vega id for newly listed assets", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-    
+
     let vega_asset_id = await bridge_logic_instance.get_vega_asset_id();
 
     assert.equal(vega_asset_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "incorrect vega asset id")
-    
+
   });
 
 });
