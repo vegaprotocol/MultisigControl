@@ -821,7 +821,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("list_asset should trigger bad signatures with invalid signature string", async () => {
+  it("list_asset should trigger bad signatures with invalid signature string (0031-ETHM-017)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -859,7 +859,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("asset that was not listed is listed after running list_asset", async () => {
+  it("asset that was not listed is listed after running list_asset (0031-ETHM-016)", async () => {
 
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
@@ -909,7 +909,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("list_asset fails to list an already listed asset", async () => {
+  it("list_asset fails to list an already listed asset (0031-ETHM-016)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     //new asset ID is listed
     assert.equal(
