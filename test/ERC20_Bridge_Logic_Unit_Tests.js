@@ -24,6 +24,7 @@ const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { expect } = require("chai");
 const { find } = require("lodash");
+const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 let private_keys = {};
 async function init_private_keys() {
@@ -938,8 +939,9 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
     await init_private_keys()
 
   });
+
   //function remove_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
-  it("listed asset is not listed after running remove_asset and no longer able to deposited", async () => {
+  it("listed asset is not listed after running remove_asset and no longer able to deposited (0031-ETHM-019)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -970,6 +972,37 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
       await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
       assert.equal(true, false, "deposit of removed asset succedded, shouldn't have")
     } catch (e) { }
+
+  });
+
+  it("remove_asset should revert with bad signatures with invalid signature string or non signer (0031-ETHM-020)", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    //new asset ID is not listed
+    assert.equal(
+      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
+      false,
+      "token is listed, shouldn't be"
+    );
+
+    try {
+      await list_asset(bridge_logic_instance, accounts[0]);
+    } catch (e) {/*ignore if already listed*/ }
+
+    
+
+    try {
+      // should fail with "bad signatures" account is not a signer
+      await remove_asset(bridge_logic_instance, accounts[9]); 
+
+      assert.equal(
+        true,
+        false,
+        "remove asset worked, shouldn't have"
+      );
+    } catch (e) { }
+
 
   });
 
@@ -1320,7 +1353,7 @@ contract("ERC20_Bridge_Logic Function: is_asset_listed", (accounts) => {
       true,
       "token not listed, should be"
     );
-    //list asset
+    //remove asset
     await remove_asset(bridge_logic_instance, accounts[0]);
 
     //new asset ID is listed
