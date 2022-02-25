@@ -169,7 +169,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-002)", (acco
     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
     assert.equal(deposit_minimum, web3.utils.toWei('5', 'ether'), "deposit min should be 5 eth, isn't");
 
-    // deposit less than min should fail (0031-ETHM-003)
+    // deposit less than min should fail (0031-ETHM-005)
     const depositAmount = web3.utils.toWei('2', 'ether');
     // check user has enough ETH in wallet to cover deposit amount
     expect(
@@ -186,7 +186,8 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-002)", (acco
       );
     } catch (e) { }
 
-    //deposit more than min should work
+    // deposit more than min should work
+    // (0031-ETHM-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('10', 'ether')))
@@ -241,7 +242,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     const depositAmount = web3.utils.toWei('4', 'ether')
 
-    //deposit less than max should work
+    //deposit less than max should work (0031-ETHM-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
@@ -250,7 +251,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
 
-    // depositing max should work
+    // depositing max should work (0031-ETHM-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('5', 'ether')))
@@ -259,7 +260,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, accounts[0], web3.utils.toWei('5', 'ether'));
 
-    //deposit more than max should fail
+    // deposit more than max should fail (0031-ETHM-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('6', 'ether')))
