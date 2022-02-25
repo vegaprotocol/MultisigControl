@@ -1202,7 +1202,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
     await init_private_keys()
 
   });
-  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl", async () => {
+  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl (0031-ETHM-013)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1246,7 +1246,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
 
   });
 
-  it("withdraw_asset fails due to amount mismatch between signature and function params", async () => {
+  it("withdraw_asset fails due to amount mismatch between signature and function params (0031-ETHM-014)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1273,7 +1273,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
       assert.equal(
         true,
         false,
-        "pad params withdrawal worked, shouldn't have"
+        "bad params withdrawal worked, shouldn't have"
       );
     } catch (e) { }
   });
