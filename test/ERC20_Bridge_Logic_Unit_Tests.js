@@ -974,7 +974,7 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
   });
 
 });
-contract("ERC20_Bridge_Logic Function: set_deposit_minimum", (accounts) => {
+contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (accounts) => {
   //function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
   beforeEach(async () => {
     await init_private_keys()
