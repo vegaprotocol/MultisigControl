@@ -956,7 +956,7 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
     //deposit new asset, should work
     let amount_deposited = await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
-    //remove new asset
+    //remove new asset (0031-ETHM-009)
     const [nonce, receipt] = await remove_asset(bridge_logic_instance, accounts[0]);;
 
     // check event parameters
@@ -1066,7 +1066,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(test_token_instance.address)).toString();
     assert.equal(deposit_minimum, "500", "deposit min should be 500, isn't");
 
-    //deposit less that min should fail
+    //deposit less than min should fail (0031-ETHM-008) (0031-ETHM-010)
     try {
       await deposit_asset(bridge_logic_instance, test_token_instance, "499");
       assert.equal(
@@ -1076,7 +1076,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
       );
     } catch (e) { }
 
-    //deposit more that min should work
+    //deposit more than min should work  (0031-ETHM-008)
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "501");
   });
 });
@@ -1130,9 +1130,9 @@ contract("ERC20_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     //Get maximum deposit, should be updated
     deposit_maximum = (await bridge_logic_instance.get_deposit_maximum(test_token_instance.address)).toString();
-    assert.equal(deposit_maximum, "500", "deposit min should be 500, isn't");
+    assert.equal(deposit_maximum, "500", "deposit max should be 500, isn't");
 
-    //deposit less that min should fail
+    //deposit more than max should fail
     try {
       await deposit_asset(bridge_logic_instance, test_token_instance, "501");
       assert.equal(
@@ -1142,8 +1142,11 @@ contract("ERC20_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
       );
     } catch (e) { }
 
-    //deposit more that min should work
+    //deposit less than max should work
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "499");
+
+    //deposit equal to max should work
+    await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "500");
   });
 });
 
@@ -1153,7 +1156,7 @@ contract("ERC20_Bridge_Logic Function: deposit_asset", (accounts) => {
     await init_private_keys()
 
   });
-  it("deposit_asset should fail due to asset not being listed", async () => {
+  it("deposit_asset should fail due to asset not being listed (0031-ETHM-009)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -1174,6 +1177,7 @@ contract("ERC20_Bridge_Logic Function: deposit_asset", (accounts) => {
     } catch (e) { }
 
   });
+
   it("happy path - should allow listed asset to be deposited", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
