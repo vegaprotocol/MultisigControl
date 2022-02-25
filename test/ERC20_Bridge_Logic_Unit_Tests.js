@@ -980,6 +980,47 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
     await init_private_keys()
 
   });
+
+  it("set deposit minimum should revert if asset is not listed (0031-ETHM-007)", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+
+    //Get minimum deposit should return 0
+    let deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(accounts[3])).toString();
+    assert.equal(deposit_minimum, "0", "deposit min should be zero, isn't");
+
+    // new asset ID is listed
+    assert.equal(
+      await bridge_logic_instance.is_asset_listed(accounts[3]),
+      false,
+      "token isn't listed, should be"
+    );
+
+    //Set minimum deposit
+    //NOTE signature tests are in MultisigControl
+    let nonce = new ethUtil.BN(crypto.randomBytes(32));
+    let encoded_message = get_message_to_sign(
+      ["address", "uint256"],
+      [accounts[3], "500"],
+      nonce,
+      "set_deposit_minimum",
+      ERC20_Bridge_Logic.address);
+    let encoded_hash = ethUtil.keccak256(encoded_message);
+
+    let signature = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+    let sig_string = to_signature_string(signature);
+
+    try {
+      await bridge_logic_instance.set_deposit_minimum(accounts[3], "500", nonce, sig_string);
+
+      assert.equal(
+        true,
+        false,
+        "set_deposit_minimum worked, shouldn't have"
+      );
+    } catch (e) { }
+
+  })
+
   it("deposit minimum changes and is enforced by running set_deposit_minimum", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
@@ -992,7 +1033,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
       await list_asset(bridge_logic_instance, accounts[0]);
     } catch (e) {/*ignore if already listed*/ }
 
-    //new asset ID is listed
+    // new asset ID is listed
     assert.equal(
       await bridge_logic_instance.is_asset_listed(test_token_instance.address),
       true,
