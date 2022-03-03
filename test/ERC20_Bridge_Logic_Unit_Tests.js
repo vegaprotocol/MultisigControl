@@ -340,7 +340,6 @@ async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold,
 }
 
 
-
 ////FUNCTIONS
 contract("ERC20_Bridge_Logic Function: set_withdraw_threshold - 0003-NP-LIMI-005", (accounts) => {
   //function set_withdraw_threshold(address asset_source, uint256 threshold, uint256 nonce, bytes calldata signatures) public
