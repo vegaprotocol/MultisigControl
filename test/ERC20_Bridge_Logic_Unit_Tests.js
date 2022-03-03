@@ -288,7 +288,8 @@ async function set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, f
   let signature = ethUtil.ecsign(encoded_hash, private_keys[from_address.toLowerCase()]);
   let sig_string = to_signature_string(signature);
 
-  //NOTE Sig tests are in MultisigControl
+  // NOTE Sig tests are in MultisigControl
+  // 0003-NP-LIMI-003 lifetime deposit max is set per ERC20 asset
   let receipt = await bridge_logic_instance.set_lifetime_deposit_max(bridge_addresses.test_token_address, lifetime_limit, nonce, sig_string);
   //console.log(receipt.logs)
   return [nonce, receipt]
