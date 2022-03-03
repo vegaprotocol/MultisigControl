@@ -927,7 +927,7 @@ contract("ERC20_Bridge_Logic Function: get_asset_deposit_limit", (accounts) => {
   })
 })
 
-contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
+contract("ERC20_Bridge_Logic Function: global_stop - 0003-NP-LIMI-004", (accounts) => {
   //function global_stop(uint256 nonce, bytes calldata signatures) public;
   beforeEach(async () => {
     await init_private_keys()
@@ -1033,7 +1033,7 @@ contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
 })
 
 
-contract("ERC20_Bridge_Logic Function: global_resume", (accounts) => {
+contract("ERC20_Bridge_Logic Function: global_resume - 0003-NP-LIMI-004", (accounts) => {
   //function global_stop(uint256 nonce, bytes calldata signatures) public;
   beforeEach(async () => {
     await init_private_keys()
