@@ -24,6 +24,7 @@ const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { expect } = require("chai");
 const { find } = require("lodash");
+const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 let private_keys = {};
 async function init_private_keys() {
@@ -160,6 +161,26 @@ async function set_bridge_address(bridge_logic_instance, asset_pool_instance, ac
   await asset_pool_instance.set_bridge_address(bridge_logic_instance.address, nonce, sig_string);
 }
 
+
+async function set_exemption_lister(bridge_logic_instance, account, listerAccount) {
+  let nonce = new ethUtil.BN(crypto.randomBytes(32));
+  //create signature
+  let encoded_message = get_message_to_sign(
+    ["address"],
+    [listerAccount],
+    nonce,
+    "set_exemption_lister",
+    ERC20_Bridge_Logic.address);
+  let encoded_hash = ethUtil.keccak256(encoded_message);
+
+  let signature = ethUtil.ecsign(encoded_hash, private_keys[account.toLowerCase()]);
+  let sig_string = to_signature_string(signature);
+
+  //NOTE Sig tests are in MultisigControl
+  let receipt = await bridge_logic_instance.set_exemption_lister(listerAccount, nonce, sig_string);
+  //console.log(receipt.logs)
+  return [nonce, receipt]
+}
 
 
 async function list_asset(bridge_logic_instance, from_address) {
@@ -416,7 +437,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
-    // let amountToWithdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
+    let amountToWithdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
     await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
 
@@ -430,7 +451,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
     let creation = (await latest()).sub(toBN(432000));
 
     await withdraw_asset_with_creation(bridge_logic_instance, test_token_instance, accounts[0], creation);
-    
+
 
     let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
     let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
@@ -447,8 +468,8 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
       "pool should be empty, isn't"
     );
 
-  })
 
+  })
 
   it("withdrawal amount below the withdrawal delay threshold is accepted by the bridge smart contract", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
@@ -517,11 +538,193 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
       "0",
       "pool should be empty, isn't"
     );
-  })
 
+  })
 })
 
 
+
+contract("ERC20_Bridge_Logic Function: set_exemption_lister", (accounts) => {
+  //function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public override
+  beforeEach(async () => {
+    await init_private_keys()
+
+  });
+
+  it("set_exemption_lister should update exemption lister contract", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(ZERO_ADDRESS);
+
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(lister);
+
+  })
+
+  it("set_exemption_lister should emit correct event and params", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+
+    const [nonce, receipt] = await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+    const { args } = await findEventInTransaction(receipt, "Exemption_Lister_Set");
+    expect(args.lister).to.be.equal(lister);
+  })
+})
+
+
+contract("ERC20_Bridge_Logic Function: revoke_exempt_depositor", (accounts) => {
+  //function revoke_exempt_depositor(address depositor) public override
+  beforeEach(async () => {
+    await init_private_keys()
+
+  });
+
+  it("revoke_exempt_depositor should revert if not lister", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+    await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(accounts[1]);
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+    await shouldFailWithMessage(
+      bridge_logic_instance.revoke_exempt_depositor(accounts[2]),
+      "unauthorized exemption lister"
+    );
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+  })
+
+  it("revoke_exempt_depositor should revoke exempted depositor", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(accounts[1]);
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+    await bridge_logic_instance.revoke_exempt_depositor(accounts[2], {from: accounts[1]});
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(false);
+  })
+
+  it("revoke_exempt_depositor should emit correct event and params", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+    await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
+    const tx = await bridge_logic_instance.revoke_exempt_depositor(accounts[2], {from: accounts[1]});
+    const {args} = await findEventInTransaction(tx, "Depositor_Exemption_Revoked");
+    expect(args.depositor).to.be.equal(accounts[2]);
+  })
+
+});
+
+
+contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
+  //function exempt_depositor(address depositor) public override
+  beforeEach(async () => {
+    await init_private_keys()
+
+  });
+
+  it("exempt_depositor should revert if not lister", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    //let lister = accounts[1];
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(ZERO_ADDRESS);
+    //await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    await shouldFailWithMessage(
+      bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]}),
+      "unauthorized exemption lister"
+    );
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(ZERO_ADDRESS);
+
+  })
+
+  it("exempt_depositor should emit correct event and params", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    const tx = await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
+
+    const {args} = await findEventInTransaction(tx, 'Depositor_Exempted');
+    expect(args.depositor).to.be.equal(accounts[2]);
+  })
+
+  it("exempt_depositor should revert for zero address", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_exempt_depositor(ZERO_ADDRESS)).to.be.equal(false);
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    await shouldFailWithMessage(
+      bridge_logic_instance.exempt_depositor(ZERO_ADDRESS, {from: accounts[1]}),
+      "cannot exempt zero address"
+    );
+
+    expect(await bridge_logic_instance.is_exempt_depositor(ZERO_ADDRESS)).to.be.equal(false);
+  })
+
+  it("is_exempt_depositor should return true if exempted", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+  })
+
+  it("is_exempt_depositor should return false if not exempted", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[8])).to.be.equal(false);
+  })
+
+  it("exempt_depositor should not be callable multiple time for the same depositor", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+    await bridge_logic_instance.revoke_exempt_depositor(accounts[2], {from: accounts[1]});
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(false);
+
+    await bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]});
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+
+    await shouldFailWithMessage(
+      bridge_logic_instance.exempt_depositor(accounts[2], {from: accounts[1]}),
+      "depositor already exempt"
+    );
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(true);
+  })
+
+})
 
 contract("ERC20_Bridge_Logic Function: set_withdraw_delay", (accounts) => {
   //function set_withdraw_delay(uint256 delay, uint256 nonce, bytes calldata signatures) public
@@ -651,7 +854,35 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max", (accounts) => 
     );
 
   })
+  
 
+  it("deposit asset should not revert if depositor is exempted and total deposited by user is > maximum lifetime deposit", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    let faucetAmount = "10000000000"; // 100 thousand in 5 decimals
+    let lifetime_limit = parseInt(faucetAmount) / 2;
+
+    await set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, accounts[0]);
+
+    expectBignumberEqual(await bridge_logic_instance.get_asset_deposit_limit(test_token_instance.address), lifetime_limit);
+
+    await shouldFailWithMessage(
+      deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]),
+      "deposit over lifetime limit"
+    );
+
+    let lister = accounts[1];
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+    await bridge_logic_instance.exempt_depositor(accounts[0], {from: accounts[1]});
+
+    // balance before deposit
+    let balanceBefore = await test_token_instance.balanceOf(accounts[0]);
+    await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
+    // balance after deposit
+    let balanceAfter = await test_token_instance.balanceOf(accounts[0]);
+    expect(balanceAfter).to.be.bignumber.lessThan(balanceBefore);
+  })
 })
 
 
@@ -854,7 +1085,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
         nonce,
         "0x"
       ),
-      "bad signatures"
+      "must contain at least 1 sig"
     );
 
   });

@@ -2,7 +2,7 @@
 pragma solidity 0.8.8;
 
 import "./IETH_Bridge_Logic.sol";
-import "./MultisigControl.sol";
+import "./IMultisigControl.sol";
 import "./ETH_Asset_Pool.sol";
 
 /// @title ETH Bridge Logic
@@ -11,23 +11,22 @@ import "./ETH_Asset_Pool.sol";
 // @notice All funds deposited/withdrawn are to/from the assigned ETH_Asset_Pool
 contract ETH_Bridge_Logic is IETH_Bridge_Logic {
 
-    address multisig_control_address;
     address payable ETH_asset_pool_address;
 
-    // asset address => minimum deposit amt
+    // minimum deposit amt
     uint256 minimum_deposit;
-    // asset address => maximum deposit amt
+    // maximum deposit amt
     uint256 maximum_deposit;
 
     bytes32 vega_asset_id;
 
     /// @param ETH_asset_pool Initial Asset Pool contract address
-    /// @param multisig_control Initial MultisigControl contract address
-    constructor(address payable ETH_asset_pool, address multisig_control) {
+    constructor(address payable ETH_asset_pool) {
         ETH_asset_pool_address = ETH_asset_pool;
-        multisig_control_address = multisig_control;
     }
-
+    function multisig_control_address() internal view returns(address) {
+        return ETH_Asset_Pool(ETH_asset_pool_address).multisig_control_address();
+    }
     /// @notice This function sets the minimum allowable deposit for ETH
     /// @param minimum_amount Minimum deposit amount
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
@@ -36,7 +35,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @dev Emits ETH_Deposit_Minimum_Set if successful
     function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
         bytes memory message = abi.encode(minimum_amount, nonce, 'set_deposit_minimum');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
         minimum_deposit = minimum_amount;
         emit ETH_Deposit_Minimum_Set(minimum_amount, nonce);
     }
@@ -49,7 +48,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @dev Emits ETH_Deposit_Maximum_Set if successful
     function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, bytes memory signatures) public override {
         bytes memory message = abi.encode(maximum_amount, nonce, 'set_deposit_maximum');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
         maximum_deposit = maximum_amount;
         emit ETH_Deposit_Maximum_Set(maximum_amount, nonce);
     }
@@ -65,8 +64,8 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public  override {
         require(expiry > block.timestamp, "withdrawal has expired");
         bytes memory message = abi.encode(amount, expiry, target,  nonce, 'withdraw_asset');
-        require(MultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
-        require(ETH_Asset_Pool(ETH_asset_pool_address).withdraw(target, amount), "token did not transfer, rejected by asset pool.");
+        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
+        ETH_Asset_Pool(ETH_asset_pool_address).withdraw(target, amount);
         emit ETH_Withdrawn(target, amount, nonce);
     }
 
@@ -95,7 +94,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
 
     /// @return current multisig_control_address
     function get_multisig_control_address() public override view returns(address) {
-        return multisig_control_address;
+        return multisig_control_address();
     }
 
     /// @return The assigned Vega Asset Id

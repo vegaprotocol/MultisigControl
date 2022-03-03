@@ -65,8 +65,7 @@ contract ERC20_Asset_Pool {
     /// @param target Target Ethereum address that the ERC20 tokens will be sent to
     /// @param amount Amount of ERC20 tokens to withdraw
     /// @dev amount is in whatever the lowest decimal value the ERC20 token has. For instance, an 18 decimal ERC20 token, 1 "amount" == 0.000000000000000001
-    /// @return true if transfer was successful.
-    function withdraw(address token_address, address target, uint256 amount) public returns(bool) {
+    function withdraw(address token_address, address target, uint256 amount) public {
         require(msg.sender == erc20_bridge_address, "msg.sender not authorized bridge");
 
         IERC20(token_address).transfer(target, amount);
@@ -84,8 +83,6 @@ contract ERC20_Asset_Pool {
                default {}
        }
        require(result, "token transfer failed"); // revert() if result is false
-
-      return true;
     }
 }
 

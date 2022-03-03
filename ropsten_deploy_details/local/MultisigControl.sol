@@ -31,7 +31,11 @@ contract MultisigControl is IMultisigControl {
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev Emits ThresholdSet event
     function set_threshold(uint16 new_threshold, uint256 nonce, bytes calldata signatures) public override{
+<<<<<<< HEAD
         require(new_threshold <= 1000 && new_threshold > 0, "new threshold outside range");
+=======
+        require(new_threshold < 1000 && new_threshold > 0, "new threshold outside range");
+>>>>>>> sweetwaterPP
         bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
         threshold = new_threshold;
@@ -78,6 +82,7 @@ contract MultisigControl is IMultisigControl {
     /// @return Returns true if valid signatures are over the threshold
     function verify_signatures(bytes calldata signatures, bytes memory message, uint256 nonce) public override returns(bool) {
         require(signatures.length % 65 == 0, "bad sig length");
+        require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
         uint8 sig_count = 0;
 
@@ -119,8 +124,11 @@ contract MultisigControl is IMultisigControl {
                 sig_count++;
             }
         }
-        used_nonces[nonce] = true;
-        return ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
+
+        used_nonces[nonce] = ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
+
+        return used_nonces[nonce];
+
     }
 
     /// @return Number of valid signers

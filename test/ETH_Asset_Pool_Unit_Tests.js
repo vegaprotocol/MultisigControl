@@ -299,7 +299,7 @@ contract("ETH_Asset_Pool Function: set_bridge_address", (accounts) => {
                 nonce,
                 "0x"
             ),
-            "bad signatures"
+            "must contain at least 1 sig"
         );
 
         // await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
