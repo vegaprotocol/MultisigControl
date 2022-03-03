@@ -342,7 +342,7 @@ async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold,
 
 
 ////FUNCTIONS
-contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
+contract("ERC20_Bridge_Logic Function: set_withdraw_threshold - 0003-NP-LIMI-005", (accounts) => {
   //function set_withdraw_threshold(address asset_source, uint256 threshold, uint256 nonce, bytes calldata signatures) public
   beforeEach(async () => {
     await init_private_keys()
@@ -427,7 +427,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
   })
 
 
-  it("set_withdraw_threshold should allow large withdrawal if creation + default_withdraw_delay <= block.timestamp - 0003-NP-LIMI-005", async () => {
+  it("set_withdraw_threshold should allow large withdrawal if creation + default_withdraw_delay <= block.timestamp", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
