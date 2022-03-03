@@ -31,11 +31,7 @@ contract MultisigControl is IMultisigControl {
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev Emits ThresholdSet event
     function set_threshold(uint16 new_threshold, uint256 nonce, bytes calldata signatures) public override{
-<<<<<<< HEAD
-        require(new_threshold <= 1000 && new_threshold > 0, "new threshold outside range");
-=======
         require(new_threshold < 1000 && new_threshold > 0, "new threshold outside range");
->>>>>>> sweetwaterPP
         bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
         require(verify_signatures(signatures, message, nonce), "bad signatures");
         threshold = new_threshold;

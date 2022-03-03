@@ -78,12 +78,12 @@ let bridge_addresses = require(root_path + "bridge_addresses.json");
 
 async function deposit_asset(bridge_logic_instance, test_token_instance, account, token_balance) {
   let wallet_pubkey = crypto.randomBytes(32);
-  await test_token_instance.faucet();
+  await test_token_instance.faucet({from: account});
   if (token_balance === undefined || token_balance === null) {
     token_balance = await test_token_instance.balanceOf(account);
   }
-  await test_token_instance.approve(ERC20_Bridge_Logic.address, token_balance);
-  await bridge_logic_instance.deposit_asset(bridge_addresses.test_token_address, token_balance, wallet_pubkey);
+  await test_token_instance.approve(ERC20_Bridge_Logic.address, token_balance, {from: account});
+  await bridge_logic_instance.deposit_asset(bridge_addresses.test_token_address, token_balance, wallet_pubkey, {from: account});
   return token_balance;
 }
 
@@ -544,14 +544,14 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
 
 
 
-contract("ERC20_Bridge_Logic Function: set_exemption_lister", (accounts) => {
+contract("ERC20_Bridge_Logic Function: set_exemption_lister - 0003-NP-LIMI-002", (accounts) => {
   //function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public override
   beforeEach(async () => {
     await init_private_keys()
 
   });
 
-  it("set_exemption_lister should update exemption lister contract", async () => {
+  it("set_exemption_lister should update exemption lister", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -563,6 +563,31 @@ contract("ERC20_Bridge_Logic Function: set_exemption_lister", (accounts) => {
 
     expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(lister);
 
+  })
+
+  it("exemption lister is not exempt from max lifetime deposit", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    await list_asset(bridge_logic_instance, accounts[0]);
+
+    let faucetAmount = "10000000000"; // 5 decimals
+    let lifetime_limit = parseInt(faucetAmount) / 2;
+
+    let lister = accounts[1];
+
+    await set_exemption_lister(bridge_logic_instance, accounts[0], lister);
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(lister);
+
+    await set_lifetime_deposit_max(bridge_logic_instance, lifetime_limit, accounts[0]);
+
+    expectBignumberEqual(await bridge_logic_instance.get_asset_deposit_limit(test_token_instance.address), lifetime_limit);
+
+    await shouldFailWithMessage(
+      deposit_asset(bridge_logic_instance, test_token_instance, lister),
+      "deposit over lifetime limit"
+    );
   })
 
   it("set_exemption_lister should emit correct event and params", async () => {
@@ -629,7 +654,7 @@ contract("ERC20_Bridge_Logic Function: revoke_exempt_depositor", (accounts) => {
 });
 
 
-contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
+contract("ERC20_Bridge_Logic Function: exempt_depositor - 0003-NP-LIMI-002", (accounts) => {
   //function exempt_depositor(address depositor) public override
   beforeEach(async () => {
     await init_private_keys()
@@ -804,7 +829,7 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max - 0003-NP-LIMI-0
 
   })
 
-  it("deposit asset should revert if total deposited by user is > maximum lifetime deposit", async () => {
+  it("deposit asset should revert if total deposited by user is > maximum lifetime deposit - 0003-NP-LIMI-001", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -821,7 +846,7 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max - 0003-NP-LIMI-0
     );
   })
 
-  it("Withdrawing all funds after the first deposit transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed max lifetime deposit is still rejected", async () => {
+  it("Withdrawing all funds after the first deposit transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed max lifetime deposit is still rejected - 0003-NP-LIMI-001", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -835,6 +860,7 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max - 0003-NP-LIMI-0
 
     // console.log((await test_token_instance.balanceOf(accounts[0])).toString());
 
+    // deposit of faucet amount works
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
     await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
@@ -856,7 +882,7 @@ contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max - 0003-NP-LIMI-0
   })
   
 
-  it("deposit asset should not revert if depositor is exempted and total deposited by user is > maximum lifetime deposit", async () => {
+  it("deposit asset should not revert if depositor is exempted and total deposited by user is > maximum lifetime deposit - 0003-NP-LIMI-002", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
