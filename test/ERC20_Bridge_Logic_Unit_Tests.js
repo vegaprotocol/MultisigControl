@@ -748,7 +748,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_delay", (accounts) => {
   })
 })
 
-contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max", (accounts) => {
+contract("ERC20_Bridge_Logic Function: set_lifetime_deposit_max - 0003-NP-LIMI-001", (accounts) => {
   //function set_lifetime_deposit_max(address asset_source, uint256 lifetime_limit, uint256 nonce, bytes calldata signatures) public;
   beforeEach(async () => {
     await init_private_keys()
