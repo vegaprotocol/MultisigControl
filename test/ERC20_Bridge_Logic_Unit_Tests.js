@@ -822,7 +822,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("list_asset should trigger bad signatures with invalid signature string (0031-ETHM-017)", async () => {
+  it("list_asset should trigger bad signatures with invalid signature string (0030-ETHM-017)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -860,7 +860,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("asset that was not listed is listed after running list_asset (0031-ETHM-016)", async () => {
+  it("asset that was not listed is listed after running list_asset (0030-ETHM-016)", async () => {
 
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
@@ -910,7 +910,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("list_asset fails to list an already listed asset (0031-ETHM-016)", async () => {
+  it("list_asset fails to list an already listed asset (0030-ETHM-016)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     //new asset ID is listed
     assert.equal(
@@ -941,7 +941,7 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
   });
 
   //function remove_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
-  it("listed asset is not listed after running remove_asset and no longer able to deposited (0031-ETHM-019)", async () => {
+  it("listed asset is not listed after running remove_asset and no longer able to deposited (0030-ETHM-019)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -958,7 +958,7 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
     //deposit new asset, should work
     let amount_deposited = await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
-    //remove new asset (0031-ETHM-009)
+    //remove new asset (0030-ETHM-009)
     const [nonce, receipt] = await remove_asset(bridge_logic_instance, accounts[0]);;
 
     // check event parameters
@@ -975,7 +975,7 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
 
   });
 
-  it("remove_asset should revert with bad signatures with invalid signature string or non signer (0031-ETHM-020)", async () => {
+  it("remove_asset should revert with bad signatures with invalid signature string or non signer (0030-ETHM-020)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -1007,14 +1007,14 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
   });
 
 });
-contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (accounts) => {
+contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0030-ETHM-006)", (accounts) => {
   //function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
   beforeEach(async () => {
     await init_private_keys()
 
   });
 
-  it("set deposit minimum should revert if asset is not listed (0031-ETHM-007)", async () => {
+  it("set deposit minimum should revert if asset is not listed (0030-ETHM-007)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
 
     //Get minimum deposit should return 0
@@ -1054,7 +1054,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
 
   })
 
-  it("set deposit minimum should revert if signature is invalid (0031-ETHM-024)", async () => {
+  it("set deposit minimum should revert if signature is invalid (0030-ETHM-024)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
 
     //Get minimum deposit should return 0
@@ -1094,7 +1094,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
 
   })
 
-  it("deposit minimum is modified with valid signature and is enforced by running set_deposit_minimum (0031-ETHM-023)", async () => {
+  it("deposit minimum is modified with valid signature and is enforced by running set_deposit_minimum (0030-ETHM-023)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -1139,7 +1139,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum(test_token_instance.address)).toString();
     assert.equal(deposit_minimum, "500", "deposit min should be 500, isn't");
 
-    //deposit less than min should fail (0031-ETHM-008) (0031-ETHM-010)
+    //deposit less than min should fail (0030-ETHM-008) (0030-ETHM-010)
     try {
       await deposit_asset(bridge_logic_instance, test_token_instance, "499");
       assert.equal(
@@ -1149,7 +1149,7 @@ contract("ERC20_Bridge_Logic Function: set_deposit_minimum (0031-ETHM-006)", (ac
       );
     } catch (e) { }
 
-    //deposit more than min should work  (0031-ETHM-008)
+    //deposit more than min should work  (0030-ETHM-008)
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0], "501");
   });
 });
@@ -1229,7 +1229,7 @@ contract("ERC20_Bridge_Logic Function: deposit_asset", (accounts) => {
     await init_private_keys()
 
   });
-  it("deposit_asset should fail due to asset not being listed (0031-ETHM-009)", async () => {
+  it("deposit_asset should fail due to asset not being listed (0030-ETHM-009)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -1275,7 +1275,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
     await init_private_keys()
 
   });
-  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl (0031-ETHM-013)", async () => {
+  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl (0030-ETHM-013)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1319,7 +1319,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
 
   });
 
-  it("withdraw_asset fails due to amount mismatch between signature and function params (0031-ETHM-014)", async () => {
+  it("withdraw_asset fails due to amount mismatch between signature and function params (0030-ETHM-014)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
