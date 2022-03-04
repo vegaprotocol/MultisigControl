@@ -75,3 +75,6 @@ See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/d
 * https://github.com/vegaprotocol/Public_Test_Bridge_Tools
 * https://vega.xyz
 * https://docs.testnet.vega.xyz
+
+# [License](./LICENSE)
+MIT
