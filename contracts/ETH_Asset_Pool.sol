@@ -59,14 +59,11 @@ contract ETH_Asset_Pool {
     /// @param target Target Ethereum address that the ETH will be sent to
     /// @param amount Amount of ETH to withdraw
     /// @dev amount is in wei, 1 wei == 0.000000000000000001 ETH
-    /// @return true if transfer was successful.
-    function withdraw(address payable target, uint256 amount) public returns(bool) {
+    function withdraw(address payable target, uint256 amount) public {
         require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
-        require(address(this).balance >= amount, "insufficient balance");
         /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
         (bool success,) = target.call{value: amount}("");
         require(success, "eth transfer failed");
-        return true;
     }
 
     /// @notice A contract can have at most one receive function,

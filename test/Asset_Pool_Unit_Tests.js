@@ -75,7 +75,7 @@ function get_message_to_sign(param_types, params, nonce, function_name, sender) 
 async function list_asset(bridge_logic_instance, from_address) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   let lifetime_limit = parseEther("1000");
-  let withdraw_threshold = parseEther("100"); 
+  let withdraw_threshold = parseEther("100");
   //create signature
   let encoded_message = get_message_to_sign(
     ["address", "bytes32", "uint256", "uint256"],
@@ -275,7 +275,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
         nonce,
         "0x"
       ),
-      "bad signatures"
+      "must contain at least 1 sig"
     );
 
     assert.equal(
@@ -338,7 +338,7 @@ contract("Asset_Pool Function: set_bridge_address", (accounts) => {
         nonce,
         "0x"
       ),
-      "bad signatures"
+      "must contain at least 1 sig"
     );
 
     // await set_bridge_address(asset_pool_instance, bridge_addresses.logic_1, accounts[0]);
