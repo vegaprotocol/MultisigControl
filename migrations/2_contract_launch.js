@@ -2,7 +2,7 @@ const path = require('path')
 
 const MultisigControl = artifacts.require("MultisigControl");
 const ERC20_Asset_Pool = artifacts.require("ERC20_Asset_Pool");
-const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic");
+const ERC20_Bridge_Logic = artifacts.require("ERC20_Bridge_Logic_Restricted");
 const ETH_Asset_Pool = artifacts.require("ETH_Asset_Pool");
 const ETH_Bridge_Logic = artifacts.require("ETH_Bridge_Logic");
 
@@ -57,8 +57,8 @@ module.exports = async function(deployer) {
     }
     await deployer.deploy(MultisigControl);
     await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
-    let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
-    let logic_2 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
+    let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address);
+    let logic_2 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address);
 
     console.log(logic_1.address);
     console.log(logic_2.address);
@@ -68,7 +68,7 @@ module.exports = async function(deployer) {
 
     /****** ETH Bridge*/
     await deployer.deploy(ETH_Asset_Pool, MultisigControl.address);
-    await deployer.deploy(ETH_Bridge_Logic, ETH_Asset_Pool.address, MultisigControl.address);
+    await deployer.deploy(ETH_Bridge_Logic, ETH_Asset_Pool.address);
 
     /*********/
 
