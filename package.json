@@ -1,8 +1,8 @@
 {
-  "name": "multisigcontrol",
+  "name": "MultisigControl",
   "version": "1.0.0",
-  "description": "Terminal 1:",
-  "main": "ecc_test.js",
+  "description": "Solidity contracts for the Ethereum <-> Vega bridge",
+  "private": true,
   "directories": {
     "test": "test"
   },
@@ -30,7 +30,6 @@
     "solidity-coverage": "^0.7.17"
   },
   "scripts": {
-    "ecc_test": "node ecc_test.js",
     "ganache": "ganache-cli -h 0.0.0.0 -p 8545 -m \"cherry manage trip absorb logic half number test shed logic purpose rifle\"",
     "migrate": "truffle migrate",
     "test": "mocha"
@@ -39,8 +38,8 @@
     "type": "git",
     "url": "git+https://github.com/vegaprotocol/MultisigControl.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Vega <hi@vega.xyz>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vegaprotocol/MultisigControl/issues"
   },
