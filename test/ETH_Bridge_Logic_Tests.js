@@ -70,7 +70,7 @@ function to_signature_string(sig) {
   return "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') + "" + sig.v.toString(16);
 }
 
-// (0030-ETHM-004)
+// (0031-ETHB-004)
 async function deposit_asset(bridge_logic_instance, account, amount) {
   let wallet_pubkey = crypto.randomBytes(32);
   let receipt = await bridge_logic_instance.deposit_asset(wallet_pubkey, { from: account, value: amount });
@@ -130,7 +130,7 @@ async function set_bridge_address(asset_pool_instance, bridge_logic_address, acc
 
 
 ////FUNCTIONS
-contract("ETH_Bridge_Logic Function: set_deposit_minimum (0030-ETHM-002)", (accounts) => {
+contract("ETH_Bridge_Logic Function: set_deposit_minimum (0031-ETHB-002)", (accounts) => {
   // function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
 
   beforeEach(async () => {
@@ -169,7 +169,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum (0030-ETHM-002)", (acco
     deposit_minimum = (await bridge_logic_instance.get_deposit_minimum()).toString();
     assert.equal(deposit_minimum, web3.utils.toWei('5', 'ether'), "deposit min should be 5 eth, isn't");
 
-    // deposit less than min should fail (0030-ETHM-005)
+    // deposit less than min should fail (0031-ETHB-005)
     const depositAmount = web3.utils.toWei('2', 'ether');
     // check user has enough ETH in wallet to cover deposit amount
     expect(
@@ -187,7 +187,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_minimum (0030-ETHM-002)", (acco
     } catch (e) { }
 
     // deposit more than min should work
-    // (0030-ETHM-003)
+    // (0031-ETHB-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('10', 'ether')))
@@ -242,7 +242,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     const depositAmount = web3.utils.toWei('4', 'ether')
 
-    //deposit less than max should work (0030-ETHM-003)
+    //deposit less than max should work (0031-ETHB-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(depositAmount))
@@ -251,7 +251,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, accounts[0], depositAmount);
 
-    // depositing max should work (0030-ETHM-003)
+    // depositing max should work (0031-ETHB-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('5', 'ether')))
@@ -260,7 +260,7 @@ contract("ETH_Bridge_Logic Function: set_deposit_maximum", (accounts) => {
 
     await deposit_asset(bridge_logic_instance, accounts[0], web3.utils.toWei('5', 'ether'));
 
-    // deposit more than max should fail (0030-ETHM-003)
+    // deposit more than max should fail (0031-ETHB-003)
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
       .to.be.greaterThanOrEqual(parseInt(formatEther(web3.utils.toWei('6', 'ether')))
@@ -388,7 +388,7 @@ contract("ETH_Bridge_Logic Function: withdraw_asset", (accounts) => {
     await init_private_keys()
 
   });
-  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl  (0030-ETHM-011)", async () => {
+  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl  (0031-ETHB-011)", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
     let asset_pool_instance = await ETH_Asset_Pool.deployed();
     //console.log(await bridge_logic_instance.ETH_asset_pool_address())
@@ -485,7 +485,7 @@ contract("ETH_Bridge_Logic Function: withdraw_asset", (accounts) => {
 
   })
 
-  it("withdraw_asset fails due to amount mismatch between signature and function params (0030-ETHM-012)", async () => {
+  it("withdraw_asset fails due to amount mismatch between signature and function params (0031-ETHB-012)", async () => {
     let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
     let asset_pool_instance = await ETH_Asset_Pool.deployed();
     //console.log(await bridge_logic_instance.ETH_asset_pool_address())
