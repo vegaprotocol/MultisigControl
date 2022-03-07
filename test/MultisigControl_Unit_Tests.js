@@ -751,7 +751,7 @@ contract("MultisigControl -- Function: get_valid_signer_count - 0030-ETHM-018", 
 });
 
 //function get_current_threshold() public view returns(uint16) {
-contract("MultisigControl -- Function: get_current_threshold",  (accounts) => {
+contract("MultisigControl -- Function: get_current_threshold - 0030-ETHM-019",  (accounts) => {
     it("get_current_threshold is correct after setting", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
