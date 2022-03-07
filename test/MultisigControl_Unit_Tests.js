@@ -652,7 +652,7 @@ contract("MultisigControl -- Function: is_nonce_used",  async (accounts) => {
 
 
 //function get_valid_signer_count() public view returns(uint8){
-contract("MultisigControl -- Function: get_valid_signer_count",  async (accounts) => {
+contract("MultisigControl -- Function: get_valid_signer_count - 0030-ETHM-018",  async (accounts) => {
   beforeEach(async()=>{
     await init_private_keys()
 
