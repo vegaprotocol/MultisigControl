@@ -584,6 +584,71 @@ contract("MultisigControl -- Function: remove_signer", (accounts) => {
 
 });
 
+//function is_nonce_used(uint nonce) public view returns(bool){
+contract("MultisigControl -- Function: is_nonce_used - 0030-ETHM-021",  async (accounts) => {
+  beforeEach(async()=>{
+    await init_private_keys()
+
+  });
+    let multisigControl_instance = await MultisigControl.deployed();
+    it("unused nonce returns false", async () => {
+
+        let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
+        assert.equal(
+            await multisigControl_instance.is_nonce_used(nonce_1),
+            true,
+            "nonce marked as used, shouldn't be"
+        );
+
+    });
+
+
+    it("used nonce returns true", async()=>{
+        let multisigControl_instance = await MultisigControl.deployed();
+
+        //check that only private_keys[0] is the signer
+        let is_signer_0 = await multisigControl_instance.is_valid_signer(accounts[0]);
+        let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
+        assert.equal(
+            is_signer_0,
+            true,
+            "account 0 is not a signer but should be"
+        );
+        assert.equal(
+            is_signer_1,
+            false,
+            "account 1 is a signer and should not be"
+        );
+
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            1,
+            "signer count should be 1, is: " + signer_count
+        );
+
+        let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
+
+        //generate message
+        let encoded_message_1 =  crypto.randomBytes(32);
+
+        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message_1, accounts[0]]));
+
+        let signature = ethUtil.ecsign(encoded_hash_1, private_keys[accounts[0].toLowerCase()]);
+        let sig_string = to_signature_string(signature);
+
+        //sign message with private_keys[0]
+        //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
+        await multisigControl_instance.verify_signatures(sig_string, encoded_message_1, nonce_1, {from: accounts[0]});
+
+        assert.equal(
+            await multisigControl_instance.is_nonce_used(nonce_1),
+            true,
+            "nonce not marked as used."
+        );
+
+    })
+});
 
 //function get_valid_signer_count() public view returns(uint8){
 contract("MultisigControl -- Function: get_valid_signer_count", async (accounts) => {
