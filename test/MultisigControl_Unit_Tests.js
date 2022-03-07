@@ -585,7 +585,7 @@ contract("MultisigControl -- Function: remove_signer",  (accounts) => {
 });
 
 //function is_nonce_used(uint nonce) public view returns(bool){
-contract("MultisigControl -- Function: is_nonce_used",  async (accounts) => {
+contract("MultisigControl -- Function: is_nonce_used - 0030-ETHM-021",  async (accounts) => {
   beforeEach(async()=>{
     await init_private_keys()
 
