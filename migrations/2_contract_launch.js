@@ -14,6 +14,11 @@ const fs = require('fs');
 let copy = require('recursive-copy');
 
 let root_path =  'ropsten_deploy_details/';
+if (!fs.existsSync("../ropsten_deploy_details/")){
+  fs.mkdirSync("../ropsten_deploy_details/");
+}
+
+
 
 let is_ganache = true;
 let net = "local";
@@ -46,7 +51,6 @@ root_path += net + "/";
 
 
 
-
 let test_token_address;
 ///https://ethereum.stackexchange.com/questions/17551/how-to-upgrade-solidity-compiler-in-truffle
 module.exports = async function(deployer) {
@@ -66,11 +70,11 @@ module.exports = async function(deployer) {
     let erc20_asset_pool_instance = await ERC20_Asset_Pool.deployed();
     let erc20_bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
 
-    /****** ETH Bridge*/
+    ///// ETH Bridge
     await deployer.deploy(ETH_Asset_Pool, MultisigControl.address);
     await deployer.deploy(ETH_Bridge_Logic, ETH_Asset_Pool.address);
 
-    /*********/
+    ///////////
 
     //save logic addresses and ABIs
     let bridge_addresses = {
@@ -85,6 +89,10 @@ module.exports = async function(deployer) {
 
 
     console.log("Saving files for " + net + " net");
+
+    if (!fs.existsSync(root_path)){
+      fs.mkdirSync(root_path);
+    }
     fs.writeFileSync(root_path +'bridge_addresses.json',  JSON.stringify(bridge_addresses));
     //fs.writeFileSync(root_path + 'MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
     //fs.writeFileSync(root_path + 'ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));
