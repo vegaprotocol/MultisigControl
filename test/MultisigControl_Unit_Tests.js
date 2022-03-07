@@ -789,7 +789,7 @@ contract("MultisigControl -- Function: get_current_threshold - 0030-ETHM-019",  
 });
 
 //function is_valid_signer(address signer_address) public view returns(bool){
-contract("MultisigControl -- Function: is_valid_signer",  (accounts) => {
+contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accounts) => {
     it("previously unknown signer is valid after setting", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
