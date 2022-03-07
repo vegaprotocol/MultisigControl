@@ -827,7 +827,7 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
         );
 
     });
-    it("previously valid signer is invalid after setting as invalid", async () => {
+    it("previously valid signer is invalid after setting as invalid - 0030-ETHM-016", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
         let encoded_message_2_signers = get_message_to_sign(
@@ -860,7 +860,7 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
             "account 4 is a signer and should not be"
         );
     });
-    it("unknown signers are invalid", async () => {
+    it("unknown signers are invalid - 0030-ETHM-016", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let is_signer_5 = await multisigControl_instance.is_valid_signer(accounts[5]);
         assert.equal(
