@@ -13,8 +13,11 @@ const fs = require('fs');
 
 let copy = require('recursive-copy');
 
-let root_path =  'ropsten_deploy_details/';
 
+let root_path =  'ropsten_deploy_details/';
+if (!fs.existsSync("../ropsten_deploy_details/")){
+  fs.mkdirSync("../ropsten_deploy_details/");
+}
 let is_ganache = true;
 let net = "local";
 for(let arg_idx = 0; arg_idx < process.argv.length; arg_idx++){
@@ -85,6 +88,10 @@ module.exports = async function(deployer) {
 
 
     console.log("Saving files for " + net + " net");
+
+    if (!fs.existsSync(root_path)){
+      fs.mkdirSync(root_path);
+    }
     fs.writeFileSync(root_path +'bridge_addresses.json',  JSON.stringify(bridge_addresses));
     //fs.writeFileSync(root_path + 'MultisigControl_ABI.json',  JSON.stringify(MultisigControl.abi));
     //fs.writeFileSync(root_path + 'ERC20_Asset_Pool_ABI.json',  JSON.stringify(ERC20_Asset_Pool.abi));

@@ -34,36 +34,25 @@ Terminal 1:
 Terminal 2:
 
 1. `truffle migrate` This deploys MultisigControl, Asset Pool, and 2 bridge logic contracts
-1. `cd TESTNET_ASSET_DEPLOYMENT`
-1. `truffle migrate` This deploys the tokens
-1. `node confgure_assets.js` This will list the tokens on the bridge logic 1 contract
-1. `node confgure_signers.js` This will set the contract to the initial signer for bootstrapping
-1. `node confgure_asset_pool.js` This will finish bridge setup
+1. `truffle build`
+1. `truffle migrate` This deploys the bridges according to `migrations/2_contract_launch.js` onto ganache
 
 All addresses, ABIs, and smart contract files will be available in `./ropsten_deploy_details/local`
 
-## Ropsten Deployment [test|stag|dev]
-
-
-1. `truffle migrate --network ropsten --vega [test|stag|dev]` (without brackets so `--network ropsten --vega test`) This deploys MultisigControl, Asset Pool, and 2 bridge logic contracts
-1. `cd TESTNET_ASSET_DEPLOYMENT`
-1. `truffle migrate --network ropsten --vega [test|stag|dev]` This deploys the tokens
-1. `node confgure_assets.js --network ropsten --vega [test|stag|dev]` This will list the tokens on the bridge logic 1 contract
-1. `node confgure_signers.js --network ropsten --vega [test|stag|dev]` This will set the contract to the initial signer for bootstrapping
-1. `node confgure_asset_pool.js --network ropsten --vega [test|stag|dev]` This will finish bridge setup
-Done.
-
-All addresses, ABIs, and smart contract files will be available in `./ropsten_deploy_details/[test|stag|dev]`
-
-## Run in Docker
-
-See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/doc/dockerisedvega.md).
-
 ## Run Tests Locally
-1. `npm i`
-2. `Start local Ganache deployment on the project root folder in a seperate terminal using: npm run ganache`
-3. `From root run command truffle build`
-4. `From root run truffle test`
+Terminal 1:
+
+1. `npm install`
+1. `ganache-cli -m "mnemonic used in .secret file"`
+
+
+Terminal 2:
+
+1. `truffle migrate` This deploys MultisigControl, Asset Pool, and 2 bridge logic contracts
+1. `truffle build`
+1. `truffle test` This tests the bridges on local ganache
+
+
 
 ## Code Coverage Checks
 1. `truffle run coverage`
@@ -74,3 +63,6 @@ See [Dockerised Vega](https://github.com/vegaprotocol/devops-infra/blob/master/d
 * https://github.com/vegaprotocol/Public_Test_Bridge_Tools
 * https://vega.xyz
 * https://docs.testnet.vega.xyz
+
+# [License](./LICENSE)
+MIT
