@@ -437,7 +437,7 @@ contract("ETH_Asset_Pool Function: withdraw", (accounts) => {
 
         await shouldFailWithMessage(
             withdraw_asset_reentry(bridge_logic_instance, accounts[0], expiry.toString(), nonce, false),
-            "revert nonce already used -- Reason given: nonce already used"
+            "nonce already used"
         );
 
         nonce = new ethUtil.BN(crypto.randomBytes(32));
