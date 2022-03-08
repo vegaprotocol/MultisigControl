@@ -327,7 +327,8 @@ contract("ETH_Bridge_Logic Function: deposit_asset", (accounts) => {
 
 
     //deposit asset
-    const depositAmount = web3.utils.toWei('500', 'ether')
+    //ganache allocates 1000 ETH to each account on genesis
+    const depositAmount = web3.utils.toWei('1001', 'ether')
 
     expect(
       parseInt(formatEther(await web3.eth.getBalance(accounts[0]))))
