@@ -220,7 +220,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     /// @param depositor The depositor from which to revoke deposit exemptions
     /// @dev emits Depositor_Exemption_Revoked if successful
     function revoke_exempt_depositor(address depositor) public override {
-      require(msg.sender == exemption_lister, "unauthorized exemption lister");
+      require(msg.sender == exemption_lister || msg.sender == depositor, "unauthorized exemption lister");
       require(exempt_depositors[depositor], "depositor not exempt");
       exempt_depositors[depositor] = false;
       emit Depositor_Exemption_Revoked(depositor);
