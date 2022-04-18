@@ -210,7 +210,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     function exempt_depositor(address depositor) public override {
       require(depositor != address(0), "cannot exempt zero address");
       require(!exempt_depositors[depositor], "depositor already exempt");
-      require(msg.sender == exemption_lister, "unauthorized exemption lister");
+      require(msg.sender == exemption_lister || msg.sender == depositor, "unauthorized exemption lister");
       exempt_depositors[depositor] = true;
       emit Depositor_Exempted(depositor);
     }
