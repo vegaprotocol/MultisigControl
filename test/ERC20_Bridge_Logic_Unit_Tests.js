@@ -545,6 +545,19 @@ contract("ERC20_Bridge_Logic Function: revoke_exempt_depositor", (accounts) => {
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(false);
   })
 
+  it("any ETH address can call revoke_exempt_depositor to remove itself (own ETH address) from the exemption list - 0003-NP-LIMI-002", async () => {
+    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
+    let test_token_instance = await Base_Faucet_Token.deployed();
+
+    await bridge_logic_instance.exempt_depositor(accounts[5], {from: accounts[5]});
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[5])).to.be.equal(true);
+
+    expect(await bridge_logic_instance.get_exemption_lister()).to.be.equal(accounts[1]);
+    await bridge_logic_instance.revoke_exempt_depositor(accounts[5], {from: accounts[5]});
+
+    expect(await bridge_logic_instance.is_exempt_depositor(accounts[5])).to.be.equal(false);
+  })
+
   it("revoke_exempt_depositor should emit correct event and params", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
@@ -584,7 +597,7 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
 
   })
 
-  it("exempt_depositor should not revert if owner", async () => {
+  it("any ETH address can call exempt_depositor to add itself (own ETH address) to the exemption list - 0003-NP-LIMI-002", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
