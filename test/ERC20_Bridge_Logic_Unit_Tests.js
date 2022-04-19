@@ -567,7 +567,7 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
 
   });
 
-  it("exempt_depositor should revert if not lister and not owner", async () => {
+  it("exempt_depositor should revert if not lister", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
