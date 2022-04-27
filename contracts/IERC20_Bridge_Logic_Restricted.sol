@@ -16,7 +16,6 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     event Bridge_Withdraw_Delay_Set(uint256 withdraw_delay);
     event Bridge_Stopped();
     event Bridge_Resumed();
-    event Exemption_Lister_Set(address indexed lister);
     event Depositor_Exempted(address indexed depositor);
     event Depositor_Exemption_Revoked(address indexed depositor);
 
@@ -67,14 +66,6 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @dev bridge must be stopped
     /// @dev MUST emit Bridge_Resumed if successful
     function global_resume(uint256 nonce, bytes calldata signatures) public virtual;
-
-    /// @notice this function allows MultisigControl to set the address that can exempt depositors from the deposit limits
-    /// @notice this feature is specifically for liquidity and rewards providers
-    /// @param lister The address that can exempt depositors
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @dev MUST emit Exemption_Lister_Set if successful
-    function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public virtual;
 
     /// @notice this function allows the exemption_lister to exempt a depositor from the deposit limits
     /// @notice this feature is specifically for liquidity and rewards providers
@@ -127,11 +118,6 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @notice this view returns the address that can exempt depositors from deposit limits
     /// @return the address can exempt depositors from deposit limits
     function get_exemption_lister() public virtual view returns(address);
-
-    /// @notice this view returns true if the given despoitor address has been exempted from deposit limits
-    /// @param depositor The depositor to check
-    /// @return true if depositor is exempt
-    function is_exempt_depositor(address depositor) public virtual view returns(bool);
 
     /// @return current multisig_control_address
     function get_multisig_control_address() public virtual view returns(address);
