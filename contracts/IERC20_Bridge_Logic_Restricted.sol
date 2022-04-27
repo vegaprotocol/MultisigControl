@@ -69,15 +69,13 @@ abstract contract IERC20_Bridge_Logic_Restricted {
 
     /// @notice this function allows the exemption_lister to exempt a depositor from the deposit limits
     /// @notice this feature is specifically for liquidity and rewards providers
-    /// @param depositor The depositor to exempt from limits
     /// @dev MUST emit Depositor_Exempted if successful
-    function exempt_depositor(address depositor) public virtual;
+    function exempt_depositor() public virtual;
 
     /// @notice this function allows the exemption_lister to revoke a depositor's exemption from deposit limits
     /// @notice this feature is specifically for liquidity and rewards providers
-    /// @param depositor The depositor from which to revoke deposit exemptions
     /// @dev MUST emit Depositor_Exemption_Revoked if successful
-    function revoke_exempt_depositor(address depositor) public virtual;
+    function revoke_exempt_depositor() public virtual;
 
     /// @notice This function withdrawals assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
@@ -89,6 +87,11 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Withdrawn if successful
     function withdraw_asset(address asset_source, uint256 amount, address target, uint256 creation, uint256 nonce, bytes memory signatures) public virtual;
+
+    /// @notice this view returns true if the given despoitor address has been exempted from deposit limits
+    /// @param depositor The depositor to check
+    /// @return true if depositor is exempt
+    function is_exempt_depositor(address depositor) public virtual view returns(bool);
 
     /// @notice This function allows a user to deposit given ERC20 tokens into Vega
     /// @param asset_source Contract address for given ERC20 token
@@ -114,10 +117,6 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @param asset_source Contract address for given ERC20 token
     /// @return Withdraw threshold
     function get_withdraw_threshold(address asset_source) public virtual view returns(uint256);
-
-    /// @notice this view returns the address that can exempt depositors from deposit limits
-    /// @return the address can exempt depositors from deposit limits
-    function get_exemption_lister() public virtual view returns(address);
 
     /// @return current multisig_control_address
     function get_multisig_control_address() public virtual view returns(address);

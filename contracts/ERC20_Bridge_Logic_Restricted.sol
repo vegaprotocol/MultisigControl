@@ -98,7 +98,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
       if (withdraw_thresholds[asset_source] != threshold) {
 	  withdraw_thresholds[asset_source] = threshold;
       }
-      emit Asset_Limits_Updated(asset_source, lifetime_limt, threshold);
+      emit Asset_Limits_Updated(asset_source, lifetime_limit, threshold);
     }
 
     /// @notice This view returns the lifetime deposit limit for the given asset
