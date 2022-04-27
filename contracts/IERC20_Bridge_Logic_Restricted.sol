@@ -10,10 +10,10 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /***************************EVENTS****************************/
     event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 amount, uint256 nonce);
     event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 amount, bytes32 vega_public_key);
-    event Asset_Deposit_Minimum_Set(address indexed asset_source,  uint256 new_minimum, uint256 nonce);
-    event Asset_Deposit_Maximum_Set(address indexed asset_source,  uint256 new_maximum, uint256 nonce);
-    event Asset_Listed(address indexed asset_source,  bytes32 indexed vega_asset_id, uint256 nonce);
-    event Asset_Removed(address indexed asset_source,  uint256 nonce);
+    event Asset_Listed(address indexed asset_source, bytes32 indexed vega_asset_id, uint256 nonce);
+    event Asset_Removed(address indexed asset_source, uint256 nonce);
+    event Asset_Limits_Updated(address indexed asset_source, uint256 lifetime_limit, uint256 withdraw_threshold);
+    event Bridge_Withdraw_Delay_Set(uint256 withdraw_delay);
     event Bridge_Stopped();
     event Bridge_Resumed();
     event Exemption_Lister_Set(address indexed lister);
@@ -40,45 +40,19 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @dev MUST emit Asset_Removed if successful
     function remove_asset(address asset_source, uint256 nonce, bytes memory signatures) public virtual;
 
-    /// @notice This function sets the minimum allowable deposit for the given ERC20 token
-    /// @param asset_source Contract address for given ERC20 token
-    /// @param minimum_amount Minimum deposit amount
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @dev MUST emit Asset_Deposit_Minimum_Set if successful
-    function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public virtual;
-
-    /// @notice This function sets the maximum allowable deposit for the given ERC20 token
-    /// @param asset_source Contract address for given ERC20 token
-    /// @param maximum_amount Maximum deposit amount
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @dev MUST emit Asset_Deposit_Maximum_Set if successful
-    function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
-
     /// @notice This function sets the lifetime maximum deposit for a given asset
     /// @param asset_source Contract address for given ERC20 token
     /// @param lifetime_limit Deposit limit for a given ethereum address
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @dev asset must first be listed
-    function set_lifetime_deposit_max(address asset_source, uint256 lifetime_limit, uint256 nonce, bytes calldata signatures) public virtual;
+    function set_asset_limits(address asset_source, uint256 lifetime_limit, uint256 threshold, uint256 nonce, bytes calldata signatures) public virtual;
 
     /// @notice This function sets the withdraw delay for withdrawals over the per-asset set thresholds
     /// @param delay Amount of time to delay a withdrawal
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     function set_withdraw_delay(uint256 delay, uint256 nonce, bytes calldata signatures) public virtual;
-
-    /// @notice This function sets the withdraw threshold above which the withdraw delay goes into effect
-    /// @param asset_source Contract address for given ERC20 token
-    /// @param threshold Withdraw size above which the withdraw delay goes into effect
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @dev asset must first be listed
-    function set_withdraw_threshold(address asset_source, uint256 threshold, uint256 nonce, bytes calldata signatures) public virtual;
 
     /// @notice This function triggers the global bridge stop that halts all withdrawals and deposits until it is resumed
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
@@ -140,20 +114,10 @@ abstract contract IERC20_Bridge_Logic_Restricted {
     /// @return True if asset is listed
     function is_asset_listed(address asset_source) public virtual view returns(bool);
 
-    /// @notice This view returns minimum valid deposit
-    /// @param asset_source Contract address for given ERC20 token
-    /// @return Minimum valid deposit of given ERC20 token
-    function get_deposit_minimum(address asset_source) public virtual view returns(uint256);
-
-    /// @notice This view returns maximum valid deposit
-    /// @param asset_source Contract address for given ERC20 token
-    /// @return Maximum valid deposit of given ERC20 token
-    function get_deposit_maximum(address asset_source) public virtual view returns(uint256);
-
     /// @notice This view returns the lifetime deposit limit for the given asset
     /// @param asset_source Contract address for given ERC20 token
     /// @return Lifetime limit for the given asset
-    function get_asset_deposit_limit(address asset_source) public virtual view returns(uint256);
+    function get_asset_deposit_lifetime_limit(address asset_source) public virtual view returns(uint256);
 
     /// @notice This view returns the given token's withdraw threshold above which the withdraw delay goes into effect
     /// @param asset_source Contract address for given ERC20 token
