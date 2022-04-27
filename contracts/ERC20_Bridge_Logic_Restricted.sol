@@ -15,10 +15,6 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     address payable erc20_asset_pool_address;
     // asset address => is listed
     mapping(address => bool) listed_tokens;
-    // asset address => minimum deposit amt
-    mapping(address => uint256) minimum_deposits;
-    // asset address => maximum deposit amt
-    mapping(address => uint256) maximum_deposits;
     // Vega asset ID => asset_source
     mapping(bytes32 => address) vega_asset_ids_to_source;
     // asset_source => Vega asset ID
@@ -70,35 +66,6 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         emit Asset_Removed(asset_source, nonce);
     }
 
-    /// @notice This function sets the minimum allowable deposit for the given ERC20 token
-    /// @param asset_source Contract address for given ERC20 token
-    /// @param minimum_amount Minimum deposit amount
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @dev Emits Asset_Deposit_Minimum_Set if successful
-    function set_deposit_minimum(address asset_source, uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
-        require(listed_tokens[asset_source], "asset not listed");
-        bytes memory message = abi.encode(asset_source, minimum_amount, nonce, 'set_deposit_minimum');
-        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
-        minimum_deposits[asset_source] = minimum_amount;
-        emit Asset_Deposit_Minimum_Set(asset_source, minimum_amount, nonce);
-    }
-
-    /// @notice This function sets the maximum allowable deposit for the given ERC20 token
-    /// @param asset_source Contract address for given ERC20 token
-    /// @param maximum_amount Maximum deposit amount
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @notice See MultisigControl for more about signatures
-    /// @dev Emits Asset_Deposit_Maximum_Set if successful
-    function set_deposit_maximum(address asset_source, uint256 maximum_amount, uint256 nonce, bytes memory signatures) public override {
-        require(listed_tokens[asset_source], "asset not listed");
-        bytes memory message = abi.encode(asset_source, maximum_amount, nonce, 'set_deposit_maximum');
-        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
-        maximum_deposits[asset_source] = maximum_amount;
-        emit Asset_Deposit_Maximum_Set(asset_source, maximum_amount, nonce);
-    }
 
     /************************RESTRICTIONS***************************/
     // user => asset_source => deposit total
@@ -112,27 +79,39 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
 
     // depositor => is exempt from deposit limits
     mapping(address => bool) exempt_depositors;
-    address exemption_lister;
+
 
     /// @notice This function sets the lifetime maximum deposit for a given asset
     /// @param asset_source Contract address for given ERC20 token
     /// @param lifetime_limit Deposit limit for a given ethereum address
+    /// @param threshold Withdraw size above which the withdraw delay goes into effect
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @dev asset must first be listed
-    function set_lifetime_deposit_max(address asset_source, uint256 lifetime_limit, uint256 nonce, bytes calldata signatures) public override {
+    function set_asset_limits(address asset_source, uint256 lifetime_limit, uint256 threshold, uint256 nonce, bytes calldata signatures) public override {
       require(listed_tokens[asset_source], "asset not listed");
-      bytes memory message = abi.encode(asset_source, lifetime_limit, nonce, 'set_lifetime_deposit_max');
+      bytes memory message = abi.encode(asset_source, lifetime_limit, threshold, nonce, 'set_asset_limits');
       require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
       asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
+      withdraw_thresholds[asset_source] = threshold;
+      
+      emit Asset_Limits_Updated(asset_source, lifetime_limit, threshold);
     }
 
     /// @notice This view returns the lifetime deposit limit for the given asset
     /// @param asset_source Contract address for given ERC20 token
     /// @return Lifetime limit for the given asset
-    function get_asset_deposit_limit(address asset_source) public override view returns(uint256) {
+    function get_asset_deposit_lifetime_limit(address asset_source) public override view returns(uint256) {
       return asset_deposit_lifetime_limit[asset_source];
     }
+
+    /// @notice This view returns the given token's withdraw threshold above which the withdraw delay goes into effect
+    /// @param asset_source Contract address for given ERC20 token
+    /// @return Withdraw threshold
+    function get_withdraw_threshold(address asset_source) public override view returns(uint256) {
+      return withdraw_thresholds[asset_source];
+    }
+
 
     /// @notice This function sets the withdraw delay for withdrawals over the per-asset set thresholds
     /// @param delay Amount of time to delay a withdrawal
@@ -142,26 +121,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
       bytes memory message = abi.encode(delay, nonce, 'set_withdraw_delay');
       require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
       default_withdraw_delay = delay;
-    }
-
-    /// @notice This function sets the withdraw threshold above which the withdraw delay goes into effect
-    /// @param asset_source Contract address for given ERC20 token
-    /// @param threshold Withdraw size above which the withdraw delay goes into effect
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @dev asset must first be listed
-    function set_withdraw_threshold(address asset_source, uint256 threshold, uint256 nonce, bytes calldata signatures) public override {
-      require(listed_tokens[asset_source], "asset not listed");
-      bytes memory message = abi.encode(asset_source, threshold, nonce, 'set_withdraw_threshold');
-      require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
-      withdraw_thresholds[asset_source] = threshold;
-    }
-
-    /// @notice This view returns the given token's withdraw threshold above which the withdraw delay goes into effect
-    /// @param asset_source Contract address for given ERC20 token
-    /// @return Withdraw threshold
-    function get_withdraw_threshold(address asset_source) public override view returns(uint256) {
-      return withdraw_thresholds[asset_source];
+      emit Bridge_Withdraw_Delay_Set(delay);
     }
 
     /// @notice This function triggers the global bridge stop that halts all withdrawals and deposits until it is resumed
@@ -190,46 +150,22 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
       emit Bridge_Resumed();
     }
 
-    /// @notice this function allows MultisigControl to set the address that can exempt depositors from the deposit limits
+    /// @notice this function allows the sender to exempt themselves from the deposit limits
     /// @notice this feature is specifically for liquidity and rewards providers
-    /// @param lister The address that can exempt depositors
-    /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed order
-    /// @dev emits Exemption_Lister_Set if successful
-    function set_exemption_lister(address lister, uint256 nonce, bytes calldata signatures) public override{
-      bytes memory message = abi.encode(lister, nonce, 'set_exemption_lister');
-      require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
-      exemption_lister = lister;
-      emit Exemption_Lister_Set(lister);
-    }
-
-    /// @notice this function allows the exemption_lister to exempt a depositor from the deposit limits
-    /// @notice this feature is specifically for liquidity and rewards providers
-    /// @param depositor The depositor to exempt from limits
     /// @dev emits Depositor_Exempted if successful
-    function exempt_depositor(address depositor) public override {
-      require(depositor != address(0), "cannot exempt zero address");
-      require(!exempt_depositors[depositor], "depositor already exempt");
-      require(msg.sender == exemption_lister || msg.sender == depositor, "unauthorized exemption lister");
-      exempt_depositors[depositor] = true;
-      emit Depositor_Exempted(depositor);
+    function exempt_depositor() public override {
+      require(!exempt_depositors[msg.sender], "sender already exempt");
+      exempt_depositors[msg.sender] = true;
+      emit Depositor_Exempted(msg.sender);
     }
 
     /// @notice this function allows the exemption_lister to revoke a depositor's exemption from deposit limits
     /// @notice this feature is specifically for liquidity and rewards providers
-    /// @param depositor The depositor from which to revoke deposit exemptions
     /// @dev emits Depositor_Exemption_Revoked if successful
-    function revoke_exempt_depositor(address depositor) public override {
-      require(msg.sender == exemption_lister || msg.sender == depositor, "unauthorized exemption lister");
-      require(exempt_depositors[depositor], "depositor not exempt");
-      exempt_depositors[depositor] = false;
-      emit Depositor_Exemption_Revoked(depositor);
-    }
-
-    /// @notice this view returns the address that can exempt depositors from deposit limits
-    /// @return the address can exempt depositors from deposit limits
-    function get_exemption_lister() public override view returns(address) {
-      return exemption_lister;
+    function revoke_exempt_depositor() public override {
+      require(exempt_depositors[msg.sender], "sender not exempt");
+      exempt_depositors[msg.sender] = false;
+      emit Depositor_Exemption_Revoked(msg.sender);
     }
 
     /// @notice this view returns true if the given despoitor address has been exempted from deposit limits
@@ -271,8 +207,6 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(exempt_depositors[msg.sender] || user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
         require(listed_tokens[asset_source], "asset not listed");
         //User must run approve before deposit
-        require(maximum_deposits[asset_source] == 0 || amount <= maximum_deposits[asset_source], "deposit above maximum");
-        require(amount >= minimum_deposits[asset_source], "deposit below minimum");
         require(IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount), "transfer failed in deposit");
         user_lifetime_deposits[msg.sender][asset_source] += amount;
         emit Asset_Deposited(msg.sender, asset_source, amount, vega_public_key);
@@ -284,20 +218,6 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     /// @return True if asset is listed
     function is_asset_listed(address asset_source) public override view returns(bool){
         return listed_tokens[asset_source];
-    }
-
-    /// @notice This view returns minimum valid deposit
-    /// @param asset_source Contract address for given ERC20 token
-    /// @return Minimum valid deposit of given ERC20 token
-    function get_deposit_minimum(address asset_source) public override view returns(uint256){
-        return minimum_deposits[asset_source];
-    }
-
-    /// @notice This view returns maximum valid deposit
-    /// @param asset_source Contract address for given ERC20 token
-    /// @return Maximum valid deposit of given ERC20 token
-    function get_deposit_maximum(address asset_source) public override view returns(uint256){
-        return maximum_deposits[asset_source];
     }
 
     /// @return current multisig_control_address
