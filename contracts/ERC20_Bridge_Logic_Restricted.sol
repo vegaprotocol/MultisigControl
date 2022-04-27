@@ -92,12 +92,9 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
       require(listed_tokens[asset_source], "asset not listed");
       bytes memory message = abi.encode(asset_source, lifetime_limit, threshold, nonce, 'set_asset_limits');
       require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
-      if (asset_deposit_lifetime_limit[asset_source] != lifetime_limit) {
-	  asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
-      }
-      if (withdraw_thresholds[asset_source] != threshold) {
-	  withdraw_thresholds[asset_source] = threshold;
-      }
+      asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
+      withdraw_thresholds[asset_source] = threshold;
+      
       emit Asset_Limits_Updated(asset_source, lifetime_limit, threshold);
     }
 
