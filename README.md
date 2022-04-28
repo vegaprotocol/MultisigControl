@@ -20,10 +20,6 @@ As the asset pool is a separate contract, it's possible to update the ERC20 brid
 
 See below for instructions on how to complete step 1.
 
-# Structure
-
-![Upgrade process](./docs/sol2uml.png)
-
 ## Local Ganache Deployment
 Terminal 1:
 
