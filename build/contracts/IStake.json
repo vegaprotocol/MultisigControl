@@ -1,0 +1,1420 @@
+{
+  "contractName": "IStake",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "vega_public_key",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Stake_Deposited",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "vega_public_key",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Stake_Removed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "vega_public_key",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Stake_Transferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "staking_token",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "target",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "vega_public_key",
+          "type": "bytes32"
+        }
+      ],
+      "name": "stake_balance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "total_staked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.8+commit.dddeac2f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Stake_Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Stake_Removed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"Stake_Transferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"vega_public_key\",\"type\":\"bytes32\"}],\"name\":\"stake_balance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"staking_token\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"total_staked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Interface contains all of the events necessary for staking Vega token\",\"kind\":\"dev\",\"methods\":{\"stake_balance(address,bytes32)\":{\"params\":{\"target\":\"Target address to check\",\"vega_public_key\":\"Target vega public key to check\"},\"returns\":{\"_0\":\"the number of tokens staked for that address->vega_public_key pair\"}},\"staking_token()\":{\"returns\":{\"_0\":\"the address of the token that is able to be staked\"}},\"total_staked()\":{\"returns\":{\"_0\":\"total tokens staked on contract\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/tests/IStake.sol\":\"IStake\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/tests/IStake.sol\":{\"keccak256\":\"0x50623c13896838cd7ffd1a0ba622626fee301fb0824a6e9cb22f11350f61d215\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ef59b2e303016b0f3e82370f19d6d68c84f1d292eba1f3b433dbb66259ed5a0e\",\"dweb:/ipfs/Qmatg8Eks4cE7uoAuzEoTjCFdpjeKiB2HnZ6DTxDGcKyso\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.8;\n\n/**\n * @dev Interface contains all of the events necessary for staking Vega token\n */\ninterface IStake {\n  event Stake_Deposited(address indexed user, uint256 amount, bytes32 indexed vega_public_key);\n  event Stake_Removed(address indexed user, uint256 amount, bytes32 indexed vega_public_key);\n  event Stake_Transferred(address indexed from, uint256 amount, address indexed to, bytes32 indexed vega_public_key);\n\n  /// @return the address of the token that is able to be staked\n  function staking_token() external view returns (address);\n\n  /// @param target Target address to check\n  /// @param vega_public_key Target vega public key to check\n  /// @return the number of tokens staked for that address->vega_public_key pair\n  function stake_balance(address target, bytes32 vega_public_key) external view returns (uint256);\n\n\n  /// @return total tokens staked on contract\n  function total_staked() external view returns (uint256);\n}\n\n\n/**\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMWEMMMMMMMMMMMMMMMMMMMMMMMMMM...............MMMMMMMMMMMMM\nMMMMMMLOVEMMMMMMMMMMMMMMMMMMMMMM...............MMMMMMMMMMMMM\nMMMMMMMMMMHIXELMMMMMMMMMMMM....................MMMMMNNMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMM....................MMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMM88=........................+MMMMMMMMMM\nMMMMMMMMMMMMMMMMM....................MMMMM...MMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMM....................MMMMM...MMMMMMMMMMMMMMM\nMMMMMMMMMMMM.........................MM+..MMM....+MMMMMMMMMM\nMMMMMMMMMNMM...................... ..MM?..MMM.. .+MMMMMMMMMM\nMMMMNDDMM+........................+MM........MM..+MMMMMMMMMM\nMMMMZ.............................+MM....................MMM\nMMMMZ.............................+MM....................MMM\nMMMMZ.............................+MM....................DDD\nMMMMZ.............................+MM..ZMMMMMMMMMMMMMMMMMMMM\nMMMMZ.............................+MM..ZMMMMMMMMMMMMMMMMMMMM\nMM..............................MMZ....ZMMMMMMMMMMMMMMMMMMMM\nMM............................MM.......ZMMMMMMMMMMMMMMMMMMMM\nMM............................MM.......ZMMMMMMMMMMMMMMMMMMMM\nMM......................ZMMMMM.......MMMMMMMMMMMMMMMMMMMMMMM\nMM............... ......ZMMMMM.... ..MMMMMMMMMMMMMMMMMMMMMMM\nMM...............MMMMM88~.........+MM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......$DDDDDDD.......$DDDDD..DDNMM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......$DDDDDDD.......$DDDDD..DDNMM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......ZMMMMMMM.......ZMMMMM..MMMMM..ZMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMM+.......MMMMM88NMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMM+.......MMMMM88NMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/\n",
+  "sourcePath": "/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/tests/IStake.sol",
+  "ast": {
+    "absolutePath": "/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/tests/IStake.sol",
+    "exportedSymbols": {
+      "IStake": [
+        4574
+      ]
+    },
+    "id": 4575,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4524,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".8"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:22:18"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 4525,
+          "nodeType": "StructuredDocumentation",
+          "src": "57:85:18",
+          "text": " @dev Interface contains all of the events necessary for staking Vega token"
+        },
+        "fullyImplemented": false,
+        "id": 4574,
+        "linearizedBaseContracts": [
+          4574
+        ],
+        "name": "IStake",
+        "nameLocation": "153:6:18",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "id": 4533,
+            "name": "Stake_Deposited",
+            "nameLocation": "170:15:18",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4527,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "202:4:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4533,
+                  "src": "186:20:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4526,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "186:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4529,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "216:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4533,
+                  "src": "208:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4528,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "208:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4531,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "240:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4533,
+                  "src": "224:31:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4530,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "224:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "185:71:18"
+            },
+            "src": "164:93:18"
+          },
+          {
+            "anonymous": false,
+            "id": 4541,
+            "name": "Stake_Removed",
+            "nameLocation": "266:13:18",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4540,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4535,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "296:4:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4541,
+                  "src": "280:20:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4534,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "280:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4537,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "310:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4541,
+                  "src": "302:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4536,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "302:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4539,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "334:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4541,
+                  "src": "318:31:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4538,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "318:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "279:71:18"
+            },
+            "src": "260:91:18"
+          },
+          {
+            "anonymous": false,
+            "id": 4551,
+            "name": "Stake_Transferred",
+            "nameLocation": "360:17:18",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4550,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4543,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "from",
+                  "nameLocation": "394:4:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "378:20:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4542,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "378:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4545,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "408:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "400:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4544,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "400:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4547,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "to",
+                  "nameLocation": "432:2:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "416:18:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4546,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "416:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4549,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "452:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "436:31:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4548,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "436:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "377:91:18"
+            },
+            "src": "354:115:18"
+          },
+          {
+            "documentation": {
+              "id": 4552,
+              "nodeType": "StructuredDocumentation",
+              "src": "473:62:18",
+              "text": "@return the address of the token that is able to be staked"
+            },
+            "functionSelector": "2dc7d74c",
+            "id": 4557,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "staking_token",
+            "nameLocation": "547:13:18",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4553,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "560:2:18"
+            },
+            "returnParameters": {
+              "id": 4556,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4555,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4557,
+                  "src": "586:7:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4554,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "586:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "585:9:18"
+            },
+            "scope": 4574,
+            "src": "538:57:18",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 4558,
+              "nodeType": "StructuredDocumentation",
+              "src": "599:183:18",
+              "text": "@param target Target address to check\n @param vega_public_key Target vega public key to check\n @return the number of tokens staked for that address->vega_public_key pair"
+            },
+            "functionSelector": "274abf34",
+            "id": 4567,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stake_balance",
+            "nameLocation": "794:13:18",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4563,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4560,
+                  "mutability": "mutable",
+                  "name": "target",
+                  "nameLocation": "816:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4567,
+                  "src": "808:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4559,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "808:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4562,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "832:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4567,
+                  "src": "824:23:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4561,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "824:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "807:41:18"
+            },
+            "returnParameters": {
+              "id": 4566,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4565,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4567,
+                  "src": "872:7:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4564,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "872:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "871:9:18"
+            },
+            "scope": 4574,
+            "src": "785:96:18",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 4568,
+              "nodeType": "StructuredDocumentation",
+              "src": "886:43:18",
+              "text": "@return total tokens staked on contract"
+            },
+            "functionSelector": "af7568dd",
+            "id": 4573,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "total_staked",
+            "nameLocation": "941:12:18",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4569,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "953:2:18"
+            },
+            "returnParameters": {
+              "id": 4572,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4571,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4573,
+                  "src": "979:7:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4570,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "979:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "978:9:18"
+            },
+            "scope": 4574,
+            "src": "932:56:18",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4575,
+        "src": "143:847:18",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:2796:18"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/tests/IStake.sol",
+    "exportedSymbols": {
+      "IStake": [
+        4574
+      ]
+    },
+    "id": 4575,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4524,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".8"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:22:18"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 4525,
+          "nodeType": "StructuredDocumentation",
+          "src": "57:85:18",
+          "text": " @dev Interface contains all of the events necessary for staking Vega token"
+        },
+        "fullyImplemented": false,
+        "id": 4574,
+        "linearizedBaseContracts": [
+          4574
+        ],
+        "name": "IStake",
+        "nameLocation": "153:6:18",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "id": 4533,
+            "name": "Stake_Deposited",
+            "nameLocation": "170:15:18",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4527,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "202:4:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4533,
+                  "src": "186:20:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4526,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "186:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4529,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "216:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4533,
+                  "src": "208:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4528,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "208:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4531,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "240:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4533,
+                  "src": "224:31:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4530,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "224:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "185:71:18"
+            },
+            "src": "164:93:18"
+          },
+          {
+            "anonymous": false,
+            "id": 4541,
+            "name": "Stake_Removed",
+            "nameLocation": "266:13:18",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4540,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4535,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "296:4:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4541,
+                  "src": "280:20:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4534,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "280:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4537,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "310:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4541,
+                  "src": "302:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4536,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "302:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4539,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "334:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4541,
+                  "src": "318:31:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4538,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "318:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "279:71:18"
+            },
+            "src": "260:91:18"
+          },
+          {
+            "anonymous": false,
+            "id": 4551,
+            "name": "Stake_Transferred",
+            "nameLocation": "360:17:18",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4550,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4543,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "from",
+                  "nameLocation": "394:4:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "378:20:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4542,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "378:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4545,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "408:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "400:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4544,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "400:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4547,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "to",
+                  "nameLocation": "432:2:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "416:18:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4546,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "416:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4549,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "452:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "436:31:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4548,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "436:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "377:91:18"
+            },
+            "src": "354:115:18"
+          },
+          {
+            "documentation": {
+              "id": 4552,
+              "nodeType": "StructuredDocumentation",
+              "src": "473:62:18",
+              "text": "@return the address of the token that is able to be staked"
+            },
+            "functionSelector": "2dc7d74c",
+            "id": 4557,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "staking_token",
+            "nameLocation": "547:13:18",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4553,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "560:2:18"
+            },
+            "returnParameters": {
+              "id": 4556,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4555,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4557,
+                  "src": "586:7:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4554,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "586:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "585:9:18"
+            },
+            "scope": 4574,
+            "src": "538:57:18",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 4558,
+              "nodeType": "StructuredDocumentation",
+              "src": "599:183:18",
+              "text": "@param target Target address to check\n @param vega_public_key Target vega public key to check\n @return the number of tokens staked for that address->vega_public_key pair"
+            },
+            "functionSelector": "274abf34",
+            "id": 4567,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "stake_balance",
+            "nameLocation": "794:13:18",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4563,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4560,
+                  "mutability": "mutable",
+                  "name": "target",
+                  "nameLocation": "816:6:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4567,
+                  "src": "808:14:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4559,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "808:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4562,
+                  "mutability": "mutable",
+                  "name": "vega_public_key",
+                  "nameLocation": "832:15:18",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4567,
+                  "src": "824:23:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 4561,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "824:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "807:41:18"
+            },
+            "returnParameters": {
+              "id": 4566,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4565,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4567,
+                  "src": "872:7:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4564,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "872:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "871:9:18"
+            },
+            "scope": 4574,
+            "src": "785:96:18",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 4568,
+              "nodeType": "StructuredDocumentation",
+              "src": "886:43:18",
+              "text": "@return total tokens staked on contract"
+            },
+            "functionSelector": "af7568dd",
+            "id": 4573,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "total_staked",
+            "nameLocation": "941:12:18",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4569,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "953:2:18"
+            },
+            "returnParameters": {
+              "id": 4572,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4571,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4573,
+                  "src": "979:7:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4570,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "979:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "978:9:18"
+            },
+            "scope": 4574,
+            "src": "932:56:18",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 4575,
+        "src": "143:847:18",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:2796:18"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.8+commit.dddeac2f.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.3",
+  "updatedAt": "2022-04-28T16:40:52.665Z",
+  "devdoc": {
+    "details": "Interface contains all of the events necessary for staking Vega token",
+    "kind": "dev",
+    "methods": {
+      "stake_balance(address,bytes32)": {
+        "params": {
+          "target": "Target address to check",
+          "vega_public_key": "Target vega public key to check"
+        },
+        "returns": {
+          "_0": "the number of tokens staked for that address->vega_public_key pair"
+        }
+      },
+      "staking_token()": {
+        "returns": {
+          "_0": "the address of the token that is able to be staked"
+        }
+      },
+      "total_staked()": {
+        "returns": {
+          "_0": "total tokens staked on contract"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

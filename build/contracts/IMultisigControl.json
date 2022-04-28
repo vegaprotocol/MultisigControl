@@ -1,0 +1,2433 @@
+{
+  "contractName": "IMultisigControl",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "new_signer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        }
+      ],
+      "name": "SignerAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "old_signer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        }
+      ],
+      "name": "SignerRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "new_threshold",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        }
+      ],
+      "name": "ThresholdSet",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "new_threshold",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signatures",
+          "type": "bytes"
+        }
+      ],
+      "name": "set_threshold",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "new_signer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signatures",
+          "type": "bytes"
+        }
+      ],
+      "name": "add_signer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "old_signer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signatures",
+          "type": "bytes"
+        }
+      ],
+      "name": "remove_signer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "signatures",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "message",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        }
+      ],
+      "name": "verify_signatures",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "get_valid_signer_count",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "get_current_threshold",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "signer_address",
+          "type": "address"
+        }
+      ],
+      "name": "is_valid_signer",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "nonce",
+          "type": "uint256"
+        }
+      ],
+      "name": "is_nonce_used",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.8+commit.dddeac2f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"new_signer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"SignerAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"old_signer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"SignerRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint16\",\"name\":\"new_threshold\",\"type\":\"uint16\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"ThresholdSet\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"new_signer\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"add_signer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_current_threshold\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_valid_signer_count\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"is_nonce_used\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signer_address\",\"type\":\"address\"}],\"name\":\"is_valid_signer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"old_signer\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"remove_signer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"new_threshold\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"}],\"name\":\"set_threshold\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"signatures\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"message\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"}],\"name\":\"verify_signatures\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Vega Protocol\",\"kind\":\"dev\",\"methods\":{\"add_signer(address,uint256,bytes)\":{\"details\":\"MUST emit 'SignerAdded' event\",\"params\":{\"new_signer\":\"New signer address\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"get_current_threshold()\":{\"returns\":{\"_0\":\"Current threshold\"}},\"get_valid_signer_count()\":{\"returns\":{\"_0\":\"Number of valid signers\"}},\"is_nonce_used(uint256)\":{\"params\":{\"nonce\":\"Nonce to lookup\"},\"returns\":{\"_0\":\"true if nonce has been used\"}},\"is_valid_signer(address)\":{\"params\":{\"signer_address\":\"target potential signer address\"},\"returns\":{\"_0\":\"true if address provided is valid signer\"}},\"remove_signer(address,uint256,bytes)\":{\"details\":\"MUST emit 'SignerRemoved' event\",\"params\":{\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"old_signer\":\"Address of signer to be removed.\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"set_threshold(uint16,uint256,bytes)\":{\"details\":\"MUST emit ThresholdSet event\",\"params\":{\"new_threshold\":\"New threshold value\",\"nonce\":\"Vega-assigned single-use number that provides replay attack protection\",\"signatures\":\"Vega-supplied signature bundle of a validator-signed order\"}},\"verify_signatures(bytes,bytes,uint256)\":{\"returns\":{\"_0\":\"MUST return true if valid signatures are over the threshold\"}}},\"title\":\"MultisigControl Interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"add_signer(address,uint256,bytes)\":{\"notice\":\"Adds new valid signer and adjusts signer count.See MultisigControl for more about signatures\"},\"remove_signer(address,uint256,bytes)\":{\"notice\":\"Removes currently valid signer and adjusts signer count.See MultisigControl for more about signatures\"},\"set_threshold(uint16,uint256,bytes)\":{\"notice\":\"Sets threshold of signatures that must be met before function is executed.See MultisigControl for more about signaturesEthereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000signatures are OK if they are >= threshold count of total valid signers\"},\"verify_signatures(bytes,bytes,uint256)\":{\"notice\":\"Verifies a signature bundle and returns true only if the threshold of valid signers is met,this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega networkmessage to hash to sign follows this pattern:abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH addressif function on bridge that then calls Multisig, then it's the address of that contractNote also the embedded encoding, this is required to verify what function/contract the function call goes to\"}},\"notice\":\"Implementations of this interface are used by the Vega network to control smart contracts without the need for Vega to have any Ethereum of its own.To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/IMultisigControl.sol\":\"IMultisigControl\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/IMultisigControl.sol\":{\"keccak256\":\"0xf8aef4ac53ad47d94f638655a1fed4bb91116e23a8c26a656674c983bd558cff\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://48977213cd676f4b93b4e77be57fd2efbae8b48188d7b49888b61caaafa01737\",\"dweb:/ipfs/QmX1hyKFRm2B5WTQUz4skCfg6Q9vEP18KyzsicFWHtApQ1\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: MIT\npragma solidity 0.8.8;\n\n/// @title MultisigControl Interface\n/// @author Vega Protocol\n/// @notice Implementations of this interface are used by the Vega network to control smart contracts without the need for Vega to have any Ethereum of its own.\n/// @notice To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum\nabstract contract IMultisigControl {\n\n    /***************************EVENTS****************************/\n    event SignerAdded(address new_signer, uint256 nonce);\n    event SignerRemoved(address old_signer, uint256 nonce);\n    event ThresholdSet(uint16 new_threshold, uint256 nonce);\n\n    /**************************FUNCTIONS*********************/\n    /// @notice Sets threshold of signatures that must be met before function is executed.\n    /// @param new_threshold New threshold value\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000\n    /// @notice signatures are OK if they are >= threshold count of total valid signers\n    /// @dev MUST emit ThresholdSet event\n    function set_threshold(uint16 new_threshold, uint nonce, bytes calldata signatures) public virtual;\n\n    /// @notice Adds new valid signer and adjusts signer count.\n    /// @param new_signer New signer address\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit 'SignerAdded' event\n    function add_signer(address new_signer, uint nonce, bytes calldata signatures) public virtual;\n\n    /// @notice Removes currently valid signer and adjusts signer count.\n    /// @param old_signer Address of signer to be removed.\n    /// @param nonce Vega-assigned single-use number that provides replay attack protection\n    /// @param signatures Vega-supplied signature bundle of a validator-signed order\n    /// @notice See MultisigControl for more about signatures\n    /// @dev MUST emit 'SignerRemoved' event\n    function remove_signer(address old_signer, uint nonce, bytes calldata signatures) public virtual;\n\n    /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,\n    /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network\n    /// @notice message to hash to sign follows this pattern:\n    /// @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);\n    /// @notice Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH address\n    /// @notice if function on bridge that then calls Multisig, then it's the address of that contract\n    /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to\n    /// @return MUST return true if valid signatures are over the threshold\n    function verify_signatures(bytes calldata signatures, bytes memory message, uint nonce) public virtual returns(bool);\n\n    /**********************VIEWS*********************/\n    /// @return Number of valid signers\n    function get_valid_signer_count() public virtual view returns(uint8);\n\n    /// @return Current threshold\n    function get_current_threshold() public virtual view returns(uint16);\n\n    /// @param signer_address target potential signer address\n    /// @return true if address provided is valid signer\n    function is_valid_signer(address signer_address) public virtual view returns(bool);\n\n    /// @param nonce Nonce to lookup\n    /// @return true if nonce has been used\n    function is_nonce_used(uint nonce) public virtual view returns(bool);\n}\n\n/**\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMWEMMMMMMMMMMMMMMMMMMMMMMMMMM...............MMMMMMMMMMMMM\nMMMMMMLOVEMMMMMMMMMMMMMMMMMMMMMM...............MMMMMMMMMMMMM\nMMMMMMMMMMHIXELMMMMMMMMMMMM....................MMMMMNNMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMM....................MMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMM88=........................+MMMMMMMMMM\nMMMMMMMMMMMMMMMMM....................MMMMM...MMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMM....................MMMMM...MMMMMMMMMMMMMMM\nMMMMMMMMMMMM.........................MM+..MMM....+MMMMMMMMMM\nMMMMMMMMMNMM...................... ..MM?..MMM.. .+MMMMMMMMMM\nMMMMNDDMM+........................+MM........MM..+MMMMMMMMMM\nMMMMZ.............................+MM....................MMM\nMMMMZ.............................+MM....................MMM\nMMMMZ.............................+MM....................DDD\nMMMMZ.............................+MM..ZMMMMMMMMMMMMMMMMMMMM\nMMMMZ.............................+MM..ZMMMMMMMMMMMMMMMMMMMM\nMM..............................MMZ....ZMMMMMMMMMMMMMMMMMMMM\nMM............................MM.......ZMMMMMMMMMMMMMMMMMMMM\nMM............................MM.......ZMMMMMMMMMMMMMMMMMMMM\nMM......................ZMMMMM.......MMMMMMMMMMMMMMMMMMMMMMM\nMM............... ......ZMMMMM.... ..MMMMMMMMMMMMMMMMMMMMMMM\nMM...............MMMMM88~.........+MM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......$DDDDDDD.......$DDDDD..DDNMM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......$DDDDDDD.......$DDDDD..DDNMM..ZMMMMMMMMMMMMMMMMMMMM\nMM.......ZMMMMMMM.......ZMMMMM..MMMMM..ZMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMM+.......MMMMM88NMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMM+.......MMMMM88NMMMMM..MMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM*/\n",
+  "sourcePath": "/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/IMultisigControl.sol",
+  "ast": {
+    "absolutePath": "/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/IMultisigControl.sol",
+    "exportedSymbols": {
+      "IMultisigControl": [
+        2845
+      ]
+    },
+    "id": 2846,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2755,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".8"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "31:22:9"
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 2756,
+          "nodeType": "StructuredDocumentation",
+          "src": "55:434:9",
+          "text": "@title MultisigControl Interface\n @author Vega Protocol\n @notice Implementations of this interface are used by the Vega network to control smart contracts without the need for Vega to have any Ethereum of its own.\n @notice To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum"
+        },
+        "fullyImplemented": false,
+        "id": 2845,
+        "linearizedBaseContracts": [
+          2845
+        ],
+        "name": "IMultisigControl",
+        "nameLocation": "507:16:9",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "id": 2762,
+            "name": "SignerAdded",
+            "nameLocation": "605:11:9",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2761,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2758,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "new_signer",
+                  "nameLocation": "625:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2762,
+                  "src": "617:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2757,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "617:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2760,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "645:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2762,
+                  "src": "637:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2759,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "637:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "616:35:9"
+            },
+            "src": "599:53:9"
+          },
+          {
+            "anonymous": false,
+            "id": 2768,
+            "name": "SignerRemoved",
+            "nameLocation": "663:13:9",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2767,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2764,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "old_signer",
+                  "nameLocation": "685:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2768,
+                  "src": "677:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2763,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "677:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2766,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "705:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2768,
+                  "src": "697:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2765,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "697:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "676:35:9"
+            },
+            "src": "657:55:9"
+          },
+          {
+            "anonymous": false,
+            "id": 2774,
+            "name": "ThresholdSet",
+            "nameLocation": "723:12:9",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2773,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2770,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "new_threshold",
+                  "nameLocation": "743:13:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2774,
+                  "src": "736:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2769,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "736:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2772,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "766:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2774,
+                  "src": "758:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2771,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "758:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "735:37:9"
+            },
+            "src": "717:56:9"
+          },
+          {
+            "documentation": {
+              "id": 2775,
+              "nodeType": "StructuredDocumentation",
+              "src": "842:593:9",
+              "text": "@notice Sets threshold of signatures that must be met before function is executed.\n @param new_threshold New threshold value\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000\n @notice signatures are OK if they are >= threshold count of total valid signers\n @dev MUST emit ThresholdSet event"
+            },
+            "functionSelector": "50ac8df8",
+            "id": 2784,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "set_threshold",
+            "nameLocation": "1449:13:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2782,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2777,
+                  "mutability": "mutable",
+                  "name": "new_threshold",
+                  "nameLocation": "1470:13:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1463:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2776,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1463:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2779,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "1490:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1485:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2778,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1485:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2781,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "1512:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1497:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2780,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1497:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1462:61:9"
+            },
+            "returnParameters": {
+              "id": 2783,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1538:0:9"
+            },
+            "scope": 2845,
+            "src": "1440:99:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2785,
+              "nodeType": "StructuredDocumentation",
+              "src": "1545:386:9",
+              "text": "@notice Adds new valid signer and adjusts signer count.\n @param new_signer New signer address\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit 'SignerAdded' event"
+            },
+            "functionSelector": "f8e3a660",
+            "id": 2794,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "add_signer",
+            "nameLocation": "1945:10:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2792,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2787,
+                  "mutability": "mutable",
+                  "name": "new_signer",
+                  "nameLocation": "1964:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2794,
+                  "src": "1956:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2786,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1956:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2789,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "1981:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2794,
+                  "src": "1976:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2788,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1976:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2791,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "2003:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2794,
+                  "src": "1988:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2790,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1988:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1955:59:9"
+            },
+            "returnParameters": {
+              "id": 2793,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2029:0:9"
+            },
+            "scope": 2845,
+            "src": "1936:94:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2795,
+              "nodeType": "StructuredDocumentation",
+              "src": "2036:411:9",
+              "text": "@notice Removes currently valid signer and adjusts signer count.\n @param old_signer Address of signer to be removed.\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit 'SignerRemoved' event"
+            },
+            "functionSelector": "98c5f73e",
+            "id": 2804,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "remove_signer",
+            "nameLocation": "2461:13:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2802,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2797,
+                  "mutability": "mutable",
+                  "name": "old_signer",
+                  "nameLocation": "2483:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2804,
+                  "src": "2475:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2796,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2475:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2799,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "2500:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2804,
+                  "src": "2495:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2798,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2495:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2801,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "2522:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2804,
+                  "src": "2507:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2800,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2507:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2474:59:9"
+            },
+            "returnParameters": {
+              "id": 2803,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2548:0:9"
+            },
+            "scope": 2845,
+            "src": "2452:97:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2805,
+              "nodeType": "StructuredDocumentation",
+              "src": "2555:906:9",
+              "text": "@notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,\n @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network\n @notice message to hash to sign follows this pattern:\n @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);\n @notice Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH address\n @notice if function on bridge that then calls Multisig, then it's the address of that contract\n @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to\n @return MUST return true if valid signatures are over the threshold"
+            },
+            "functionSelector": "ba73659a",
+            "id": 2816,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "verify_signatures",
+            "nameLocation": "3475:17:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2812,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2807,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "3508:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3493:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2806,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3493:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2809,
+                  "mutability": "mutable",
+                  "name": "message",
+                  "nameLocation": "3533:7:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3520:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2808,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3520:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2811,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "3547:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3542:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2810,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3542:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3492:61:9"
+            },
+            "returnParameters": {
+              "id": 2815,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2814,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3577:4:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2813,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3577:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3576:6:9"
+            },
+            "scope": 2845,
+            "src": "3466:117:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2817,
+              "nodeType": "StructuredDocumentation",
+              "src": "3644:35:9",
+              "text": "@return Number of valid signers"
+            },
+            "functionSelector": "b04e3dd1",
+            "id": 2822,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get_valid_signer_count",
+            "nameLocation": "3693:22:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2818,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3715:2:9"
+            },
+            "returnParameters": {
+              "id": 2821,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2820,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2822,
+                  "src": "3746:5:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 2819,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3746:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3745:7:9"
+            },
+            "scope": 2845,
+            "src": "3684:69:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2823,
+              "nodeType": "StructuredDocumentation",
+              "src": "3759:29:9",
+              "text": "@return Current threshold"
+            },
+            "functionSelector": "dbe528df",
+            "id": 2828,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get_current_threshold",
+            "nameLocation": "3802:21:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2824,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3823:2:9"
+            },
+            "returnParameters": {
+              "id": 2827,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2826,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2828,
+                  "src": "3854:6:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2825,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3854:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3853:8:9"
+            },
+            "scope": 2845,
+            "src": "3793:69:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2829,
+              "nodeType": "StructuredDocumentation",
+              "src": "3868:114:9",
+              "text": "@param signer_address target potential signer address\n @return true if address provided is valid signer"
+            },
+            "functionSelector": "5f061559",
+            "id": 2836,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "is_valid_signer",
+            "nameLocation": "3996:15:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2832,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2831,
+                  "mutability": "mutable",
+                  "name": "signer_address",
+                  "nameLocation": "4020:14:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2836,
+                  "src": "4012:22:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2830,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4012:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4011:24:9"
+            },
+            "returnParameters": {
+              "id": 2835,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2834,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2836,
+                  "src": "4064:4:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2833,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4064:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4063:6:9"
+            },
+            "scope": 2845,
+            "src": "3987:83:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2837,
+              "nodeType": "StructuredDocumentation",
+              "src": "4076:76:9",
+              "text": "@param nonce Nonce to lookup\n @return true if nonce has been used"
+            },
+            "functionSelector": "5b9fe26b",
+            "id": 2844,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "is_nonce_used",
+            "nameLocation": "4166:13:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2840,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2839,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "4185:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2844,
+                  "src": "4180:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2838,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4180:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4179:12:9"
+            },
+            "returnParameters": {
+              "id": 2843,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2842,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2844,
+                  "src": "4220:4:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2841,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4220:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4219:6:9"
+            },
+            "scope": 2845,
+            "src": "4157:69:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2846,
+        "src": "489:3739:9",
+        "usedErrors": []
+      }
+    ],
+    "src": "31:6035:9"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/nemitariajienka/Desktop/projects/MultisigControl/contracts/IMultisigControl.sol",
+    "exportedSymbols": {
+      "IMultisigControl": [
+        2845
+      ]
+    },
+    "id": 2846,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2755,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".8"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "31:22:9"
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 2756,
+          "nodeType": "StructuredDocumentation",
+          "src": "55:434:9",
+          "text": "@title MultisigControl Interface\n @author Vega Protocol\n @notice Implementations of this interface are used by the Vega network to control smart contracts without the need for Vega to have any Ethereum of its own.\n @notice To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum"
+        },
+        "fullyImplemented": false,
+        "id": 2845,
+        "linearizedBaseContracts": [
+          2845
+        ],
+        "name": "IMultisigControl",
+        "nameLocation": "507:16:9",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "id": 2762,
+            "name": "SignerAdded",
+            "nameLocation": "605:11:9",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2761,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2758,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "new_signer",
+                  "nameLocation": "625:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2762,
+                  "src": "617:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2757,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "617:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2760,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "645:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2762,
+                  "src": "637:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2759,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "637:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "616:35:9"
+            },
+            "src": "599:53:9"
+          },
+          {
+            "anonymous": false,
+            "id": 2768,
+            "name": "SignerRemoved",
+            "nameLocation": "663:13:9",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2767,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2764,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "old_signer",
+                  "nameLocation": "685:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2768,
+                  "src": "677:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2763,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "677:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2766,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "705:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2768,
+                  "src": "697:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2765,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "697:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "676:35:9"
+            },
+            "src": "657:55:9"
+          },
+          {
+            "anonymous": false,
+            "id": 2774,
+            "name": "ThresholdSet",
+            "nameLocation": "723:12:9",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2773,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2770,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "new_threshold",
+                  "nameLocation": "743:13:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2774,
+                  "src": "736:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2769,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "736:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2772,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "766:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2774,
+                  "src": "758:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2771,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "758:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "735:37:9"
+            },
+            "src": "717:56:9"
+          },
+          {
+            "documentation": {
+              "id": 2775,
+              "nodeType": "StructuredDocumentation",
+              "src": "842:593:9",
+              "text": "@notice Sets threshold of signatures that must be met before function is executed.\n @param new_threshold New threshold value\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000\n @notice signatures are OK if they are >= threshold count of total valid signers\n @dev MUST emit ThresholdSet event"
+            },
+            "functionSelector": "50ac8df8",
+            "id": 2784,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "set_threshold",
+            "nameLocation": "1449:13:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2782,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2777,
+                  "mutability": "mutable",
+                  "name": "new_threshold",
+                  "nameLocation": "1470:13:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1463:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2776,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1463:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2779,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "1490:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1485:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2778,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1485:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2781,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "1512:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2784,
+                  "src": "1497:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2780,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1497:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1462:61:9"
+            },
+            "returnParameters": {
+              "id": 2783,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1538:0:9"
+            },
+            "scope": 2845,
+            "src": "1440:99:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2785,
+              "nodeType": "StructuredDocumentation",
+              "src": "1545:386:9",
+              "text": "@notice Adds new valid signer and adjusts signer count.\n @param new_signer New signer address\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit 'SignerAdded' event"
+            },
+            "functionSelector": "f8e3a660",
+            "id": 2794,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "add_signer",
+            "nameLocation": "1945:10:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2792,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2787,
+                  "mutability": "mutable",
+                  "name": "new_signer",
+                  "nameLocation": "1964:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2794,
+                  "src": "1956:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2786,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1956:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2789,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "1981:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2794,
+                  "src": "1976:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2788,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1976:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2791,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "2003:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2794,
+                  "src": "1988:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2790,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1988:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1955:59:9"
+            },
+            "returnParameters": {
+              "id": 2793,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2029:0:9"
+            },
+            "scope": 2845,
+            "src": "1936:94:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2795,
+              "nodeType": "StructuredDocumentation",
+              "src": "2036:411:9",
+              "text": "@notice Removes currently valid signer and adjusts signer count.\n @param old_signer Address of signer to be removed.\n @param nonce Vega-assigned single-use number that provides replay attack protection\n @param signatures Vega-supplied signature bundle of a validator-signed order\n @notice See MultisigControl for more about signatures\n @dev MUST emit 'SignerRemoved' event"
+            },
+            "functionSelector": "98c5f73e",
+            "id": 2804,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "remove_signer",
+            "nameLocation": "2461:13:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2802,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2797,
+                  "mutability": "mutable",
+                  "name": "old_signer",
+                  "nameLocation": "2483:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2804,
+                  "src": "2475:18:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2796,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2475:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2799,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "2500:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2804,
+                  "src": "2495:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2798,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2495:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2801,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "2522:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2804,
+                  "src": "2507:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2800,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2507:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2474:59:9"
+            },
+            "returnParameters": {
+              "id": 2803,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2548:0:9"
+            },
+            "scope": 2845,
+            "src": "2452:97:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2805,
+              "nodeType": "StructuredDocumentation",
+              "src": "2555:906:9",
+              "text": "@notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,\n @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network\n @notice message to hash to sign follows this pattern:\n @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);\n @notice Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH address\n @notice if function on bridge that then calls Multisig, then it's the address of that contract\n @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to\n @return MUST return true if valid signatures are over the threshold"
+            },
+            "functionSelector": "ba73659a",
+            "id": 2816,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "verify_signatures",
+            "nameLocation": "3475:17:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2812,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2807,
+                  "mutability": "mutable",
+                  "name": "signatures",
+                  "nameLocation": "3508:10:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3493:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2806,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3493:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2809,
+                  "mutability": "mutable",
+                  "name": "message",
+                  "nameLocation": "3533:7:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3520:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 2808,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3520:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2811,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "3547:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3542:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2810,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3542:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3492:61:9"
+            },
+            "returnParameters": {
+              "id": 2815,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2814,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "3577:4:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2813,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3577:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3576:6:9"
+            },
+            "scope": 2845,
+            "src": "3466:117:9",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2817,
+              "nodeType": "StructuredDocumentation",
+              "src": "3644:35:9",
+              "text": "@return Number of valid signers"
+            },
+            "functionSelector": "b04e3dd1",
+            "id": 2822,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get_valid_signer_count",
+            "nameLocation": "3693:22:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2818,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3715:2:9"
+            },
+            "returnParameters": {
+              "id": 2821,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2820,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2822,
+                  "src": "3746:5:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 2819,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3746:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3745:7:9"
+            },
+            "scope": 2845,
+            "src": "3684:69:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2823,
+              "nodeType": "StructuredDocumentation",
+              "src": "3759:29:9",
+              "text": "@return Current threshold"
+            },
+            "functionSelector": "dbe528df",
+            "id": 2828,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get_current_threshold",
+            "nameLocation": "3802:21:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2824,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3823:2:9"
+            },
+            "returnParameters": {
+              "id": 2827,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2826,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2828,
+                  "src": "3854:6:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 2825,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3854:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3853:8:9"
+            },
+            "scope": 2845,
+            "src": "3793:69:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2829,
+              "nodeType": "StructuredDocumentation",
+              "src": "3868:114:9",
+              "text": "@param signer_address target potential signer address\n @return true if address provided is valid signer"
+            },
+            "functionSelector": "5f061559",
+            "id": 2836,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "is_valid_signer",
+            "nameLocation": "3996:15:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2832,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2831,
+                  "mutability": "mutable",
+                  "name": "signer_address",
+                  "nameLocation": "4020:14:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2836,
+                  "src": "4012:22:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2830,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4012:7:9",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4011:24:9"
+            },
+            "returnParameters": {
+              "id": 2835,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2834,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2836,
+                  "src": "4064:4:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2833,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4064:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4063:6:9"
+            },
+            "scope": 2845,
+            "src": "3987:83:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 2837,
+              "nodeType": "StructuredDocumentation",
+              "src": "4076:76:9",
+              "text": "@param nonce Nonce to lookup\n @return true if nonce has been used"
+            },
+            "functionSelector": "5b9fe26b",
+            "id": 2844,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "is_nonce_used",
+            "nameLocation": "4166:13:9",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2840,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2839,
+                  "mutability": "mutable",
+                  "name": "nonce",
+                  "nameLocation": "4185:5:9",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2844,
+                  "src": "4180:10:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2838,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4180:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4179:12:9"
+            },
+            "returnParameters": {
+              "id": 2843,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2842,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2844,
+                  "src": "4220:4:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2841,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4220:4:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4219:6:9"
+            },
+            "scope": 2845,
+            "src": "4157:69:9",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2846,
+        "src": "489:3739:9",
+        "usedErrors": []
+      }
+    ],
+    "src": "31:6035:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.8+commit.dddeac2f.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.3",
+  "updatedAt": "2022-04-28T16:40:52.633Z",
+  "devdoc": {
+    "author": "Vega Protocol",
+    "kind": "dev",
+    "methods": {
+      "add_signer(address,uint256,bytes)": {
+        "details": "MUST emit 'SignerAdded' event",
+        "params": {
+          "new_signer": "New signer address",
+          "nonce": "Vega-assigned single-use number that provides replay attack protection",
+          "signatures": "Vega-supplied signature bundle of a validator-signed order"
+        }
+      },
+      "get_current_threshold()": {
+        "returns": {
+          "_0": "Current threshold"
+        }
+      },
+      "get_valid_signer_count()": {
+        "returns": {
+          "_0": "Number of valid signers"
+        }
+      },
+      "is_nonce_used(uint256)": {
+        "params": {
+          "nonce": "Nonce to lookup"
+        },
+        "returns": {
+          "_0": "true if nonce has been used"
+        }
+      },
+      "is_valid_signer(address)": {
+        "params": {
+          "signer_address": "target potential signer address"
+        },
+        "returns": {
+          "_0": "true if address provided is valid signer"
+        }
+      },
+      "remove_signer(address,uint256,bytes)": {
+        "details": "MUST emit 'SignerRemoved' event",
+        "params": {
+          "nonce": "Vega-assigned single-use number that provides replay attack protection",
+          "old_signer": "Address of signer to be removed.",
+          "signatures": "Vega-supplied signature bundle of a validator-signed order"
+        }
+      },
+      "set_threshold(uint16,uint256,bytes)": {
+        "details": "MUST emit ThresholdSet event",
+        "params": {
+          "new_threshold": "New threshold value",
+          "nonce": "Vega-assigned single-use number that provides replay attack protection",
+          "signatures": "Vega-supplied signature bundle of a validator-signed order"
+        }
+      },
+      "verify_signatures(bytes,bytes,uint256)": {
+        "returns": {
+          "_0": "MUST return true if valid signatures are over the threshold"
+        }
+      }
+    },
+    "title": "MultisigControl Interface",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "add_signer(address,uint256,bytes)": {
+        "notice": "Adds new valid signer and adjusts signer count.See MultisigControl for more about signatures"
+      },
+      "remove_signer(address,uint256,bytes)": {
+        "notice": "Removes currently valid signer and adjusts signer count.See MultisigControl for more about signatures"
+      },
+      "set_threshold(uint16,uint256,bytes)": {
+        "notice": "Sets threshold of signatures that must be met before function is executed.See MultisigControl for more about signaturesEthereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000signatures are OK if they are >= threshold count of total valid signers"
+      },
+      "verify_signatures(bytes,bytes,uint256)": {
+        "notice": "Verifies a signature bundle and returns true only if the threshold of valid signers is met,this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega networkmessage to hash to sign follows this pattern:abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);Note that validating_contract_or_submitter_address is the the submitting party. If on MultisigControl contract itself, it's the submitting ETH addressif function on bridge that then calls Multisig, then it's the address of that contractNote also the embedded encoding, this is required to verify what function/contract the function call goes to"
+      }
+    },
+    "notice": "Implementations of this interface are used by the Vega network to control smart contracts without the need for Vega to have any Ethereum of its own.To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum",
+    "version": 1
+  }
+}
