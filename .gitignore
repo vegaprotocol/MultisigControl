@@ -10,6 +10,7 @@ lerna-debug.log*
 
 
 .idea/
+/build/contracts/*.json
 
 /ropsten_deploy_details/
 /TESTNET_ASSET_DEPLOYMENT/
