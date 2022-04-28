@@ -109,6 +109,8 @@ module.exports = async function(deployer) {
     let abi_path = "./build/contracts/";
     const files = await fs.promises.readdir(  abi_path);
 
+    let contract_abis = {};
+
     // Loop them all with the new for...of
     for( const file of files ) {
         let split_name = file.split('.');
@@ -116,9 +118,12 @@ module.exports = async function(deployer) {
             try {
                 let json_file = require("../" + abi_path + file);
                     let new_path = root_path + split_name[0] + "_ABI." + split_name[1]
+                    console.log("Contract Name: " + split_name[0])
                     console.log("New Path: " + new_path);
-
+                    // export json file with contract names and ABIs
                     fs.writeFileSync(new_path,  JSON.stringify(json_file.abi));
+                    contract_abis[split_name[0]] = {"abi": json_file.abi, "bytecode": json_file.bytecode};
+                    
             }catch (e) {
                 console.log("Error: ")
                 console.log(e);
@@ -126,6 +131,6 @@ module.exports = async function(deployer) {
         }
     }
 
-
+    fs.writeFileSync("./contract-abis.json",  JSON.stringify(contract_abis));
 
 };
