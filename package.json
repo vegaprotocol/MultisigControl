@@ -22,6 +22,7 @@
     "grpc-web": "^1.2.1",
     "keccak": "^3.0.1",
     "recursive-copy": "^2.0.11",
+    "solidity-docgen": "github:OpenZeppelin/solidity-docgen#03f42b5e271b1e1c1d0b814b921ecdc086055255",
     "truffle": "^5.3.11",
     "truffle-contract": "^4.0.31",
     "web3": "^1.2.11"
