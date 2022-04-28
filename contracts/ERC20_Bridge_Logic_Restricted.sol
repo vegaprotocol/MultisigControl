@@ -94,7 +94,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
       require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
       asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
       withdraw_thresholds[asset_source] = threshold;
-      
+
       emit Asset_Limits_Updated(asset_source, lifetime_limit, threshold);
     }
 
@@ -206,8 +206,24 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(!is_stopped, "bridge stopped");
         require(exempt_depositors[msg.sender] || user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
         require(listed_tokens[asset_source], "asset not listed");
+        
         //User must run approve before deposit
-        require(IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount), "transfer failed in deposit");
+        IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount);
+        /// @dev the following is a test for non-standard ERC20 tokens IE ones without a return value
+        bool result;
+        assembly {
+           switch returndatasize()
+               case 0 {                      // no return value but didn't revert
+                   result := true
+               }
+               case 32 {                     // standard ERC20, has return value
+                   returndatacopy(0, 0, 32)
+                   result := mload(0)        // result is result of transfer call
+               }
+               default {}
+        }
+        require(result, "token transfer failed"); // revert() if result is false
+
         user_lifetime_deposits[msg.sender][asset_source] += amount;
         emit Asset_Deposited(msg.sender, asset_source, amount, vega_public_key);
     }
