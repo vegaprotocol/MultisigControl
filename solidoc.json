@@ -1,0 +1,7 @@
+{
+  "pathToRoot": "./",
+  "outputPath": "./docs",
+  "noCompilation": false,
+  "compiler": "truffle compile",
+  "ignoreFiles": ["contracts/tests/Bulk_Deposit.sol"]
+}
