@@ -176,7 +176,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     }
     /***********************END RESTRICTIONS*************************/
 
-    /// @notice This function withdrawals assets to the target Ethereum address
+    /// @notice This function withdraws assets to the target Ethereum address
     /// @param asset_source Contract address for given ERC20 token
     /// @param amount Amount of ERC20 tokens to withdraw
     /// @param target Target Ethereum address to receive withdrawn ERC20 tokens
@@ -206,7 +206,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(!is_stopped, "bridge stopped");
         require(exempt_depositors[msg.sender] || user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
         require(listed_tokens[asset_source], "asset not listed");
-        
+
         //User must run approve before deposit
         IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount);
         /// @dev the following is a test for non-standard ERC20 tokens IE ones without a return value

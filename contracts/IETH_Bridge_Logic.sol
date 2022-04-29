@@ -30,7 +30,7 @@ abstract contract IETH_Bridge_Logic {
     /// @dev MUST emit Asset_Deposit_Maximum_Set if successful
     function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
 
-    /// @notice This function sets the maximum allowable deposit for the given ETH
+    /// @notice This function withdraws assets to the target Ethereum address
     /// @param amount Amount of ETH to withdraw
     /// @param expiry Vega-assigned timestamp of withdrawal order expiration
     /// @param target Target Ethereum address to receive withdrawn ETH
