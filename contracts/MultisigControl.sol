@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+\41;2500;0c//SPDX-License-Identifier: MIT
 pragma solidity 0.8.8;
 
 import "./IMultisigControl.sol";
@@ -17,7 +17,7 @@ contract MultisigControl is IMultisigControl {
 
     uint16 threshold;
     uint8 signer_count;
-    mapping(address => bool) signers;
+    mapping(address => bool) public signers;
     mapping(uint => bool) used_nonces;
     mapping(bytes32 => mapping(address => bool)) has_signed;
 
