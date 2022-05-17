@@ -11,6 +11,7 @@ abstract contract IMultisigControl {
     event SignerAdded(address new_signer, uint256 nonce);
     event SignerRemoved(address old_signer, uint256 nonce);
     event ThresholdSet(uint16 new_threshold, uint256 nonce);
+    event NonceBurnt(uint256 nonce);
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.

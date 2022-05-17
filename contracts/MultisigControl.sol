@@ -68,6 +68,17 @@ contract MultisigControl is IMultisigControl {
         emit SignerRemoved(old_signer, nonce);
     }
 
+    /// @notice Burn an nonce before it gets used by a user. Useful in case the validators needs to prevents a malicious user to do un-permitted action.
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @notice See MultisigControl for more about signatures
+    /// @dev Emits 'NonceBurnt' event
+    function burn_nonce(uint256 nonce, bytes calldata signatures) public override {
+        bytes memory message = abi.encode(nonce, "burn_nonce");
+        require(verify_signatures(signatures, message, nonce), "bad signatures");
+        emit NonceBurnt(nonce);
+    }
+
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
     /// @notice message to hash to sign follows this pattern:
