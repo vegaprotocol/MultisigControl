@@ -19,7 +19,6 @@ contract MultisigControl is IMultisigControl {
     uint8 signer_count;
     mapping(address => bool) public signers;
     mapping(uint => bool) used_nonces;
-    // mapping(bytes32 => mapping(address => bool)) has_signed;
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
