@@ -19,7 +19,7 @@ contract MultisigControl is IMultisigControl {
     uint8 signer_count;
     mapping(address => bool) public signers;
     mapping(uint => bool) used_nonces;
-    mapping(bytes32 => mapping(address => bool)) has_signed;
+    // mapping(bytes32 => mapping(address => bool)) has_signed;
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
@@ -91,7 +91,7 @@ contract MultisigControl is IMultisigControl {
         require(signatures.length % 65 == 0, "bad sig length");
         require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
-        uint8 sig_count = 0;
+	address[] signers = [];
 
         bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
         uint256 offset;
@@ -126,16 +126,24 @@ contract MultisigControl is IMultisigControl {
 
             address recovered_address = ecrecover(message_hash, v, r, s);
 
-            if(signers[recovered_address] && !has_signed[message_hash][recovered_address]){
-                has_signed[message_hash][recovered_address] = true;
-                sig_count++;
+            if(signers[recovered_address] && !has_signed(signers, recovered_address)){
+                has_signed.push(recovered_address);
             }
         }
 
-        used_nonces[nonce] = ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
+        used_nonces[nonce] = ((uint256(signers.length) * 1000) / (uint256(signer.length))) > threshold;
 
         return used_nonces[nonce];
 
+    }
+
+    function has_signed(address[] memory signers, address signer) private return(bool) {
+	for (uint i; i < signers.length; i++) {
+	    if (signers[i] == signer) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     /// @return Number of valid signers
