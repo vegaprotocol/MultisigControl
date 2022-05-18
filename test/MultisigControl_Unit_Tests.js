@@ -15,21 +15,21 @@ const bip39 = require('bip39');
 const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 
-let private_keys ={};
-async function init_private_keys(){
-  private_keys = {};
-  for(let key_idx = 0; key_idx < 10; key_idx++){
-    const seed = await bip39.mnemonicToSeed(mnemonic); // mnemonic is the string containing the words
+let private_keys = {};
+async function init_private_keys() {
+    private_keys = {};
+    for (let key_idx = 0; key_idx < 10; key_idx++) {
+        const seed = await bip39.mnemonicToSeed(mnemonic); // mnemonic is the string containing the words
 
-    const hdk = hdkey.fromMasterSeed(seed);
-    const addr_node = hdk.derivePath("m/44'/60'/0'/0/" + key_idx); //m/44'/60'/0'/0/0 is derivation path for the first account. m/44'/60'/0'/0/1 is the derivation path for the second account and so on
-    const addr = addr_node.getWallet().getAddressString(); //check that this is the same with the address that ganache list for the first account to make sure the derivation is correct
-    const private_key = addr_node.getWallet().getPrivateKey();
-    //console.log(private_key)
-    //console.log(addr.toString("hex"))
-    //console.log(private_key.toString("hex"))
-    private_keys[addr.toString("hex")] = private_key;
-  }
+        const hdk = hdkey.fromMasterSeed(seed);
+        const addr_node = hdk.derivePath("m/44'/60'/0'/0/" + key_idx); //m/44'/60'/0'/0/0 is derivation path for the first account. m/44'/60'/0'/0/1 is the derivation path for the second account and so on
+        const addr = addr_node.getWallet().getAddressString(); //check that this is the same with the address that ganache list for the first account to make sure the derivation is correct
+        const private_key = addr_node.getWallet().getPrivateKey();
+        //console.log(private_key)
+        //console.log(addr.toString("hex"))
+        //console.log(private_key.toString("hex"))
+        private_keys[addr.toString("hex")] = private_key;
+    }
 }
 
 /****** note, add:
@@ -43,7 +43,7 @@ beforeEach(async()=>{
 
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
-function get_message_to_sign(param_types, params, nonce, function_name, sender){
+function get_message_to_sign(param_types, params, nonce, function_name, sender) {
     params.push(nonce);
     param_types.push("uint256");
     params.push(function_name);
@@ -56,8 +56,8 @@ function get_message_to_sign(param_types, params, nonce, function_name, sender){
 }
 
 
-function to_signature_string(sig){
-    return "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') +""+ sig.v.toString(16);
+function to_signature_string(sig) {
+    return "0x" + sig.r.toString('hex') + "" + sig.s.toString('hex') + "" + sig.v.toString(16);
 }
 
 function recover_signer_address(sig, msgHash) {
@@ -67,13 +67,13 @@ function recover_signer_address(sig, msgHash) {
 }
 
 async function add_signer(multisigControl_instance, new_signer, sender) {
-  let nonce = new ethUtil.BN(crypto.randomBytes(32));
-  let encoded_message = get_message_to_sign(
-      ["address"],
-      [new_signer],
-      nonce.toString(),
-      "add_signer",
-      sender);
+    let nonce = new ethUtil.BN(crypto.randomBytes(32));
+    let encoded_message = get_message_to_sign(
+        ["address"],
+        [new_signer],
+        nonce.toString(),
+        "add_signer",
+        sender);
     let encoded_hash = ethUtil.keccak256(encoded_message);
     let signature = ethUtil.ecsign(encoded_hash, private_keys[sender.toLowerCase()]);
     let sig_string = to_signature_string(signature);
@@ -82,11 +82,11 @@ async function add_signer(multisigControl_instance, new_signer, sender) {
 }
 
 //function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
+contract("MultisigControl -- Function: verify_signatures", (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
 
-  });
+    });
     it("verify_signatures - happy path 1 signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
@@ -114,16 +114,16 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
         let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
 
         //generate message
-        let encoded_message_1 =  crypto.randomBytes(32);
+        let encoded_message_1 = crypto.randomBytes(32);
 
-        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message_1, accounts[0]]));
+        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message_1, accounts[0]]));
 
         let signature = ethUtil.ecsign(encoded_hash_1, private_keys[accounts[0].toLowerCase()]);
         let sig_string = to_signature_string(signature);
 
         //sign message with private_keys[0]
         //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, {from: accounts[0]});
+        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, { from: accounts[0] });
 
         assert.equal(
             verify_receipt,
@@ -159,16 +159,16 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
         let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
 
         //generate message
-        let encoded_message_1 =  crypto.randomBytes(32);
+        let encoded_message_1 = crypto.randomBytes(32);
 
-        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message_1, accounts[0]]));
+        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message_1, accounts[0]]));
 
         let signature = ethUtil.ecsign(encoded_hash_1, private_keys[accounts[1].toLowerCase()]);
         let sig_string = to_signature_string(signature);
 
         //sign message with private_keys[0]
         //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, {from: accounts[0]});
+        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, { from: accounts[0] });
 
         assert.equal(
             verify_receipt,
@@ -206,16 +206,16 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
         let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
 
         //generate message
-        let encoded_message_1 =  crypto.randomBytes(32);
+        let encoded_message_1 = crypto.randomBytes(32);
 
-        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message_1, accounts[0]]));
+        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message_1, accounts[0]]));
 
         let signature = ethUtil.ecsign(encoded_hash_1, private_keys[accounts[0].toLowerCase()]);
         let sig_string = to_signature_string(signature);
 
         //sign message with private_keys[0]
         //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, {from: accounts[0]});
+        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, { from: accounts[0] });
 
         assert.equal(
             verify_receipt,
@@ -223,12 +223,12 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
             "signatures are bad: "
         );
         //actually sending the transaction:
-        await multisigControl_instance.verify_signatures(sig_string, encoded_message_1, nonce_1, {from: accounts[0]});
+        await multisigControl_instance.verify_signatures(sig_string, encoded_message_1, nonce_1, { from: accounts[0] });
 
-        try{
-            await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, {from: accounts[0]})
+        try {
+            await multisigControl_instance.verify_signatures.call(sig_string, encoded_message_1, nonce_1, { from: accounts[0] })
             assert.equal(true, false, "nonce reuse worked, which shouldn't")
-        } catch (e) {}
+        } catch (e) { }
     });
 
     it("verify_signatures - happy path 2 signers", async () => {
@@ -261,9 +261,9 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
 
         //generate message
-        let encoded_message =  crypto.randomBytes(32);
+        let encoded_message = crypto.randomBytes(32);
 
-        let encoded_hash = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message, accounts[0]]));
+        let encoded_hash = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message, accounts[0]]));
 
         let signature_0 = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
         let sig_string_0 = to_signature_string(signature_0);
@@ -275,7 +275,7 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
 
         //sign message with private_keys[0]
         //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_bundle, encoded_message, nonce, {from: accounts[0]});
+        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_bundle, encoded_message, nonce, { from: accounts[0] });
 
         assert.equal(
             verify_receipt,
@@ -289,7 +289,7 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
         let multisigControl_instance = await MultisigControl.deployed();
 
 
-        try{
+        try {
             await add_signer(multisigControl_instance, accounts[1], accounts[0]);
         } catch (e) {
             // the signer should have been added in a prior step, but just in case
@@ -317,12 +317,12 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
 
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
         //generate message
-        let encoded_message =  crypto.randomBytes(32);
-        let encoded_hash = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message, accounts[0]]));
+        let encoded_message = crypto.randomBytes(32);
+        let encoded_hash = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message, accounts[0]]));
         let signature_0 = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
         let sig_string_0 = to_signature_string(signature_0);
 
-        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string_0, encoded_message, nonce, {from: accounts[0]});
+        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_string_0, encoded_message, nonce, { from: accounts[0] });
         assert.equal(
             verify_receipt,
             false,
@@ -332,11 +332,11 @@ contract("MultisigControl -- Function: verify_signatures",  (accounts) => {
 });
 
 //function set_threshold(uint16 new_threshold, uint nonce, bytes memory signatures) public{
-contract("MultisigControl -- Function: set_threshold",  (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
+contract("MultisigControl -- Function: set_threshold", (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
 
-  });
+    });
     it("set_threshold", async () => {
         // set 2 signers
         let multisigControl_instance = await MultisigControl.deployed();
@@ -385,7 +385,7 @@ contract("MultisigControl -- Function: set_threshold",  (accounts) => {
         try {
             await multisigControl_instance.set_threshold(300, nonce_300, sig_string_0_300);
             assert.equal(true, false, "set threshold worked, shouldn't have")
-        }catch (e) {}
+        } catch (e) { }
 
         // set threshold to 300 (30%) with 2 signers
         await multisigControl_instance.set_threshold(300, nonce_300, sig_bundle_300);
@@ -422,11 +422,11 @@ contract("MultisigControl -- Function: set_threshold",  (accounts) => {
 });
 
 //function add_signer(address new_signer, uint nonce, bytes memory signatures) public {
-contract("MultisigControl -- Function: add_signer",  (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
+contract("MultisigControl -- Function: add_signer", (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
 
-  });
+    });
     it("add_signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -513,11 +513,11 @@ contract("MultisigControl -- Function: add_signer",  (accounts) => {
 });
 
 // function remove_signer(address old_signer, uint nonce, bytes memory signatures) public {
-contract("MultisigControl -- Function: remove_signer",  (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
+contract("MultisigControl -- Function: remove_signer", (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
 
-  });
+    });
     it("remove signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -584,79 +584,13 @@ contract("MultisigControl -- Function: remove_signer",  (accounts) => {
 
 });
 
-//function is_nonce_used(uint nonce) public view returns(bool){
-contract("MultisigControl -- Function: is_nonce_used",  async (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
-
-  });
-    let multisigControl_instance = await MultisigControl.deployed();
-    it("unused nonce returns false", async () => {
-
-        let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
-        assert.equal(
-            await multisigControl_instance.is_nonce_used(nonce_1),
-            true,
-            "nonce marked as used, shouldn't be"
-        );
-
-    });
-
-
-    it("used nonce returns true", async()=>{
-        let multisigControl_instance = await MultisigControl.deployed();
-
-        //check that only private_keys[0] is the signer
-        let is_signer_0 = await multisigControl_instance.is_valid_signer(accounts[0]);
-        let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
-        assert.equal(
-            is_signer_0,
-            true,
-            "account 0 is not a signer but should be"
-        );
-        assert.equal(
-            is_signer_1,
-            false,
-            "account 1 is a signer and should not be"
-        );
-
-        let signer_count = await multisigControl_instance.get_valid_signer_count();
-        assert.equal(
-            signer_count,
-            1,
-            "signer count should be 1, is: " + signer_count
-        );
-
-        let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
-
-        //generate message
-        let encoded_message_1 =  crypto.randomBytes(32);
-
-        let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"],[encoded_message_1, accounts[0]]));
-
-        let signature = ethUtil.ecsign(encoded_hash_1, private_keys[accounts[0].toLowerCase()]);
-        let sig_string = to_signature_string(signature);
-
-        //sign message with private_keys[0]
-        //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-        await multisigControl_instance.verify_signatures(sig_string, encoded_message_1, nonce_1, {from: accounts[0]});
-
-        assert.equal(
-            await multisigControl_instance.is_nonce_used(nonce_1),
-            true,
-            "nonce not marked as used."
-        );
-
-    })
-});
-
 
 //function get_valid_signer_count() public view returns(uint8){
-contract("MultisigControl -- Function: get_valid_signer_count",  async (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
+contract("MultisigControl -- Function: get_valid_signer_count", async (accounts) => {
+    beforeEach(async () => {
+        await init_private_keys()
 
-  });
+    });
     it("signer count is valid after add signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -751,7 +685,7 @@ contract("MultisigControl -- Function: get_valid_signer_count",  async (accounts
 });
 
 //function get_current_threshold() public view returns(uint16) {
-contract("MultisigControl -- Function: get_current_threshold",  (accounts) => {
+contract("MultisigControl -- Function: get_current_threshold", (accounts) => {
     it("get_current_threshold is correct after setting", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
@@ -789,7 +723,7 @@ contract("MultisigControl -- Function: get_current_threshold",  (accounts) => {
 });
 
 //function is_valid_signer(address signer_address) public view returns(bool){
-contract("MultisigControl -- Function: is_valid_signer",  (accounts) => {
+contract("MultisigControl -- Function: is_valid_signer", (accounts) => {
     it("previously unknown signer is valid after setting", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -873,3 +807,118 @@ contract("MultisigControl -- Function: is_valid_signer",  (accounts) => {
     });
 
 });
+
+//function is_nonce_used(uint nonce) public view returns(bool){
+    contract("MultisigControl -- Function: is_nonce_used", (accounts) => {
+        beforeEach(async () => {
+            await init_private_keys()
+        });
+
+        it("unused nonce returns false", async () => {
+            let multisigControl_instance = await MultisigControl.deployed();
+
+            let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
+            assert.equal(
+                await multisigControl_instance.is_nonce_used(nonce_1),
+                false,
+                "nonce marked as used, shouldn't be"
+            );
+    
+        });
+    
+    
+        it("used nonce returns true", async () => {
+            let multisigControl_instance = await MultisigControl.deployed();
+    
+            //check that only private_keys[0] is the signer
+            let is_signer_0 = await multisigControl_instance.is_valid_signer(accounts[0]);
+            let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
+            assert.equal(
+                is_signer_0,
+                true,
+                "account 0 is not a signer but should be"
+            );
+            assert.equal(
+                is_signer_1,
+                false,
+                "account 1 is a signer and should not be"
+            );
+    
+            let signer_count = await multisigControl_instance.get_valid_signer_count();
+            assert.equal(
+                signer_count,
+                1,
+                "signer count should be 1, is: " + signer_count
+            );
+    
+            let nonce_1 = new ethUtil.BN(crypto.randomBytes(32));
+    
+            //generate message
+            let encoded_message_1 = crypto.randomBytes(32);
+    
+            let encoded_hash_1 = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message_1, accounts[0]]));
+    
+            let signature = ethUtil.ecsign(encoded_hash_1, private_keys[accounts[0].toLowerCase()]);
+            let sig_string = to_signature_string(signature);
+    
+            //sign message with private_keys[0]
+            //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
+            await multisigControl_instance.verify_signatures(sig_string, encoded_message_1, nonce_1, { from: accounts[0] });
+    
+            assert.equal(
+                await multisigControl_instance.is_nonce_used(nonce_1),
+                true,
+                "nonce not marked as used."
+            );
+    
+        })
+    
+        it("burnt nonce should become used", async () => {
+            let multisigControl_instance = await MultisigControl.deployed();
+    
+            //check that only private_keys[0] is the signer
+            let is_signer_0 = await multisigControl_instance.is_valid_signer(accounts[0]);
+            let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
+            assert.equal(
+                is_signer_0,
+                true,
+                "account 0 is not a signer but should be"
+            );
+            assert.equal(
+                is_signer_1,
+                false,
+                "account 1 is a signer and should not be"
+            );
+    
+            let signer_count = await multisigControl_instance.get_valid_signer_count();
+            assert.equal(
+                signer_count,
+                1,
+                "signer count should be 1, is: " + signer_count
+            );
+    
+            let nonce = new ethUtil.BN(crypto.randomBytes(32));
+            let sender = accounts[0];
+                
+            // create signature required by contract
+            //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
+            let encoded_a = abi.rawEncode(["uint256", "string"], [nonce, "burn_nonce"]);
+            //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
+            let encoded_message = abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+                    
+            let encoded_hash = ethUtil.keccak256(encoded_message);
+            let signature = ethUtil.ecsign(encoded_hash, private_keys[sender.toLowerCase()]);
+            let sig_string = to_signature_string(signature);
+    
+            //sign message with private_keys[0]
+            //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
+            await multisigControl_instance.burn_nonce(nonce, sig_string, { from: accounts[0] });
+    
+            assert.equal(
+                await multisigControl_instance.is_nonce_used(nonce),
+                true,
+                "nonce not marked as used."
+            );
+    
+        })
+    });

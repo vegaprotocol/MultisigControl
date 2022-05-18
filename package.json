@@ -12,6 +12,7 @@
     "@truffle/hdwallet-provider": "^1.2.0",
     "bip39": "^3.0.4",
     "elliptic": "^6.5.3",
+    "eth-gas-reporter": "^0.2.25",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "^6.2.1",

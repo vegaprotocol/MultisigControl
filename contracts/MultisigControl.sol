@@ -17,9 +17,8 @@ contract MultisigControl is IMultisigControl {
 
     uint16 threshold;
     uint8 signer_count;
-    mapping(address => bool) signers;
+    mapping(address => bool) public signers;
     mapping(uint => bool) used_nonces;
-    mapping(bytes32 => mapping(address => bool)) has_signed;
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
@@ -68,6 +67,17 @@ contract MultisigControl is IMultisigControl {
         emit SignerRemoved(old_signer, nonce);
     }
 
+    /// @notice Burn an nonce before it gets used by a user. Useful in case the validators needs to prevents a malicious user to do un-permitted action.
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @notice See MultisigControl for more about signatures
+    /// @dev Emits 'NonceBurnt' event
+    function burn_nonce(uint256 nonce, bytes calldata signatures) public override {
+        bytes memory message = abi.encode(nonce, "burn_nonce");
+        require(verify_signatures(signatures, message, nonce), "bad signatures");
+        emit NonceBurnt(nonce);
+    }
+
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
     /// @notice message to hash to sign follows this pattern:
@@ -80,7 +90,9 @@ contract MultisigControl is IMultisigControl {
         require(signatures.length % 65 == 0, "bad sig length");
         require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
-        uint8 sig_count = 0;
+	    
+        uint8 size = 0;
+        address[] memory signers_temp = new address[](signer_count);
 
         bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
         uint256 offset;
@@ -115,16 +127,23 @@ contract MultisigControl is IMultisigControl {
 
             address recovered_address = ecrecover(message_hash, v, r, s);
 
-            if(signers[recovered_address] && !has_signed[message_hash][recovered_address]){
-                has_signed[message_hash][recovered_address] = true;
-                sig_count++;
+            if(signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)){
+                signers_temp[size] = recovered_address;
+                size++;
             }
         }
 
-        used_nonces[nonce] = ((uint256(sig_count) * 1000) / (uint256(signer_count))) > threshold;
-
+        used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
         return used_nonces[nonce];
+    }
 
+    function has_signed(address[] memory signers_temp, address signer, uint8 size) private pure returns(bool) {
+        for (uint i; i < size; i++) {
+            if (signers_temp[i] == signer) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// @return Number of valid signers

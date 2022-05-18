@@ -11,6 +11,7 @@ abstract contract IMultisigControl {
     event SignerAdded(address new_signer, uint256 nonce);
     event SignerRemoved(address old_signer, uint256 nonce);
     event ThresholdSet(uint16 new_threshold, uint256 nonce);
+    event NonceBurnt(uint256 nonce);
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
@@ -38,6 +39,14 @@ abstract contract IMultisigControl {
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit 'SignerRemoved' event
     function remove_signer(address old_signer, uint nonce, bytes calldata signatures) public virtual;
+
+    /// @notice Burn an nonce before it gets used by a user. Useful in case the validators needs to prevents a malicious user to do un-permitted action.
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed order
+    /// @notice See MultisigControl for more about signatures
+    /// @dev Emits 'NonceBurnt' event
+    function burn_nonce(uint256 nonce, bytes calldata signatures) public virtual;
+
 
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
