@@ -1,4 +1,4 @@
-\41;2500;0c//SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT
 pragma solidity 0.8.8;
 
 import "./IMultisigControl.sol";
@@ -91,7 +91,9 @@ contract MultisigControl is IMultisigControl {
         require(signatures.length % 65 == 0, "bad sig length");
         require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
-	address[] signers = [];
+	    
+        uint8 size = 0;
+        address[] memory signers_temp = new address[](signer_count);
 
         bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
         uint256 offset;
@@ -126,24 +128,23 @@ contract MultisigControl is IMultisigControl {
 
             address recovered_address = ecrecover(message_hash, v, r, s);
 
-            if(signers[recovered_address] && !has_signed(signers, recovered_address)){
-                has_signed.push(recovered_address);
+            if(signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)){
+                signers_temp[size] = recovered_address;
+                size++;
             }
         }
 
-        used_nonces[nonce] = ((uint256(signers.length) * 1000) / (uint256(signer.length))) > threshold;
-
+        used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
         return used_nonces[nonce];
-
     }
 
-    function has_signed(address[] memory signers, address signer) private return(bool) {
-	for (uint i; i < signers.length; i++) {
-	    if (signers[i] == signer) {
-		return true;
-	    }
-	}
-	return false;
+    function has_signed(address[] memory signers_temp, address signer, uint8 size) private pure returns(bool) {
+        for (uint i; i < size; i++) {
+            if (signers_temp[i] == signer) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// @return Number of valid signers
