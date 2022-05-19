@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Terminal 1:",
   "main": "ecc_test.js",
+  "scripts": {
+    "test": "false"
+  },
   "directories": {
     "test": "test"
   },
