@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "scripts":{
+    "ganache": "ganache-cli -a=20 -m=\"$(echo $(cat .secret))\""
+  },
   "dependencies": {
     "@openzeppelin/test-helpers": "^0.5.13",
     "@openzeppelin/truffle-upgrades": "^1.9.1",
