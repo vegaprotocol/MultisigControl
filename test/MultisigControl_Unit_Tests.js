@@ -514,9 +514,8 @@ contract("MultisigControl -- Function: add_signer", (accounts) => {
 
 // function remove_signer(address old_signer, uint nonce, bytes memory signatures) public {
 contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (accounts) => {
-  beforeEach(async()=>{
-    await init_private_keys()
-
+    beforeEach(async()=>{
+	await init_private_keys()
     });
     it("remove signer", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
