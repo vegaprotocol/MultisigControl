@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts":{
-    "ganache": "ganache-cli -a=20 -m=$(echo $(cat .secret))"
+    "ganache": "ganache-cli -a=20 -m=\"$(echo $(cat .secret))\""
   },
   "dependencies": {
     "@openzeppelin/test-helpers": "^0.5.13",
