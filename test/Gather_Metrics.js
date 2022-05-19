@@ -228,7 +228,7 @@ contract("Gather Metrics", (accounts) => {
       }
       console.log("---------------------------------------------------")
 
-
+      fs.writeFileSync('metrics_output.json', JSON.stringify(gas_runs));
       // save to file
   });
 
