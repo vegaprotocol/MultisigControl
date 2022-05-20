@@ -26,9 +26,9 @@ const { find } = require("lodash");
 const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 let private_keys = {};
-async function init_private_keys() {
+async function init_private_keys(n = 20) {
   private_keys = {};
-  for (let key_idx = 0; key_idx < 20; key_idx++) {
+  for (let key_idx = 0; key_idx < n; key_idx++) {
     const seed = await bip39.mnemonicToSeed(mnemonic); // mnemonic is the string containing the words
 
     const hdk = hdkey.fromMasterSeed(seed);
@@ -181,7 +181,7 @@ async function list_asset(bridge_logic_instance, test_token_instance, from_addre
 contract("Gather Metrics", (accounts) => {
   //function revoke_exempt_depositor(address depositor) public override
   beforeEach(async () => {
-    await init_private_keys()
+    await init_private_keys(accounts.length)
     multisigControl_instance = await MultisigControl.new();
     asset_pool_instance = await ERC20_Asset_Pool.new(multisigControl_instance.address);
     test_token_instance = await Base_Faucet_Token.new("TEST", "TEST", 18, 0, "1000000000000000000");
@@ -190,7 +190,7 @@ contract("Gather Metrics", (accounts) => {
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0])
   });
 
-  it("2-20 signers, see metrics_output.json for results", async () => {
+  it("Incremental number of signers, see metrics_output.json for results", async () => {
       let gas_runs = []
 
       // set threshold to 1
@@ -206,7 +206,7 @@ contract("Gather Metrics", (accounts) => {
       console.log("Gas Results:")
 
       let signer_list = [accounts[0]]
-      for(let signer_count = 1; signer_count < 20; signer_count++){
+      for(let signer_count = 1; signer_count < Object.keys(private_keys).length; signer_count++){
 
         signer_list.push(accounts[signer_count])
         // add signer
