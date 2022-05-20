@@ -206,23 +206,15 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(!is_stopped, "bridge stopped");
         require(exempt_depositors[msg.sender] || user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source], "deposit over lifetime limit");
         require(listed_tokens[asset_source], "asset not listed");
+        require(is_contract(asset_source), "asset_source must be contract");
 
-        //User must run approve before deposit
-        IERC20(asset_source).transferFrom(msg.sender, erc20_asset_pool_address, amount);
-        /// @dev the following is a test for non-standard ERC20 tokens IE ones without a return value
-        bool result;
-        assembly {
-           switch returndatasize()
-               case 0 {                      // no return value but didn't revert
-                   result := true
-               }
-               case 32 {                     // standard ERC20, has return value
-                   returndatacopy(0, 0, 32)
-                   result := mload(0)        // result is result of transfer call
-               }
-               default {}
+        (bool success, bytes memory returndata) = asset_source.call(abi.encodeWithSignature("transferFrom(address,address,uint256)", msg.sender, erc20_asset_pool_address, amount));
+        require(success, "token transfer failed");
+
+        if (returndata.length > 0) {
+            // Return data is optional
+            require(abi.decode(returndata, (bool)), "token transfer failed");
         }
-        require(result, "token transfer failed"); // revert() if result is false
 
         user_lifetime_deposits[msg.sender][asset_source] += amount;
         emit Asset_Deposited(msg.sender, asset_source, amount, vega_public_key);
@@ -251,6 +243,14 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     /// @return The ERC20 token contract address for a given Vega Asset Id
     function get_asset_source(bytes32 vega_asset_id) public override view returns(address){
         return vega_asset_ids_to_source[vega_asset_id];
+    }
+
+    function is_contract(address addr) internal view returns(bool) {
+        uint256 code_size;
+        assembly {
+            code_size := extcodesize(addr)
+        }
+        return code_size > 0;
     }
 }
 

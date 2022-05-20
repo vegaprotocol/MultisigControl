@@ -37,11 +37,8 @@ contract ERC20_Asset_Pool {
     /// @notice Emits Multisig_Control_Set event
     function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
         require(new_address != address(0), "invalid MultisigControl address");
-        uint256 size;
-        assembly {
-           size := extcodesize(new_address)
-        }
-        require(size > 0, "new address must be contract");
+        require(is_contract(new_address), "new address must be contract");
+
         bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
         require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
         multisig_control_address = new_address;
@@ -67,22 +64,23 @@ contract ERC20_Asset_Pool {
     /// @dev amount is in whatever the lowest decimal value the ERC20 token has. For instance, an 18 decimal ERC20 token, 1 "amount" == 0.000000000000000001
     function withdraw(address token_address, address target, uint256 amount) public {
         require(msg.sender == erc20_bridge_address, "msg.sender not authorized bridge");
+        require(is_contract(token_address), "token_address must be contract");
 
-        IERC20(token_address).transfer(target, amount);
-        /// @dev the following is a test for non-standard ERC20 tokens IE ones without a return value
-        bool result;
+        (bool success, bytes memory returndata) = token_address.call(abi.encodeWithSignature("transfer(address,uint256)", target, amount));
+        require(success, "token transfer failed");
+
+        if (returndata.length > 0) {
+            // Return data is optional
+            require(abi.decode(returndata, (bool)), "token transfer failed");
+        }
+    }
+
+    function is_contract(address addr) internal view returns(bool) {
+        uint256 code_size;
         assembly {
-           switch returndatasize()
-               case 0 {                      // no return value but didn't revert
-                   result := true
-               }
-               case 32 {                     // standard ERC20, has return value
-                   returndatacopy(0, 0, 32)
-                   result := mload(0)        // result is result of transfer call
-               }
-               default {}
-       }
-       require(result, "token transfer failed"); // revert() if result is false
+            code_size := extcodesize(addr)
+        }
+        return code_size > 0;
     }
 }
 
