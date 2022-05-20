@@ -44,8 +44,9 @@ jobs:
         env:
           ENABLE_GAS_REPORTER: true
 
-      - name: Code coverage
-        run: npx truffle run coverage
-        env:
-          ENABLE_GAS_REPORTER: true
+      # Currently broken due to inline Solidity asm
+      # - name: Code coverage
+      #   run: npx truffle run coverage
+      #   env:
+      #     ENABLE_GAS_REPORTER: true
       
