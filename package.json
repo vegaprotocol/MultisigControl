@@ -5,7 +5,8 @@
   "main": "ecc_test.js",
   "scripts": {
     "test": "truffle test",
-    "ganache": "ganache-cli --accounts=50 --mnemonic=\"$(cat .secret)\""
+    "ganache": "ganache-cli --accounts=50 --mnemonic=\"$(cat .secret)\"",
+    "lint": "prettier --check 'contracts/**/*.sol'"
   },
   "directories": {
     "test": "test"
