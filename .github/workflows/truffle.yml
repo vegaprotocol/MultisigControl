@@ -27,13 +27,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Add dummy mnemonic
+        run: echo "hub addict trumpet remind ring twist erupt giggle excite animal allow perfect" > .secret
+
       - name: Compile contracts
         run: npx truffle compile
       
       - name: Start ganache
-        run: |
-          echo "hub addict trumpet remind ring twist erupt giggle excite animal allow perfect" > .secret
-          npm run ganache &
+        run: npm run ganache &
       
       - name: Migrate contracts
         run: npx truffle migrate
