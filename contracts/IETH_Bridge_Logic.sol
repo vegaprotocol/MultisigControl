@@ -6,10 +6,17 @@ pragma solidity 0.8.8;
 /// @notice Implementations of this interface are used by Vega network users to deposit and withdraw ETH to/from Vega.
 // @notice All funds deposited/withdrawn are to/from the ETH_Asset_Pool
 abstract contract IETH_Bridge_Logic {
-
     /***************************EVENTS****************************/
-    event ETH_Withdrawn(address indexed user_address, uint256 amount, uint256 nonce);
-    event ETH_Deposited(address indexed user_address, uint256 amount, bytes32 vega_public_key);
+    event ETH_Withdrawn(
+        address indexed user_address,
+        uint256 amount,
+        uint256 nonce
+    );
+    event ETH_Deposited(
+        address indexed user_address,
+        uint256 amount,
+        bytes32 vega_public_key
+    );
     event ETH_Deposit_Minimum_Set(uint256 new_minimum, uint256 nonce);
     event ETH_Deposit_Maximum_Set(uint256 new_maximum, uint256 nonce);
 
@@ -20,7 +27,11 @@ abstract contract IETH_Bridge_Logic {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Deposit_Minimum_Set if successful
-    function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public virtual;
+    function set_deposit_minimum(
+        uint256 minimum_amount,
+        uint256 nonce,
+        bytes memory signatures
+    ) public virtual;
 
     /// @notice This function sets the maximum allowable deposit for ETH
     /// @param maximum_amount Maximum deposit amount
@@ -28,7 +39,11 @@ abstract contract IETH_Bridge_Logic {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Deposit_Maximum_Set if successful
-    function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, bytes memory signatures) public virtual;
+    function set_deposit_maximum(
+        uint256 maximum_amount,
+        uint256 nonce,
+        bytes memory signatures
+    ) public virtual;
 
     /// @notice This function withdraws assets to the target Ethereum address
     /// @param amount Amount of ETH to withdraw
@@ -38,7 +53,13 @@ abstract contract IETH_Bridge_Logic {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit Asset_Withdrawn if successful
-    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public virtual;
+    function withdraw_asset(
+        uint256 amount,
+        uint256 expiry,
+        address payable target,
+        uint256 nonce,
+        bytes memory signatures
+    ) public virtual;
 
     /// @notice This function allows a user to deposit ETH into Vega
     /// @param vega_public_key Target vega public key to be credited with this deposit
@@ -50,17 +71,21 @@ abstract contract IETH_Bridge_Logic {
     /***************************VIEWS*****************************/
     /// @notice This view returns minimum valid deposit
     /// @return Minimum valid deposit of ETH
-    function get_deposit_minimum() public virtual view returns(uint256);
+    function get_deposit_minimum() public view virtual returns (uint256);
 
     /// @notice This view returns maximum valid deposit
     /// @return Maximum valid deposit of ETH
-    function get_deposit_maximum() public virtual view returns(uint256);
+    function get_deposit_maximum() public view virtual returns (uint256);
 
     /// @return current multisig_control_address
-    function get_multisig_control_address() public virtual view returns(address);
+    function get_multisig_control_address()
+        public
+        view
+        virtual
+        returns (address);
 
     /// @return The assigned Vega Asset Id for ETH
-    function get_vega_asset_id() public virtual view returns(bytes32);
+    function get_vega_asset_id() public view virtual returns (bytes32);
 }
 
 /**

@@ -7,7 +7,7 @@ import "./IMultisigControl.sol";
 /// @author Vega Protocol
 /// @notice This contract enables validators, through a multisignature process, to run functions on contracts by consensus
 contract MultisigControl is IMultisigControl {
-    constructor () {
+    constructor() {
         // set initial threshold to 50%
         threshold = 500;
         signers[msg.sender] = true;
@@ -18,7 +18,7 @@ contract MultisigControl is IMultisigControl {
     uint16 threshold;
     uint8 signer_count;
     mapping(address => bool) public signers;
-    mapping(uint => bool) used_nonces;
+    mapping(uint256 => bool) used_nonces;
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
@@ -29,10 +29,24 @@ contract MultisigControl is IMultisigControl {
     /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev Emits ThresholdSet event
-    function set_threshold(uint16 new_threshold, uint256 nonce, bytes calldata signatures) public override{
-        require(new_threshold < 1000 && new_threshold > 0, "new threshold outside range");
-        bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
+    function set_threshold(
+        uint16 new_threshold,
+        uint256 nonce,
+        bytes calldata signatures
+    ) public override {
+        require(
+            new_threshold < 1000 && new_threshold > 0,
+            "new threshold outside range"
+        );
+        bytes memory message = abi.encode(
+            new_threshold,
+            nonce,
+            "set_threshold"
+        );
+        require(
+            verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         threshold = new_threshold;
         emit ThresholdSet(new_threshold, nonce);
     }
@@ -43,10 +57,17 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'SignerAdded' event
-    function add_signer(address new_signer, uint256 nonce, bytes calldata signatures) public override{
+    function add_signer(
+        address new_signer,
+        uint256 nonce,
+        bytes calldata signatures
+    ) public override {
         bytes memory message = abi.encode(new_signer, nonce, "add_signer");
         require(!signers[new_signer], "signer already exists");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
+        require(
+            verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         signers[new_signer] = true;
         signer_count++;
         emit SignerAdded(new_signer, nonce);
@@ -58,10 +79,17 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'SignerRemoved' event
-    function remove_signer(address old_signer, uint256 nonce, bytes calldata signatures) public override {
+    function remove_signer(
+        address old_signer,
+        uint256 nonce,
+        bytes calldata signatures
+    ) public override {
         bytes memory message = abi.encode(old_signer, nonce, "remove_signer");
         require(signers[old_signer], "signer doesn't exist");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
+        require(
+            verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         signers[old_signer] = false;
         signer_count--;
         emit SignerRemoved(old_signer, nonce);
@@ -72,9 +100,15 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'NonceBurnt' event
-    function burn_nonce(uint256 nonce, bytes calldata signatures) public override {
+    function burn_nonce(uint256 nonce, bytes calldata signatures)
+        public
+        override
+    {
         bytes memory message = abi.encode(nonce, "burn_nonce");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
+        require(
+            verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         emit NonceBurnt(nonce);
     }
 
@@ -86,32 +120,35 @@ contract MultisigControl is IMultisigControl {
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return Returns true if valid signatures are over the threshold
-    function verify_signatures(bytes calldata signatures, bytes memory message, uint256 nonce) public override returns(bool) {
+    function verify_signatures(
+        bytes calldata signatures,
+        bytes memory message,
+        uint256 nonce
+    ) public override returns (bool) {
         require(signatures.length % 65 == 0, "bad sig length");
         require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
-	    
+
         uint8 size = 0;
         address[] memory signers_temp = new address[](signer_count);
 
         bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
         uint256 offset;
         assembly {
-          offset := signatures.offset
+            offset := signatures.offset
         }
-        for(uint256 msg_idx = 0; msg_idx < signatures.length; msg_idx+= 65){
+        for (uint256 msg_idx = 0; msg_idx < signatures.length; msg_idx += 65) {
             //recover address from that msg
             bytes32 r;
             bytes32 s;
             uint8 v;
             assembly {
-
-            // first 32 bytes, after the length prefix
-                r := calldataload(add(offset,msg_idx))
-            // second 32 bytes
-                s := calldataload(add(add(offset,msg_idx), 32))
-            // final byte (first byte of the next 32 bytes)
-                v := byte(0, calldataload(add(add(offset,msg_idx), 64)))
+                // first 32 bytes, after the length prefix
+                r := calldataload(add(offset, msg_idx))
+                // second 32 bytes
+                s := calldataload(add(add(offset, msg_idx), 32))
+                // final byte (first byte of the next 32 bytes)
+                v := byte(0, calldataload(add(add(offset, msg_idx), 64)))
             }
             // EIP-2 still allows signature malleability for ecrecover(). Remove this possibility and make the signature
             // unique. Appendix F in the Ethereum Yellow paper (https://ethereum.github.io/yellowpaper/paper.pdf), defines
@@ -122,23 +159,35 @@ contract MultisigControl is IMultisigControl {
             // with 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141 - s1 and flip v from 27 to 28 or
             // vice versa. If your library also generates signatures with 0/1 for v instead 27/28, add 27 to v to accept
             // these malleable signatures as well.
-            require(uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0, "Malleable signature error");
+            require(
+                uint256(s) <=
+                    0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0,
+                "Malleable signature error"
+            );
             if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
 
-            if(signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)){
+            if (
+                signers[recovered_address] &&
+                !has_signed(signers_temp, recovered_address, size)
+            ) {
                 signers_temp[size] = recovered_address;
                 size++;
             }
         }
 
-        used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
+        used_nonces[nonce] =
+            ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
         return used_nonces[nonce];
     }
 
-    function has_signed(address[] memory signers_temp, address signer, uint8 size) private pure returns(bool) {
-        for (uint i; i < size; i++) {
+    function has_signed(
+        address[] memory signers_temp,
+        address signer,
+        uint8 size
+    ) private pure returns (bool) {
+        for (uint256 i; i < size; i++) {
             if (signers_temp[i] == signer) {
                 return true;
             }
@@ -147,24 +196,29 @@ contract MultisigControl is IMultisigControl {
     }
 
     /// @return Number of valid signers
-    function get_valid_signer_count() public override view returns(uint8){
+    function get_valid_signer_count() public view override returns (uint8) {
         return signer_count;
     }
 
     /// @return Current threshold
-    function get_current_threshold() public override view returns(uint16) {
+    function get_current_threshold() public view override returns (uint16) {
         return threshold;
     }
 
     /// @param signer_address target potential signer address
     /// @return true if address provided is valid signer
-    function is_valid_signer(address signer_address) public override view returns(bool){
+    function is_valid_signer(address signer_address)
+        public
+        view
+        override
+        returns (bool)
+    {
         return signers[signer_address];
     }
 
     /// @param nonce Nonce to lookup
     /// @return true if nonce has been used
-    function is_nonce_used(uint256 nonce) public override view returns(bool){
+    function is_nonce_used(uint256 nonce) public view override returns (bool) {
         return used_nonces[nonce];
     }
 }

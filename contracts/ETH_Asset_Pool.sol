@@ -7,10 +7,9 @@ import "./IMultisigControl.sol";
 /// @author Vega Protocol
 /// @notice This contract is the target for all deposits to the ETH Bridge via ETH_Bridge_Logic
 contract ETH_Asset_Pool {
-
     event Multisig_Control_Set(address indexed new_address);
     event Bridge_Address_Set(address indexed new_address);
-    event Received(address indexed sender, uint amount);
+    event Received(address indexed sender, uint256 amount);
 
     /// @return Current MultisigControl contract address
     address public multisig_control_address;
@@ -30,15 +29,30 @@ contract ETH_Asset_Pool {
     /// @param signatures Vega-supplied signature bundle of a validator-signed set_multisig_control order
     /// @notice See MultisigControl for more about signatures
     /// @notice Emits Multisig_Control_Set event
-    function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
+    function set_multisig_control(
+        address new_address,
+        uint256 nonce,
+        bytes memory signatures
+    ) public {
         require(new_address != address(0), "invalid MultisigControl address");
         uint256 size;
         assembly {
-           size := extcodesize(new_address)
+            size := extcodesize(new_address)
         }
         require(size > 0, "new address must be contract");
-        bytes memory message = abi.encode(new_address, nonce, 'set_multisig_control');
-        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+        bytes memory message = abi.encode(
+            new_address,
+            nonce,
+            "set_multisig_control"
+        );
+        require(
+            IMultisigControl(multisig_control_address).verify_signatures(
+                signatures,
+                message,
+                nonce
+            ),
+            "bad signatures"
+        );
         multisig_control_address = new_address;
         emit Multisig_Control_Set(new_address);
     }
@@ -48,9 +62,24 @@ contract ETH_Asset_Pool {
     /// @param signatures Vega-supplied signature bundle of a validator-signed set_bridge_address order
     /// @notice See MultisigControl for more about signatures
     /// @notice Emits Bridge_Address_Set event
-    function set_bridge_address(address new_address, uint256 nonce, bytes memory signatures) public {
-        bytes memory message = abi.encode(new_address, nonce, 'set_bridge_address');
-        require(IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce), "bad signatures");
+    function set_bridge_address(
+        address new_address,
+        uint256 nonce,
+        bytes memory signatures
+    ) public {
+        bytes memory message = abi.encode(
+            new_address,
+            nonce,
+            "set_bridge_address"
+        );
+        require(
+            IMultisigControl(multisig_control_address).verify_signatures(
+                signatures,
+                message,
+                nonce
+            ),
+            "bad signatures"
+        );
         ETH_bridge_address = new_address;
         emit Bridge_Address_Set(new_address);
     }
@@ -60,9 +89,12 @@ contract ETH_Asset_Pool {
     /// @param amount Amount of ETH to withdraw
     /// @dev amount is in wei, 1 wei == 0.000000000000000001 ETH
     function withdraw(address payable target, uint256 amount) public {
-        require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
+        require(
+            msg.sender == ETH_bridge_address,
+            "msg.sender not authorized bridge"
+        );
         /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
-        (bool success,) = target.call{value: amount}("");
+        (bool success, ) = target.call{value: amount}("");
         require(success, "eth transfer failed");
     }
 
@@ -80,7 +112,6 @@ contract ETH_Asset_Pool {
     receive() external payable {
         emit Received(msg.sender, msg.value);
     }
-
 }
 
 /**
