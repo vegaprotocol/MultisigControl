@@ -43,3 +43,9 @@ jobs:
         run: npm test
         env:
           ENABLE_GAS_REPORTER: true
+
+      - name: Code coverage
+        run: npx truffle run coverage
+        env:
+          ENABLE_GAS_REPORTER: true
+      
