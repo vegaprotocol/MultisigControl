@@ -3,33 +3,29 @@
   "version": "1.0.0",
   "description": "Terminal 1:",
   "main": "ecc_test.js",
+  "scripts": {
+    "test": "truffle test",
+    "ganache": "ganache-cli --accounts=50 --mnemonic=\"$(cat .secret)\""
+  },
   "directories": {
     "test": "test"
   },
-  "scripts":{
-    "ganache": "ganache-cli -a=20 -m=\"$(echo $(cat .secret))\""
-  },
   "dependencies": {
+    "@ethersproject/units": "^5.6.0",
     "@openzeppelin/test-helpers": "^0.5.13",
     "@openzeppelin/truffle-upgrades": "^1.9.1",
     "@truffle/hdwallet-provider": "^1.2.0",
     "bip39": "^3.0.4",
-    "elliptic": "^6.5.3",
+    "chai": "^4.3.6",
     "eth-gas-reporter": "^0.2.25",
     "ethereumjs-abi": "^0.6.8",
-    "ethereumjs-tx": "^2.1.2",
     "ethereumjs-util": "^6.2.1",
     "ethereumjs-wallet": "^0.6.5",
-    "express": "^4.17.1",
-    "fs-extra": "^9.0.1",
-    "ganache-cli": "^6.10.1",
-    "grpc-web": "^1.2.1",
-    "keccak": "^3.0.1",
+    "ethers": "^5.6.6",
+    "ganache-cli": "^6.12.2",
     "recursive-copy": "^2.0.11",
     "solidity-docgen": "github:OpenZeppelin/solidity-docgen#03f42b5e271b1e1c1d0b814b921ecdc086055255",
-    "truffle": "^5.3.11",
-    "truffle-contract": "^4.0.31",
-    "web3": "^1.2.11"
+    "truffle": "^5.3.11"
   },
   "devDependencies": {
     "solidity-coverage": "^0.7.17"

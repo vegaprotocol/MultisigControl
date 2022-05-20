@@ -23,7 +23,6 @@ const bip39 = require('bip39');
 const hdkey = require('ethereumjs-wallet/hdkey');
 const wallet = require('ethereumjs-wallet');
 const { expect } = require("chai");
-const { find } = require("lodash");
 const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 let private_keys = {};
