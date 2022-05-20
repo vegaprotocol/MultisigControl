@@ -1,6 +1,6 @@
 ---
 
-name: Node.js CI
+name: Truffle CI
 
 "on":
   push:
