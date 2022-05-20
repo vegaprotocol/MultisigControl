@@ -25,8 +25,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     }
 
     function multisig_control_address() internal view returns (address) {
-        return
-            ETH_Asset_Pool(ETH_asset_pool_address).multisig_control_address();
+        return ETH_Asset_Pool(ETH_asset_pool_address).multisig_control_address();
     }
 
     /// @notice This function sets the minimum allowable deposit for ETH
@@ -40,17 +39,9 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         uint256 nonce,
         bytes memory signatures
     ) public override {
-        bytes memory message = abi.encode(
-            minimum_amount,
-            nonce,
-            "set_deposit_minimum"
-        );
+        bytes memory message = abi.encode(minimum_amount, nonce, "set_deposit_minimum");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(
-                signatures,
-                message,
-                nonce
-            ),
+            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         minimum_deposit = minimum_amount;
@@ -68,17 +59,9 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         uint256 nonce,
         bytes memory signatures
     ) public override {
-        bytes memory message = abi.encode(
-            maximum_amount,
-            nonce,
-            "set_deposit_maximum"
-        );
+        bytes memory message = abi.encode(maximum_amount, nonce, "set_deposit_maximum");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(
-                signatures,
-                message,
-                nonce
-            ),
+            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         maximum_deposit = maximum_amount;
@@ -101,19 +84,9 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         bytes memory signatures
     ) public override {
         require(expiry > block.timestamp, "withdrawal has expired");
-        bytes memory message = abi.encode(
-            amount,
-            expiry,
-            target,
-            nonce,
-            "withdraw_asset"
-        );
+        bytes memory message = abi.encode(amount, expiry, target, nonce, "withdraw_asset");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(
-                signatures,
-                message,
-                nonce
-            ),
+            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         ETH_Asset_Pool(ETH_asset_pool_address).withdraw(target, amount);
@@ -124,10 +97,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @param vega_public_key Target vega public key to be credited with this deposit
     /// @dev Emits ETH_Deposited if successful
     function deposit_asset(bytes32 vega_public_key) public payable override {
-        require(
-            maximum_deposit == 0 || msg.value <= maximum_deposit,
-            "deposit above maximum"
-        );
+        require(maximum_deposit == 0 || msg.value <= maximum_deposit, "deposit above maximum");
         require(msg.value >= minimum_deposit, "deposit below minimum");
         ETH_asset_pool_address.transfer(msg.value);
         emit ETH_Deposited(msg.sender, msg.value, vega_public_key);
@@ -147,12 +117,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     }
 
     /// @return current multisig_control_address
-    function get_multisig_control_address()
-        public
-        view
-        override
-        returns (address)
-    {
+    function get_multisig_control_address() public view override returns (address) {
         return multisig_control_address();
     }
 

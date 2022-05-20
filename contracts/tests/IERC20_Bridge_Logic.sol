@@ -7,33 +7,16 @@ pragma solidity 0.8.8;
 // @notice All funds deposited/withdrawn are to/from the ERC20_Asset_Pool
 abstract contract IERC20_Bridge_Logic {
     /***************************EVENTS****************************/
-    event Asset_Withdrawn(
-        address indexed user_address,
-        address indexed asset_source,
-        uint256 amount,
-        uint256 nonce
-    );
+    event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 amount, uint256 nonce);
     event Asset_Deposited(
         address indexed user_address,
         address indexed asset_source,
         uint256 amount,
         bytes32 vega_public_key
     );
-    event Asset_Deposit_Minimum_Set(
-        address indexed asset_source,
-        uint256 new_minimum,
-        uint256 nonce
-    );
-    event Asset_Deposit_Maximum_Set(
-        address indexed asset_source,
-        uint256 new_maximum,
-        uint256 nonce
-    );
-    event Asset_Listed(
-        address indexed asset_source,
-        bytes32 indexed vega_asset_id,
-        uint256 nonce
-    );
+    event Asset_Deposit_Minimum_Set(address indexed asset_source, uint256 new_minimum, uint256 nonce);
+    event Asset_Deposit_Maximum_Set(address indexed asset_source, uint256 new_maximum, uint256 nonce);
+    event Asset_Listed(address indexed asset_source, bytes32 indexed vega_asset_id, uint256 nonce);
     event Asset_Removed(address indexed asset_source, uint256 nonce);
 
     /***************************FUNCTIONS*************************/
@@ -126,52 +109,28 @@ abstract contract IERC20_Bridge_Logic {
     /// @notice This view returns true if the given ERC20 token contract has been listed valid for deposit
     /// @param asset_source Contract address for given ERC20 token
     /// @return True if asset is listed
-    function is_asset_listed(address asset_source)
-        public
-        view
-        virtual
-        returns (bool);
+    function is_asset_listed(address asset_source) public view virtual returns (bool);
 
     /// @notice This view returns minimum valid deposit
     /// @param asset_source Contract address for given ERC20 token
     /// @return Minimum valid deposit of given ERC20 token
-    function get_deposit_minimum(address asset_source)
-        public
-        view
-        virtual
-        returns (uint256);
+    function get_deposit_minimum(address asset_source) public view virtual returns (uint256);
 
     /// @notice This view returns maximum valid deposit
     /// @param asset_source Contract address for given ERC20 token
     /// @return Maximum valid deposit of given ERC20 token
-    function get_deposit_maximum(address asset_source)
-        public
-        view
-        virtual
-        returns (uint256);
+    function get_deposit_maximum(address asset_source) public view virtual returns (uint256);
 
     /// @return current multisig_control_address
-    function get_multisig_control_address()
-        public
-        view
-        virtual
-        returns (address);
+    function get_multisig_control_address() public view virtual returns (address);
 
     /// @param asset_source Contract address for given ERC20 token
     /// @return The assigned Vega Asset Id for given ERC20 token
-    function get_vega_asset_id(address asset_source)
-        public
-        view
-        virtual
-        returns (bytes32);
+    function get_vega_asset_id(address asset_source) public view virtual returns (bytes32);
 
     /// @param vega_asset_id Vega-assigned asset ID for which you want the ERC20 token address
     /// @return The ERC20 token contract address for a given Vega Asset Id
-    function get_asset_source(bytes32 vega_asset_id)
-        public
-        view
-        virtual
-        returns (address);
+    function get_asset_source(bytes32 vega_asset_id) public view virtual returns (address);
 }
 
 /**

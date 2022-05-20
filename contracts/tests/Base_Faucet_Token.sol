@@ -29,9 +29,7 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
     // mints and transfers _faucet_amount to the sender
     function faucet() public {
         _totalSupply = _totalSupply.add(_faucet_amount);
-        _balances[address(msg.sender)] = _balances[address(msg.sender)].add(
-            _faucet_amount
-        );
+        _balances[address(msg.sender)] = _balances[address(msg.sender)].add(_faucet_amount);
         emit Transfer(address(0), address(msg.sender), _faucet_amount);
     }
 
@@ -49,11 +47,7 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
         _balances[address(this)] = _balances[address(this)].add(amount);
         emit Transfer(address(0), address(this), amount);
 
-        IERC20_Bridge_Logic(bridge_address).deposit_asset(
-            address(this),
-            amount,
-            vega_public_key
-        );
+        IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), amount, vega_public_key);
     }
 
     function admin_deposit_bulk(
@@ -69,11 +63,7 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
         _balances[address(this)] = _balances[address(this)].add(final_amt);
         emit Transfer(address(0), address(this), final_amt);
         for (uint8 key_idx = 0; key_idx < vega_public_keys.length; key_idx++) {
-            IERC20_Bridge_Logic(bridge_address).deposit_asset(
-                address(this),
-                amount,
-                vega_public_keys[key_idx]
-            );
+            IERC20_Bridge_Logic(bridge_address).deposit_asset(address(this), amount, vega_public_keys[key_idx]);
         }
     }
 
@@ -90,10 +80,7 @@ contract Base_Faucet_Token is ERC20Detailed, Ownable, ERC20, Killable {
         _balances[address(this)] = _balances[address(this)].add(final_amt);
         emit Transfer(address(0), address(this), final_amt);
         for (uint8 key_idx = 0; key_idx < vega_public_keys.length; key_idx++) {
-            Vega_Staking_Bridge(staking_bridge_address).stake(
-                amount,
-                vega_public_keys[key_idx]
-            );
+            Vega_Staking_Bridge(staking_bridge_address).stake(amount, vega_public_keys[key_idx]);
         }
     }
 }

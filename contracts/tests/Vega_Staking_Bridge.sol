@@ -23,13 +23,7 @@ contract Vega_Staking_Bridge is IStake {
     /// @dev Emits Stake_Deposited event
     /// @dev User MUST run "approve" on token prior to running Stake
     function stake(uint256 amount, bytes32 vega_public_key) public {
-        require(
-            IERC20(_staking_token).transferFrom(
-                msg.sender,
-                address(this),
-                amount
-            )
-        );
+        require(IERC20(_staking_token).transferFrom(msg.sender, address(this), amount));
         stakes[msg.sender][vega_public_key] += amount;
         emit Stake_Deposited(msg.sender, amount, vega_public_key);
     }
@@ -56,12 +50,7 @@ contract Vega_Staking_Bridge is IStake {
     ) public {
         stakes[msg.sender][vega_public_key] -= amount;
         stakes[new_address][vega_public_key] += amount;
-        emit Stake_Transferred(
-            msg.sender,
-            amount,
-            new_address,
-            vega_public_key
-        );
+        emit Stake_Transferred(msg.sender, amount, new_address, vega_public_key);
     }
 
     /// @dev This is IStake.staking_token
@@ -74,12 +63,7 @@ contract Vega_Staking_Bridge is IStake {
     /// @param target Target address to check
     /// @param vega_public_key Target vega public key to check
     /// @return the number of tokens staked for that address->vega_public_key pair
-    function stake_balance(address target, bytes32 vega_public_key)
-        external
-        view
-        override
-        returns (uint256)
-    {
+    function stake_balance(address target, bytes32 vega_public_key) external view override returns (uint256) {
         return stakes[target][vega_public_key];
     }
 

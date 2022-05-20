@@ -40,17 +40,9 @@ contract ETH_Asset_Pool {
             size := extcodesize(new_address)
         }
         require(size > 0, "new address must be contract");
-        bytes memory message = abi.encode(
-            new_address,
-            nonce,
-            "set_multisig_control"
-        );
+        bytes memory message = abi.encode(new_address, nonce, "set_multisig_control");
         require(
-            IMultisigControl(multisig_control_address).verify_signatures(
-                signatures,
-                message,
-                nonce
-            ),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         multisig_control_address = new_address;
@@ -67,17 +59,9 @@ contract ETH_Asset_Pool {
         uint256 nonce,
         bytes memory signatures
     ) public {
-        bytes memory message = abi.encode(
-            new_address,
-            nonce,
-            "set_bridge_address"
-        );
+        bytes memory message = abi.encode(new_address, nonce, "set_bridge_address");
         require(
-            IMultisigControl(multisig_control_address).verify_signatures(
-                signatures,
-                message,
-                nonce
-            ),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         ETH_bridge_address = new_address;
@@ -89,10 +73,7 @@ contract ETH_Asset_Pool {
     /// @param amount Amount of ETH to withdraw
     /// @dev amount is in wei, 1 wei == 0.000000000000000001 ETH
     function withdraw(address payable target, uint256 amount) public {
-        require(
-            msg.sender == ETH_bridge_address,
-            "msg.sender not authorized bridge"
-        );
+        require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
         /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
         (bool success, ) = target.call{value: amount}("");
         require(success, "eth transfer failed");

@@ -34,19 +34,9 @@ contract MultisigControl is IMultisigControl {
         uint256 nonce,
         bytes calldata signatures
     ) public override {
-        require(
-            new_threshold < 1000 && new_threshold > 0,
-            "new threshold outside range"
-        );
-        bytes memory message = abi.encode(
-            new_threshold,
-            nonce,
-            "set_threshold"
-        );
-        require(
-            verify_signatures(signatures, message, nonce),
-            "bad signatures"
-        );
+        require(new_threshold < 1000 && new_threshold > 0, "new threshold outside range");
+        bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
+        require(verify_signatures(signatures, message, nonce), "bad signatures");
         threshold = new_threshold;
         emit ThresholdSet(new_threshold, nonce);
     }
@@ -64,10 +54,7 @@ contract MultisigControl is IMultisigControl {
     ) public override {
         bytes memory message = abi.encode(new_signer, nonce, "add_signer");
         require(!signers[new_signer], "signer already exists");
-        require(
-            verify_signatures(signatures, message, nonce),
-            "bad signatures"
-        );
+        require(verify_signatures(signatures, message, nonce), "bad signatures");
         signers[new_signer] = true;
         signer_count++;
         emit SignerAdded(new_signer, nonce);
@@ -86,10 +73,7 @@ contract MultisigControl is IMultisigControl {
     ) public override {
         bytes memory message = abi.encode(old_signer, nonce, "remove_signer");
         require(signers[old_signer], "signer doesn't exist");
-        require(
-            verify_signatures(signatures, message, nonce),
-            "bad signatures"
-        );
+        require(verify_signatures(signatures, message, nonce), "bad signatures");
         signers[old_signer] = false;
         signer_count--;
         emit SignerRemoved(old_signer, nonce);
@@ -100,15 +84,9 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'NonceBurnt' event
-    function burn_nonce(uint256 nonce, bytes calldata signatures)
-        public
-        override
-    {
+    function burn_nonce(uint256 nonce, bytes calldata signatures) public override {
         bytes memory message = abi.encode(nonce, "burn_nonce");
-        require(
-            verify_signatures(signatures, message, nonce),
-            "bad signatures"
-        );
+        require(verify_signatures(signatures, message, nonce), "bad signatures");
         emit NonceBurnt(nonce);
     }
 
@@ -160,25 +138,20 @@ contract MultisigControl is IMultisigControl {
             // vice versa. If your library also generates signatures with 0/1 for v instead 27/28, add 27 to v to accept
             // these malleable signatures as well.
             require(
-                uint256(s) <=
-                    0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0,
+                uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0,
                 "Malleable signature error"
             );
             if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
 
-            if (
-                signers[recovered_address] &&
-                !has_signed(signers_temp, recovered_address, size)
-            ) {
+            if (signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)) {
                 signers_temp[size] = recovered_address;
                 size++;
             }
         }
 
-        used_nonces[nonce] =
-            ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
+        used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
         return used_nonces[nonce];
     }
 
@@ -207,12 +180,7 @@ contract MultisigControl is IMultisigControl {
 
     /// @param signer_address target potential signer address
     /// @return true if address provided is valid signer
-    function is_valid_signer(address signer_address)
-        public
-        view
-        override
-        returns (bool)
-    {
+    function is_valid_signer(address signer_address) public view override returns (bool) {
         return signers[signer_address];
     }
 

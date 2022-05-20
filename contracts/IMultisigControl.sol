@@ -56,9 +56,7 @@ abstract contract IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'NonceBurnt' event
-    function burn_nonce(uint256 nonce, bytes calldata signatures)
-        public
-        virtual;
+    function burn_nonce(uint256 nonce, bytes calldata signatures) public virtual;
 
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
@@ -83,11 +81,7 @@ abstract contract IMultisigControl {
 
     /// @param signer_address target potential signer address
     /// @return true if address provided is valid signer
-    function is_valid_signer(address signer_address)
-        public
-        view
-        virtual
-        returns (bool);
+    function is_valid_signer(address signer_address) public view virtual returns (bool);
 
     /// @param nonce Nonce to lookup
     /// @return true if nonce has been used

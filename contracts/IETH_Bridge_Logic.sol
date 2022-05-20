@@ -7,16 +7,8 @@ pragma solidity 0.8.8;
 // @notice All funds deposited/withdrawn are to/from the ETH_Asset_Pool
 abstract contract IETH_Bridge_Logic {
     /***************************EVENTS****************************/
-    event ETH_Withdrawn(
-        address indexed user_address,
-        uint256 amount,
-        uint256 nonce
-    );
-    event ETH_Deposited(
-        address indexed user_address,
-        uint256 amount,
-        bytes32 vega_public_key
-    );
+    event ETH_Withdrawn(address indexed user_address, uint256 amount, uint256 nonce);
+    event ETH_Deposited(address indexed user_address, uint256 amount, bytes32 vega_public_key);
     event ETH_Deposit_Minimum_Set(uint256 new_minimum, uint256 nonce);
     event ETH_Deposit_Maximum_Set(uint256 new_maximum, uint256 nonce);
 
@@ -78,11 +70,7 @@ abstract contract IETH_Bridge_Logic {
     function get_deposit_maximum() public view virtual returns (uint256);
 
     /// @return current multisig_control_address
-    function get_multisig_control_address()
-        public
-        view
-        virtual
-        returns (address);
+    function get_multisig_control_address() public view virtual returns (address);
 
     /// @return The assigned Vega Asset Id for ETH
     function get_vega_asset_id() public view virtual returns (bytes32);
