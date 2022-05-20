@@ -10,7 +10,6 @@ import "./ETH_Asset_Pool.sol";
 /// @notice This contract is used by Vega network users to deposit and withdraw ETH to/from Vega.
 // @notice All funds deposited/withdrawn are to/from the assigned ETH_Asset_Pool
 contract ETH_Bridge_Logic is IETH_Bridge_Logic {
-
     address payable ETH_asset_pool_address;
 
     // minimum deposit amt
@@ -24,18 +23,27 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     constructor(address payable ETH_asset_pool) {
         ETH_asset_pool_address = ETH_asset_pool;
     }
-    function multisig_control_address() internal view returns(address) {
+
+    function multisig_control_address() internal view returns (address) {
         return ETH_Asset_Pool(ETH_asset_pool_address).multisig_control_address();
     }
+
     /// @notice This function sets the minimum allowable deposit for ETH
     /// @param minimum_amount Minimum deposit amount
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits ETH_Deposit_Minimum_Set if successful
-    function set_deposit_minimum(uint256 minimum_amount, uint256 nonce, bytes memory signatures) public override{
-        bytes memory message = abi.encode(minimum_amount, nonce, 'set_deposit_minimum');
-        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
+    function set_deposit_minimum(
+        uint256 minimum_amount,
+        uint256 nonce,
+        bytes memory signatures
+    ) public override {
+        bytes memory message = abi.encode(minimum_amount, nonce, "set_deposit_minimum");
+        require(
+            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         minimum_deposit = minimum_amount;
         emit ETH_Deposit_Minimum_Set(minimum_amount, nonce);
     }
@@ -46,9 +54,16 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits ETH_Deposit_Maximum_Set if successful
-    function set_deposit_maximum(uint256 maximum_amount, uint256 nonce, bytes memory signatures) public override {
-        bytes memory message = abi.encode(maximum_amount, nonce, 'set_deposit_maximum');
-        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
+    function set_deposit_maximum(
+        uint256 maximum_amount,
+        uint256 nonce,
+        bytes memory signatures
+    ) public override {
+        bytes memory message = abi.encode(maximum_amount, nonce, "set_deposit_maximum");
+        require(
+            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         maximum_deposit = maximum_amount;
         emit ETH_Deposit_Maximum_Set(maximum_amount, nonce);
     }
@@ -61,10 +76,19 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits ETH_Withdrawn if successful
-    function withdraw_asset(uint256 amount, uint256 expiry, address payable target, uint256 nonce, bytes memory signatures) public  override {
+    function withdraw_asset(
+        uint256 amount,
+        uint256 expiry,
+        address payable target,
+        uint256 nonce,
+        bytes memory signatures
+    ) public override {
         require(expiry > block.timestamp, "withdrawal has expired");
-        bytes memory message = abi.encode(amount, expiry, target,  nonce, 'withdraw_asset');
-        require(IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce), "bad signatures");
+        bytes memory message = abi.encode(amount, expiry, target, nonce, "withdraw_asset");
+        require(
+            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
         ETH_Asset_Pool(ETH_asset_pool_address).withdraw(target, amount);
         emit ETH_Withdrawn(target, amount, nonce);
     }
@@ -82,26 +106,25 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /***************************VIEWS*****************************/
     /// @notice This view returns minimum valid deposit
     /// @return Minimum valid deposit of ETH
-    function get_deposit_minimum() public override view returns(uint256){
+    function get_deposit_minimum() public view override returns (uint256) {
         return minimum_deposit;
     }
 
     /// @notice This view returns maximum valid deposit
     /// @return Maximum valid deposit of ETH
-    function get_deposit_maximum() public override view returns(uint256){
+    function get_deposit_maximum() public view override returns (uint256) {
         return maximum_deposit;
     }
 
     /// @return current multisig_control_address
-    function get_multisig_control_address() public override view returns(address) {
+    function get_multisig_control_address() public view override returns (address) {
         return multisig_control_address();
     }
 
     /// @return The assigned Vega Asset Id
-    function get_vega_asset_id() public override view returns(bytes32){
+    function get_vega_asset_id() public view override returns (bytes32) {
         return vega_asset_id;
     }
-
 }
 
 /**

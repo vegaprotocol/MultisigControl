@@ -31,23 +31,23 @@ import "./SafeMath.sol";
 contract ERC20 is IERC20 {
     using SafeMath for uint256;
 
-    mapping (address => uint256) internal _balances;
+    mapping(address => uint256) internal _balances;
 
-    mapping (address => mapping (address => uint256)) internal _allowances;
+    mapping(address => mapping(address => uint256)) internal _allowances;
 
     uint256 internal _totalSupply;
 
     /**
      * @dev See {IERC20-totalSupply}.
      */
-    function totalSupply() public override view returns (uint256) {
+    function totalSupply() public view override returns (uint256) {
         return _totalSupply;
     }
 
     /**
      * @dev See {IERC20-balanceOf}.
      */
-    function balanceOf(address account) public override view returns (uint256) {
+    function balanceOf(address account) public view override returns (uint256) {
         return _balances[account];
     }
 
@@ -67,7 +67,7 @@ contract ERC20 is IERC20 {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) public override view returns (uint256) {
+    function allowance(address owner, address spender) public view override returns (uint256) {
         return _allowances[owner][spender];
     }
 
@@ -95,7 +95,11 @@ contract ERC20 is IERC20 {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public override returns (bool) {
         _transfer(sender, recipient, amount);
         _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount));
         return true;
@@ -151,7 +155,11 @@ contract ERC20 is IERC20 {
      * - `recipient` cannot be the zero address.
      * - `sender` must have a balance of at least `amount`.
      */
-    function _transfer(address sender, address recipient, uint256 amount) internal {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
@@ -177,7 +185,7 @@ contract ERC20 is IERC20 {
         emit Transfer(address(0), account, amount);
     }
 
-     /**
+    /**
      * @dev Destroys `amount` tokens from `account`, reducing the
      * total supply.
      *
@@ -209,7 +217,11 @@ contract ERC20 is IERC20 {
      * - `owner` cannot be the zero address.
      * - `spender` cannot be the zero address.
      */
-    function _approve(address owner, address spender, uint256 value) internal {
+    function _approve(
+        address owner,
+        address spender,
+        uint256 value
+    ) internal {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 

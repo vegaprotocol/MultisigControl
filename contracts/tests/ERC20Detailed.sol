@@ -16,7 +16,11 @@ abstract contract ERC20Detailed is IERC20 {
      * these values are immutable: they can only be set once during
      * construction.
      */
-    constructor (string memory __name, string memory __symbol, uint8 __decimals)  {
+    constructor(
+        string memory __name,
+        string memory __symbol,
+        uint8 __decimals
+    ) {
         _name = __name;
         _symbol = __symbol;
         _decimals = __decimals;
