@@ -4,7 +4,7 @@
   "description": "Terminal 1:",
   "main": "ecc_test.js",
   "scripts": {
-    "test": "false"
+    "test": "truffle test"
   },
   "directories": {
     "test": "test"
