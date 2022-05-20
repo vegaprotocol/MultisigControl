@@ -206,7 +206,7 @@ contract("Gather Metrics", (accounts) => {
       console.log("Gas Results:")
 
       let signer_list = [accounts[0]]
-      for(let signer_count = 1; signer_count < accounts.length; signer_count++){
+      for(let signer_count = 1; signer_count < 20; signer_count++){
 
         signer_list.push(accounts[signer_count])
         // add signer
