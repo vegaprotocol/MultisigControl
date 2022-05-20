@@ -33,7 +33,7 @@ jobs:
       - name: Start ganache
         run: |
           echo "hub addict trumpet remind ring twist erupt giggle excite animal allow perfect" > .secret
-          npx ganache-cli --accounts 50 --mnemonic "$(cat .secret)" &
+          npm run ganache &
       
       - name: Migrate contracts
         run: npx truffle migrate
