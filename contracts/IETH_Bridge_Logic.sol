@@ -71,9 +71,6 @@ abstract contract IETH_Bridge_Logic {
 
     /// @return current multisig_control_address
     function get_multisig_control_address() public view virtual returns (address);
-
-    /// @return The assigned Vega Asset Id for ETH
-    function get_vega_asset_id() public view virtual returns (bytes32);
 }
 
 /**
