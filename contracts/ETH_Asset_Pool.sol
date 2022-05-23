@@ -59,6 +59,7 @@ contract ETH_Asset_Pool {
         uint256 nonce,
         bytes memory signatures
     ) public {
+        require(new_address != address(0), "invalid bridge address");
         bytes memory message = abi.encode(new_address, nonce, "set_bridge_address");
         require(
             IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
