@@ -264,11 +264,12 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     ) public override {
         require(!is_stopped, "bridge stopped");
 
-        if(!exempt_depositors[msg.sender]) {
-          require(user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source],
-              "deposit over lifetime limit"
-          );
-          user_lifetime_deposits[msg.sender][asset_source] += amount;
+        if (!exempt_depositors[msg.sender]) {
+            require(
+                user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source],
+                "deposit over lifetime limit"
+            );
+            user_lifetime_deposits[msg.sender][asset_source] += amount;
         }
 
         require(listed_tokens[asset_source], "asset not listed");
