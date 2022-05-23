@@ -88,9 +88,9 @@ async function deposit_asset(bridge_logic_instance, test_token_instance, account
 
 async function withdraw_asset(bridge_logic_instance, test_token_instance, account, bad_params) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
-
+  
   let to_withdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
-
+  
   let now = creation = await latest();
 
   let target = account;
@@ -182,10 +182,13 @@ async function set_exemption_lister(bridge_logic_instance, account, listerAccoun
 }
 
 
-async function list_asset(bridge_logic_instance, from_address) {
+async function list_asset(bridge_logic_instance, from_address, _withdraw_threshold) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   let lifetime_limit = parseEther("1000");
   let withdraw_threshold = parseEther("100");
+  if (_withdraw_threshold) {
+    withdraw_threshold = _withdraw_threshold;
+  }
   //create signature
   let encoded_message = get_message_to_sign(
     ["address", "bytes32", "uint256", "uint256"],
@@ -340,83 +343,37 @@ async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold,
 
 
 ////FUNCTIONS
-/*
-contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
+
+contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
   //function set_withdraw_threshold(address asset_source, uint256 threshold, uint256 nonce, bytes calldata signatures) public
   beforeEach(async () => {
     await init_private_keys()
-
   });
 
-  it("set_withdraw_threshold should revert if asset is not listed", async () => {
-    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-    let test_token_instance = await Base_Faucet_Token.deployed();
-
-    let withdraw_threshold = parseEther("1000");
-
-    expectBignumberEqual(await bridge_logic_instance.get_withdraw_threshold(test_token_instance.address), 0);
-
-    //new asset ID is not listed
-    assert.equal(
-      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
-      false,
-      "token is listed, shouldn't be"
-    );
-
-    await shouldFailWithMessage(
-      set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, accounts[0]),
-      "asset not listed"
-    )
-  })
-
-
-  it("set_withdraw_threshold should update asset threshold in contract if listed", async () => {
-    let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
-    let test_token_instance = await Base_Faucet_Token.deployed();
-
-    let withdraw_threshold = parseEther("1000");
-
-    expectBignumberEqual(await bridge_logic_instance.get_withdraw_threshold(test_token_instance.address), 0);
-
-    //new asset ID is not listed
-    assert.equal(
-      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
-      false,
-      "token is listed, shouldn't be"
-    );
-
-    //list new asset
-    await list_asset(bridge_logic_instance, accounts[0]);
-
-    //new asset ID is listed
-    assert.equal(
-      await bridge_logic_instance.is_asset_listed(bridge_addresses.test_token_address),
-      true,
-      "token isn't listed, should be"
-    );
-
-
-    await set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, accounts[0]);
-
-    expectBignumberEqual(await bridge_logic_instance.get_withdraw_threshold(test_token_instance.address), withdraw_threshold);
-
-  })
-
-
-  it("set_withdraw_threshold should throw large withdraw is not old enough", async () => {
+  it("withdraw_asset should throw large withdraw is not old enough", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
 
-    let withdraw_threshold = "1000000000";
-    // set threshold to lower than deposit and withdraw amounts of "10000000000"
-    await set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, accounts[0]);
+    await list_asset(bridge_logic_instance, accounts[0]);
 
+    let current_withdraw_threshold = parseEther("100");
+    // let faucetAmount = "10000000000";
+    expectBignumberEqual(await bridge_logic_instance.get_withdraw_threshold(test_token_instance.address), current_withdraw_threshold);
+    
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
 
     let amountToWithdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
     await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
+
+    // set threshold to lower than deposit and withdraw amounts of "10000000000"
+    let lifetime_limit = "10";
+    let withdraw_threshold = "1000";
+    await set_asset_limits(bridge_logic_instance, lifetime_limit, withdraw_threshold, accounts[0]);
+    // but do not increase time
+    // let withdraw_delay = await bridge_logic_instance.default_withdraw_delay();
+    // await increase(withdraw_delay + 1);
 
     await shouldFailWithMessage(
       withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0]),
@@ -426,18 +383,16 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
   })
 
 
-  it("set_withdraw_threshold should allow large withdrawal if creation + default_withdraw_delay <= block.timestamp", async () => {
+  it("set_asset_limits should allow large deposit and withdrawal if creation + default_withdraw_delay <= block.timestamp", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
 
     let withdraw_threshold = "1000000000";
-    // set threshold to lower than deposit and withdraw amounts of "10000000000"
-    await set_withdraw_threshold(bridge_logic_instance, withdraw_threshold, accounts[0]);
+    let lifetime_limit = parseEther("100");
+    await set_asset_limits(bridge_logic_instance, lifetime_limit, withdraw_threshold, accounts[0]);
 
     await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
-
-    let amountToWithdraw = (await test_token_instance.balanceOf(ERC20_Asset_Pool.address)).toString();
 
     await set_bridge_address(bridge_logic_instance, asset_pool_instance, accounts[0]);
 
@@ -472,7 +427,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_threshold", (accounts) => {
   })
 
 })
-*/
+
 
 /*
 contract("ERC20_Bridge_Logic Function: set_exemption_lister", (accounts) => {
@@ -1053,6 +1008,11 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
       true,
       "token isn't listed, should be"
     );
+
+    await shouldFailWithMessage(
+      list_asset(bridge_logic_instance, accounts[0]),
+      "asset already listed"
+    )
 
     //deposit new asset
     let amount_deposited = await deposit_asset(bridge_logic_instance, test_token_instance, accounts[0]);
