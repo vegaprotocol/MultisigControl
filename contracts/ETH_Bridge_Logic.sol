@@ -21,6 +21,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
 
     /// @param ETH_asset_pool Initial Asset Pool contract address
     constructor(address payable ETH_asset_pool) {
+        require(ETH_asset_pool != address(0), "invalid asset pool address");
         ETH_asset_pool_address = ETH_asset_pool;
     }
 

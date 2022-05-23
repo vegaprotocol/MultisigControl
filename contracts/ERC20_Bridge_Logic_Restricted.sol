@@ -21,6 +21,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
 
     /// @param erc20_asset_pool Initial Asset Pool contract address
     constructor(address payable erc20_asset_pool) {
+        require(erc20_asset_pool != address(0), "invalid asset pool address");
         erc20_asset_pool_address = erc20_asset_pool;
     }
 
