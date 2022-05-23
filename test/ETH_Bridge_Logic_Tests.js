@@ -644,22 +644,3 @@ beforeEach(async()=>{
     assert.equal(multisig_control_address, MultisigControl.address, "Multisig control shows the wrong address");
   });
 });
-
-contract("ETH_Bridge_Logic Function: get_vega_asset_id",  (accounts) => {
-//    function get_vega_asset_id() public override view returns(bytes32){
-
-beforeEach(async()=>{
-  await init_private_keys()
-
-});
-  //function get_vega_asset_id(address asset_source) public view returns(bytes32);
-  it("get_vega_asset_id returns proper vega id for newly listed assets", async () => {
-    let bridge_logic_instance = await ETH_Bridge_Logic.deployed();
-    
-    let vega_asset_id = await bridge_logic_instance.get_vega_asset_id();
-
-    assert.equal(vega_asset_id, "0x0000000000000000000000000000000000000000000000000000000000000000", "incorrect vega asset id")
-    
-  });
-
-});
