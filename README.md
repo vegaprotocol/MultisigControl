@@ -28,7 +28,7 @@ See below for instructions on how to complete step 1.
 Terminal 1:
 
 1. `npm install`
-1. `npm run ganache` - this will start ganache-cli with the mnemonic from .secret 
+1. `npm run ganache` - this will start ganache-cli with the mnemonic from .secret
 
 
 Terminal 2:
@@ -43,7 +43,7 @@ All addresses, ABIs, and smart contract files will be available in `./ropsten_de
 Terminal 1:
 
 1. `npm install`
-1. `npm run ganache` - this will start ganache-cli with the mnemonic from .secret 
+1. `npm run ganache` - this will start ganache-cli with the mnemonic from .secret
 
 
 Terminal 2:
@@ -57,6 +57,8 @@ Terminal 2:
 ## Code Coverage Checks
 1. `truffle run coverage`
 
+## Prettier
+1. `npx prettier -w contracts/`
 
 # See Also
 
