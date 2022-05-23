@@ -1280,6 +1280,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
     await init_private_keys()
 
   });
+
   it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
