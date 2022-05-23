@@ -263,11 +263,14 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         bytes32 vega_public_key
     ) public override {
         require(!is_stopped, "bridge stopped");
-        require(
-            exempt_depositors[msg.sender] ||
-                user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source],
-            "deposit over lifetime limit"
-        );
+
+        if(!exempt_depositors[msg.sender]) {
+          require(user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source],
+              "deposit over lifetime limit"
+          );
+          user_lifetime_deposits[msg.sender][asset_source] += amount;
+        }
+
         require(listed_tokens[asset_source], "asset not listed");
         require(is_contract(asset_source), "asset_source must be contract");
 
@@ -286,7 +289,6 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
             require(abi.decode(returndata, (bool)), "token transfer failed");
         }
 
-        user_lifetime_deposits[msg.sender][asset_source] += amount;
         emit Asset_Deposited(msg.sender, asset_source, amount, vega_public_key);
     }
 
