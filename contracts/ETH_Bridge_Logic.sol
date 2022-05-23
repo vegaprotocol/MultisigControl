@@ -17,8 +17,6 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     // maximum deposit amt
     uint256 maximum_deposit;
 
-    bytes32 vega_asset_id;
-
     /// @param ETH_asset_pool Initial Asset Pool contract address
     constructor(address payable ETH_asset_pool) {
         require(ETH_asset_pool != address(0), "invalid asset pool address");
@@ -120,11 +118,6 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @return current multisig_control_address
     function get_multisig_control_address() public view override returns (address) {
         return multisig_control_address();
-    }
-
-    /// @return The assigned Vega Asset Id
-    function get_vega_asset_id() public view override returns (bytes32) {
-        return vega_asset_id;
     }
 }
 
