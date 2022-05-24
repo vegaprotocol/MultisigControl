@@ -23,7 +23,7 @@ abstract contract IETH_Bridge_Logic {
         uint256 minimum_amount,
         uint256 nonce,
         bytes memory signatures
-    ) public virtual;
+    ) external virtual;
 
     /// @notice This function sets the maximum allowable deposit for ETH
     /// @param maximum_amount Maximum deposit amount
@@ -35,7 +35,7 @@ abstract contract IETH_Bridge_Logic {
         uint256 maximum_amount,
         uint256 nonce,
         bytes memory signatures
-    ) public virtual;
+    ) external virtual;
 
     /// @notice This function withdraws assets to the target Ethereum address
     /// @param amount Amount of ETH to withdraw
@@ -51,26 +51,26 @@ abstract contract IETH_Bridge_Logic {
         address payable target,
         uint256 nonce,
         bytes memory signatures
-    ) public virtual;
+    ) external virtual;
 
     /// @notice This function allows a user to deposit ETH into Vega
     /// @param vega_public_key Target vega public key to be credited with this deposit
     /// @dev MUST emit Asset_Deposited if successful
     /// @dev ETH approve function should be run before running this
     /// @notice ETH approve function should be run before running this
-    function deposit_asset(bytes32 vega_public_key) public payable virtual;
+    function deposit_asset(bytes32 vega_public_key) external payable virtual;
 
     /***************************VIEWS*****************************/
     /// @notice This view returns minimum valid deposit
     /// @return Minimum valid deposit of ETH
-    function get_deposit_minimum() public view virtual returns (uint256);
+    function get_deposit_minimum() external view virtual returns (uint256);
 
     /// @notice This view returns maximum valid deposit
     /// @return Maximum valid deposit of ETH
-    function get_deposit_maximum() public view virtual returns (uint256);
+    function get_deposit_maximum() external view virtual returns (uint256);
 
     /// @return current multisig_control_address
-    function get_multisig_control_address() public view virtual returns (address);
+    function get_multisig_control_address() external view virtual returns (address);
 }
 
 /**

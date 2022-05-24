@@ -33,7 +33,7 @@ contract ETH_Asset_Pool {
         address new_address,
         uint256 nonce,
         bytes memory signatures
-    ) public {
+    ) external {
         require(new_address != address(0), "invalid MultisigControl address");
         uint256 size;
         assembly {
@@ -58,7 +58,7 @@ contract ETH_Asset_Pool {
         address new_address,
         uint256 nonce,
         bytes memory signatures
-    ) public {
+    ) external {
         require(new_address != address(0), "invalid bridge address");
         bytes memory message = abi.encode(new_address, nonce, "set_bridge_address");
         require(
@@ -73,7 +73,7 @@ contract ETH_Asset_Pool {
     /// @param target Target Ethereum address that the ETH will be sent to
     /// @param amount Amount of ETH to withdraw
     /// @dev amount is in wei, 1 wei == 0.000000000000000001 ETH
-    function withdraw(address payable target, uint256 amount) public {
+    function withdraw(address payable target, uint256 amount) external {
         require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
         /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
         (bool success, ) = target.call{value: amount}("");
