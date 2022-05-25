@@ -37,7 +37,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         uint256 minimum_amount,
         uint256 nonce,
         bytes memory signatures
-    ) public override {
+    ) external override {
         bytes memory message = abi.encode(minimum_amount, nonce, "set_deposit_minimum");
         require(
             IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
@@ -57,7 +57,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         uint256 maximum_amount,
         uint256 nonce,
         bytes memory signatures
-    ) public override {
+    ) external override {
         bytes memory message = abi.encode(maximum_amount, nonce, "set_deposit_maximum");
         require(
             IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
@@ -81,7 +81,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
         address payable target,
         uint256 nonce,
         bytes memory signatures
-    ) public override {
+    ) external override {
         require(expiry > block.timestamp, "withdrawal has expired");
         bytes memory message = abi.encode(amount, expiry, target, nonce, "withdraw_asset");
         require(
@@ -95,7 +95,7 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /// @notice This function allows a user to deposit ETH into Vega
     /// @param vega_public_key Target vega public key to be credited with this deposit
     /// @dev Emits ETH_Deposited if successful
-    function deposit_asset(bytes32 vega_public_key) public payable override {
+    function deposit_asset(bytes32 vega_public_key) external payable override {
         require(maximum_deposit == 0 || msg.value <= maximum_deposit, "deposit above maximum");
         require(msg.value >= minimum_deposit, "deposit below minimum");
         ETH_asset_pool_address.transfer(msg.value);
@@ -105,18 +105,18 @@ contract ETH_Bridge_Logic is IETH_Bridge_Logic {
     /***************************VIEWS*****************************/
     /// @notice This view returns minimum valid deposit
     /// @return Minimum valid deposit of ETH
-    function get_deposit_minimum() public view override returns (uint256) {
+    function get_deposit_minimum() external view override returns (uint256) {
         return minimum_deposit;
     }
 
     /// @notice This view returns maximum valid deposit
     /// @return Maximum valid deposit of ETH
-    function get_deposit_maximum() public view override returns (uint256) {
+    function get_deposit_maximum() external view override returns (uint256) {
         return maximum_deposit;
     }
 
     /// @return current multisig_control_address
-    function get_multisig_control_address() public view override returns (address) {
+    function get_multisig_control_address() external view override returns (address) {
         return multisig_control_address();
     }
 }
