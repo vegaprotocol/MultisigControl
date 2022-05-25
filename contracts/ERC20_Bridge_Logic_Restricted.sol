@@ -11,7 +11,7 @@ import "./ERC20_Asset_Pool.sol";
 /// @notice This contract is used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.
 // @notice All funds deposited/withdrawn are to/from the assigned ERC20_Asset_Pool
 contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
-    address payable erc20_asset_pool_address;
+    address payable public erc20_asset_pool_address;
     // asset address => is listed
     mapping(address => bool) listed_tokens;
     // Vega asset ID => asset_source
