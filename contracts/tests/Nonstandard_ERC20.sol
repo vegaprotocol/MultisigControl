@@ -27,9 +27,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * allowances. See {IERC20-approve}.
  */
 contract Nonstandard_ERC20 is Context {
-
-
-  /**
+    /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
      * another (`to`).
      *
@@ -65,17 +63,14 @@ contract Nonstandard_ERC20 is Context {
         _symbol = symbol_;
     }
 
-
     function faucet() public {
-      _mint(msg.sender, 1000000000000000000);
+        _mint(msg.sender, 1000000000000000000);
     }
-
-
 
     /**
      * @dev Returns the name of the token.
      */
-    function name() public view   returns (string memory) {
+    function name() public view returns (string memory) {
         return _name;
     }
 
@@ -83,7 +78,7 @@ contract Nonstandard_ERC20 is Context {
      * @dev Returns the symbol of the token, usually a shorter version of the
      * name.
      */
-    function symbol() public view   returns (string memory) {
+    function symbol() public view returns (string memory) {
         return _symbol;
     }
 
@@ -100,21 +95,21 @@ contract Nonstandard_ERC20 is Context {
      * no way affects any of the arithmetic of the contract, including
      * {IERC20-balanceOf} and {IERC20-transfer}.
      */
-    function decimals() public view   returns (uint8) {
+    function decimals() public view returns (uint8) {
         return 18;
     }
 
     /**
      * @dev See {IERC20-totalSupply}.
      */
-    function totalSupply() public view   returns (uint256) {
+    function totalSupply() public view returns (uint256) {
         return _totalSupply;
     }
 
     /**
      * @dev See {IERC20-balanceOf}.
      */
-    function balanceOf(address account) public view   returns (uint256) {
+    function balanceOf(address account) public view returns (uint256) {
         return _balances[account];
     }
 
@@ -134,7 +129,7 @@ contract Nonstandard_ERC20 is Context {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) public view   returns (uint256) {
+    function allowance(address owner, address spender) public view returns (uint256) {
         return _allowances[owner][spender];
     }
 
@@ -148,7 +143,7 @@ contract Nonstandard_ERC20 is Context {
      *
      * - `spender` cannot be the zero address.
      */
-    function approve(address spender, uint256 amount) public   returns (bool) {
+    function approve(address spender, uint256 amount) public returns (bool) {
         address owner = _msgSender();
         _approve(owner, spender, amount);
         return true;
@@ -174,7 +169,7 @@ contract Nonstandard_ERC20 is Context {
         address from,
         address to,
         uint256 amount
-    ) public   {
+    ) public {
         address spender = _msgSender();
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
