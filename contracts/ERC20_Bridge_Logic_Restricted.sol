@@ -47,6 +47,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         uint256 nonce,
         bytes memory signatures
     ) external override {
+        require(asset_source != address(0), "invalid asset source");
         require(!listed_tokens[asset_source], "asset already listed");
         bytes memory message = abi.encode(
             asset_source,

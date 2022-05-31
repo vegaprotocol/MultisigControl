@@ -20,6 +20,7 @@ contract ERC20_Asset_Pool {
     /// @param multisig_control The initial MultisigControl contract address
     /// @notice Emits Multisig_Control_Set event
     constructor(address multisig_control) {
+        require(multisig_control != address(0), "invalid MultisigControl address");
         multisig_control_address = multisig_control;
         emit Multisig_Control_Set(multisig_control);
     }
