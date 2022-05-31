@@ -76,6 +76,7 @@ contract ETH_Asset_Pool {
     function withdraw(address payable target, uint256 amount) external {
         require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
         /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
+        /// @dev gas is unrestricted, but even in the event of a gas mining attack from the recipient, gas is user supplied by an interested party and hence will be self-inflicted
         (bool success, ) = target.call{value: amount}("");
         require(success, "eth transfer failed");
     }

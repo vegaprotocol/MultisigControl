@@ -11,6 +11,10 @@ import "./ERC20_Asset_Pool.sol";
 /// @notice This contract is used by Vega network users to deposit and withdraw ERC20 tokens to/from Vega.
 // @notice All funds deposited/withdrawn are to/from the assigned ERC20_Asset_Pool
 contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
+    event Multisig_Control_Set(address indexed new_address);
+
+    address multisig_control_address;
+
     address payable public erc20_asset_pool_address;
     // asset address => is listed
     mapping(address => bool) listed_tokens;
@@ -20,13 +24,39 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     mapping(address => bytes32) asset_source_to_vega_asset_id;
 
     /// @param erc20_asset_pool Initial Asset Pool contract address
-    constructor(address payable erc20_asset_pool) {
+    constructor(address payable erc20_asset_pool, address multisig_control) {
         require(erc20_asset_pool != address(0), "invalid asset pool address");
+        require(multisig_control != address(0), "invalid MultisigControl address");
+        multisig_control_address = multisig_control;
+
         erc20_asset_pool_address = erc20_asset_pool;
+
+        emit Multisig_Control_Set(multisig_control);
     }
 
-    function multisig_control_address() internal view returns (address) {
-        return ERC20_Asset_Pool(erc20_asset_pool_address).multisig_control_address();
+    /// @param new_address The new MultisigControl contract address.
+    /// @param nonce Vega-assigned single-use number that provides replay attack protection
+    /// @param signatures Vega-supplied signature bundle of a validator-signed set_multisig_control order
+    /// @notice See MultisigControl for more about signatures
+    /// @notice Emits Multisig_Control_Set event
+    function set_multisig_control(
+        address new_address,
+        uint256 nonce,
+        bytes memory signatures
+    ) external {
+        require(new_address != address(0), "invalid MultisigControl address");
+        uint256 size;
+        assembly {
+            size := extcodesize(new_address)
+        }
+        require(size > 0, "new address must be contract");
+        bytes memory message = abi.encode(new_address, nonce, "set_multisig_control");
+        require(
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
+            "bad signatures"
+        );
+        multisig_control_address = new_address;
+        emit Multisig_Control_Set(new_address);
     }
 
     /***************************FUNCTIONS*************************/
@@ -57,7 +87,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
             "list_asset"
         );
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         listed_tokens[asset_source] = true;
@@ -82,7 +112,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(listed_tokens[asset_source], "asset not listed");
         bytes memory message = abi.encode(asset_source, nonce, "remove_asset");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         listed_tokens[asset_source] = false;
@@ -119,7 +149,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(listed_tokens[asset_source], "asset not listed");
         bytes memory message = abi.encode(asset_source, lifetime_limit, threshold, nonce, "set_asset_limits");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         asset_deposit_lifetime_limit[asset_source] = lifetime_limit;
@@ -153,7 +183,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     ) external override {
         bytes memory message = abi.encode(delay, nonce, "set_withdraw_delay");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         default_withdraw_delay = delay;
@@ -169,7 +199,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(!is_stopped, "bridge already stopped");
         bytes memory message = abi.encode(nonce, "global_stop");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         is_stopped = true;
@@ -185,7 +215,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         require(is_stopped, "bridge not stopped");
         bytes memory message = abi.encode(nonce, "global_resume");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         is_stopped = false;
@@ -243,7 +273,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         );
         bytes memory message = abi.encode(asset_source, amount, target, creation, nonce, "withdraw_asset");
         require(
-            IMultisigControl(multisig_control_address()).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
             "bad signatures"
         );
         ERC20_Asset_Pool(erc20_asset_pool_address).withdraw(asset_source, target, amount);
@@ -303,7 +333,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
 
     /// @return current multisig_control_address
     function get_multisig_control_address() external view override returns (address) {
-        return multisig_control_address();
+        return multisig_control_address;
     }
 
     /// @param asset_source Contract address for given ERC20 token

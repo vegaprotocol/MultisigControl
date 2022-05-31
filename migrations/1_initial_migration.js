@@ -60,8 +60,8 @@ module.exports = async function(deployer) {
     }
     await deployer.deploy(MultisigControl);
     await deployer.deploy(ERC20_Asset_Pool, MultisigControl.address);
-    let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address);
-    let logic_2 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address);
+    let logic_1 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
+    let logic_2 = await deployer.deploy(ERC20_Bridge_Logic, ERC20_Asset_Pool.address, MultisigControl.address);
 
     console.log(logic_1.address);
     console.log(logic_2.address);

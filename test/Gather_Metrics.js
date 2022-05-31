@@ -185,7 +185,7 @@ contract("Gather Metrics", (accounts) => {
     multisigControl_instance = await MultisigControl.new();
     asset_pool_instance = await ERC20_Asset_Pool.new(multisigControl_instance.address);
     test_token_instance = await Base_Faucet_Token.new("TEST", "TEST", 18, 0, "1000000000000000000");
-    bridge_logic_instance = await ERC20_Bridge_Logic.new(asset_pool_instance.address);
+    bridge_logic_instance = await ERC20_Bridge_Logic.new(asset_pool_instance.address, multisigControl_instance.address);
 
     await set_bridge_address(asset_pool_instance, bridge_logic_instance.address, accounts[0])
   });
