@@ -20,6 +20,7 @@ contract ETH_Asset_Pool {
     /// @param multisig_control The initial MultisigControl contract address
     /// @notice Emits Multisig_Control_Set event
     constructor(address multisig_control) {
+        require(multisig_control != address(0), "invalid MultisigControl address");
         multisig_control_address = multisig_control;
         emit Multisig_Control_Set(multisig_control);
     }
@@ -74,6 +75,7 @@ contract ETH_Asset_Pool {
     /// @param amount Amount of ETH to withdraw
     /// @dev amount is in wei, 1 wei == 0.000000000000000001 ETH
     function withdraw(address payable target, uint256 amount) external {
+        require(target != address(0), "invalid target address");
         require(msg.sender == ETH_bridge_address, "msg.sender not authorized bridge");
         /// @dev reentry is protected by the non-reusable nonce in the signature check in the ETH_Bridge_Logic
         (bool success, ) = target.call{value: amount}("");
