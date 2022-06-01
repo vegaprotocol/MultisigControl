@@ -194,10 +194,7 @@ async function set_exemption_lister(bridge_logic_instance, account, listerAccoun
 }
 
 
-async function list_asset(bridge_logic_instance, from_address, _withdraw_threshold, target) {
-  if(target === undefined){
-    target = bridge_addresses.test_token_address;
-  }
+async function list_asset(bridge_logic_instance, from_address, _withdraw_threshold, target = bridge_addresses.test_token_address) {
   let nonce = new ethUtil.BN(crypto.randomBytes(32));
   let lifetime_limit = parseEther("1000");
   let withdraw_threshold = parseEther("100");

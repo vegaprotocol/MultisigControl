@@ -1,5 +1,4 @@
 pragma solidity 0.8.8;
-import "@openzeppelin/contracts/utils/Context.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -26,7 +25,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract Nonstandard_ERC20 is Context {
+contract Nonstandard_ERC20 {
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
      * another (`to`).
@@ -122,7 +121,7 @@ contract Nonstandard_ERC20 is Context {
      * - the caller must have a balance of at least `amount`.
      */
     function transfer(address to, uint256 amount) public {
-        address owner = _msgSender();
+        address owner = msg.sender;
         _transfer(owner, to, amount);
     }
 
@@ -144,7 +143,7 @@ contract Nonstandard_ERC20 is Context {
      * - `spender` cannot be the zero address.
      */
     function approve(address spender, uint256 amount) public returns (bool) {
-        address owner = _msgSender();
+        address owner = msg.sender;
         _approve(owner, spender, amount);
         return true;
     }
@@ -170,7 +169,7 @@ contract Nonstandard_ERC20 is Context {
         address to,
         uint256 amount
     ) public {
-        address spender = _msgSender();
+        address spender = msg.sender;
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
     }
@@ -188,7 +187,7 @@ contract Nonstandard_ERC20 is Context {
      * - `spender` cannot be the zero address.
      */
     function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
-        address owner = _msgSender();
+        address owner = msg.sender;
         _approve(owner, spender, allowance(owner, spender) + addedValue);
         return true;
     }
@@ -208,7 +207,7 @@ contract Nonstandard_ERC20 is Context {
      * `subtractedValue`.
      */
     function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        address owner = _msgSender();
+        address owner = msg.sender;
         uint256 currentAllowance = allowance(owner, spender);
         require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
         unchecked {
