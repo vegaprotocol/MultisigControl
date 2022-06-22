@@ -85,7 +85,7 @@ async function add_signer(multisigControl_instance, new_signer, sender) {
 }
 
 //function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
-contract("MultisigControl -- Function: verify_signatures", (accounts) => {
+contract("MultisigControl -- Function: verify_signatures - 0030-ETHM-023", (accounts) => {
     beforeEach(async () => {
         await init_private_keys()
 
@@ -382,11 +382,22 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
         let signature_1_300 = ethUtil.ecsign(encoded_hash_300, private_keys[accounts[1].toLowerCase()]);
         let sig_string_1_300 = to_signature_string(signature_1_300);
 
+        // invalid signature from someone not on the contract
+        let signature_2_300 = ethUtil.ecsign(encoded_hash_300, private_keys[accounts[2].toLowerCase()]);
+        let sig_string_2_300 = to_signature_string(signature_2_300);
+
         let sig_bundle_300 = sig_string_0_300 + sig_string_1_300.substr(2);
+        let sig_bundle_invalid_300 = sig_string_0_300 + sig_string_2_300.substr(2);
 
         //fail to sign with 1 sig
         try {
             await multisigControl_instance.set_threshold(300, nonce_300, sig_string_0_300);
+            assert.equal(true, false, "set threshold worked, shouldn't have")
+        } catch (e) { }
+
+        //fail to sign with invalid sig 0030-ETHM-005
+        try {
+            await multisigControl_instance.set_threshold(300, nonce_300, sig_bundle_invalid_300);
             assert.equal(true, false, "set threshold worked, shouldn't have")
         } catch (e) { }
 
@@ -411,6 +422,7 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
             await multisigControl_instance.set_threshold(100, nonce_300, sig_bundle_300);
             assert.equal(true, false, "set threshold worked, shouldn't have")
         }catch (e) {}
+
 
         // set threshold to 500 (50%) with 1 signer
         let nonce_500 = new ethUtil.BN(crypto.randomBytes(32));
@@ -666,7 +678,7 @@ contract("MultisigControl -- Function: is_nonce_used - 0030-ETHM-021",  async (a
 });
 
 //function get_valid_signer_count() public view returns(uint8){
-contract("MultisigControl -- Function: get_valid_signer_count", async (accounts) => {
+contract("MultisigControl -- Function: get_valid_signer_count - 0030-ETHM-018", async (accounts) => {
     beforeEach(async () => {
         await init_private_keys()
 
