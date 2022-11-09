@@ -352,7 +352,7 @@ async function set_withdraw_threshold(bridge_logic_instance, withdraw_threshold,
   return [nonce, receipt]
 }
 
-
+skip_it = ()=> {}
 
 ////FUNCTIONS
 
@@ -362,7 +362,7 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
     await init_private_keys()
   });
 
-  it("withdraw_asset should throw large withdraw is not old enough", async () => {
+  it("withdraw_asset should throw large withdraw is not old enough (0031-ETHB-033)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -395,7 +395,7 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
   })
 
 
-  it("set_asset_limits should allow large deposit and withdrawal if creation + default_withdraw_delay <= block.timestamp", async () => {
+  it("set_asset_limits should allow large deposit and withdrawal if creation + default_withdraw_delay <= block.timestamp (0031-ETHB-029)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -418,7 +418,6 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
     let creation = (await latest()).sub(toBN(432000));
 
     await withdraw_asset_with_creation(bridge_logic_instance, test_token_instance, accounts[0], creation);
-
 
     let account_bal_after = await test_token_instance.balanceOf(accounts[0]);
     let pool_bal_after = await test_token_instance.balanceOf(asset_pool_instance.address);
@@ -514,7 +513,7 @@ contract("ERC20_Bridge_Logic Function: revoke_exempt_depositor", (accounts) => {
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(false);
   })
 
-  it("any ETH address can call revoke_exempt_depositor to remove itself (own ETH address) from the exemption list - 0003-NP-LIMI-002", async () => {
+  it("any ETH address can call revoke_exempt_depositor to remove itself (own ETH address) from the exemption list - (0003-NP-LIMI-002, 0021-ETHB-049, 0021-ETHB-051)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -624,7 +623,7 @@ contract("ERC20_Bridge_Logic Function: exempt_depositor", (accounts) => {
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[8])).to.be.equal(false);
   })
 
-  it("exempt_depositor should not be callable multiple time for the same depositor", async () => {
+  it("exempt_depositor should not be callable multiple time for the same depositor (0031-ETHB-048)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -650,7 +649,7 @@ contract("ERC20_Bridge_Logic Function: set_withdraw_delay", (accounts) => {
 
   });
 
-  it("set_withdraw_delay should update delay in contract and emit correct event and parameters", async () => {
+  it("set_withdraw_delay should update delay in contract and emit correct event and parameters (0031-ETHB-034)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -694,7 +693,7 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
     )
   })
 
-  it("set_asset_limits should not revert if asset is listed and emit correct event and parameters", async () => {
+  it("set_asset_limits should not revert if asset is listed and emit correct event and parameters (0031-ETHB-032)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -730,7 +729,7 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
 
   })
 
-  it("deposit asset should revert if total deposited by user is > maximum lifetime deposit", async () => {
+  it("deposit asset should revert if total deposited by user is > maximum lifetime deposit (0031-ETHB-058)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -749,7 +748,7 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
   })
 
 
-  it("deposit asset should not revert if depositor is exempted and total deposited by user is > maximum lifetime deposit", async () => {
+  it("deposit asset should not revert if depositor is exempted and total deposited by user is > maximum lifetime deposit (0031-ETHB-047, 0031-ETHB-057, 0031-ETHB-055)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -801,7 +800,7 @@ contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
 
   });
 
-  it("global_stop throws bridge already stopped", async () => {
+  it("global_stop throws bridge already stopped (0031-ETHB-040)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -816,7 +815,7 @@ contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
   })
 
-  it("global_stop should set is_stopped to true and emit correct event", async () => {
+  it("global_stop should set is_stopped to true and emit correct event (0031-ETHB-027, 0031-ETHB-028, 0031-ETHB-037)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -830,7 +829,7 @@ contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(true);
   })
 
-  it("deposit asset should revert when is_stopped", async () => {
+  it("deposit asset should revert when is_stopped (0031-ETHB-038)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -861,7 +860,7 @@ contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
   })
 
 
-  it("withdraw asset should revert when is_stopped", async () => {
+  it("withdraw asset should revert when is_stopped (0031-ETHB-039)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -891,12 +890,7 @@ contract("ERC20_Bridge_Logic Function: global_stop", (accounts) => {
       withdraw_asset(bridge_logic_instance, test_token_instance, accounts[0]),
       "bridge stopped"
     )
-
-
-
   })
-
-
 })
 
 
@@ -907,7 +901,7 @@ contract("ERC20_Bridge_Logic Function: global_resume", (accounts) => {
 
   });
 
-  it("global_resume should set is_stopped to false and emit correct event", async () => {
+  it("global_resume should set is_stopped to false and emit correct event (0031-ETHB-042)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -922,7 +916,7 @@ contract("ERC20_Bridge_Logic Function: global_resume", (accounts) => {
     expect(await bridge_logic_instance.is_stopped()).to.be.equal(false);
   })
 
-  it("global_resume throws bridge not stopped if it is not stopped", async () => {
+  it("global_resume throws bridge not stopped if it is not stopped (0031-ETHB-045)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -946,7 +940,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("list_asset should trigger bad signatures with invalid signature string", async () => {
+  it("list_asset should trigger bad signatures with invalid signature string (0031-ETHB-021)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -984,7 +978,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("asset that was not listed is listed after running list_asset", async () => {
+  it("asset that was not listed is listed after running list_asset (0031-ETHB-020, 0031-ETHB-056, 0031-ETHB-060, 0031-ETHB-061, 0031-ETHB-062, 0031-ETHB-063)", async () => {
 
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
@@ -1039,7 +1033,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("list_asset fails to list an already listed asset", async () => {
+  it("list_asset fails to list an already listed asset (0031-ETHB-020)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     //new asset ID is listed
     assert.equal(
@@ -1069,7 +1063,7 @@ contract("ERC20_Bridge_Logic Function: remove_asset", (accounts) => {
 
   });
   //function remove_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
-  it("listed asset is not listed after running remove_asset and no longer able to deposited", async () => {
+  it("listed asset is not listed after running remove_asset and no longer able to deposited (0031-ETHB-023)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
@@ -1332,7 +1326,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
   });
 
 
-  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl", async () => {
+  it("happy path - should allow withdrawal from a generated withdraw ticket signed by MultisigControl (0031-ETHB-052)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1420,7 +1414,7 @@ contract("ERC20_Bridge_Logic Function: withdraw_asset", (accounts) => {
   })
 
 
-  it("withdraw_asset fails due to amount mismatch between signature and function params", async () => {
+  it("withdraw_asset fails due to amount mismatch between signature and function params (0031-ETHB-053, 0031-ETHB-054)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1595,7 +1589,7 @@ contract("ERC20_Bridge_Logic Function: get_multisig_control_address", (accounts)
 
   });
   //function get_multisig_control_address() public view returns(address);
-  it("get_multisig_control_address returns the address it was initialized with", async () => {
+  it("get_multisig_control_address returns the address it was initialized with (0031-ETHB-064)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1611,7 +1605,7 @@ contract("ERC20_Bridge_Logic Function: get_vega_asset_id", (accounts) => {
 
   });
   //function get_vega_asset_id(address asset_source) public view returns(bytes32);
-  it("get_vega_asset_id returns proper vega id for newly listed assets", async () => {
+  it("get_vega_asset_id returns proper vega id for newly listed assets (0031-ETHB-065)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     //new asset ID is not listed
@@ -1654,7 +1648,7 @@ contract("ERC20_Bridge_Logic Function: get_vega_asset_id", (accounts) => {
   });
 });
 
-contract("ERC20_Bridge_Logic Function: get_asset_source", (accounts) => {
+contract("ERC20_Bridge_Logic Function: get_asset_source (0031-ETHB-066)", (accounts) => {
   beforeEach(async () => {
     await init_private_keys()
 
