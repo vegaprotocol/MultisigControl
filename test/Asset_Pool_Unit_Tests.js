@@ -181,9 +181,6 @@ async function withdraw_asset(bridge_logic_instance, test_token_instance, accoun
 }
 
 
-
-
-
 ////FUNCTIONS
 contract("Asset_Pool Function: set_multisig_control", (accounts) => {
   beforeEach(async () => {
@@ -191,7 +188,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
 
   });
 
-  it("should revert if new address is address(0)", async () => {
+ it("should revert if new address is address(0)", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
     //set new multisig_control_address
@@ -253,7 +250,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
     );
   });
 
-  it("should trigger bad signatures with invalid signature string", async () => {
+  it("should trigger bad signatures with invalid signature string (0031-ETHB-073)", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
@@ -286,7 +283,7 @@ contract("Asset_Pool Function: set_multisig_control", (accounts) => {
   });
 
   //function set_multisig_control(address new_address, uint256 nonce, bytes memory signatures) public {
-  it("should change multisig control address", async () => {
+  it("should change multisig control address (0031-ETHB-067, 0031-ETHB-068, 0031-ETHB-071, 0031-ETHB-072)", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
@@ -319,7 +316,7 @@ contract("Asset_Pool Function: set_bridge_address", (accounts) => {
     await init_private_keys()
   });
 
-  it("should trigger bad signatures with invalid signature string", async () => {
+  it("should trigger bad signatures with invalid signature string (0031-ETHB-076)", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
 
@@ -351,7 +348,7 @@ contract("Asset_Pool Function: set_bridge_address", (accounts) => {
     );
   });
 
-  it("should change the bridge address to a new address, should now ignore old address", async () => {
+  it("should change the bridge address to a new address, should now ignore old address (0031-ETHB-069, 0031-ETHB-070, 0031-ETHB-074, 0031-ETHB-075)", async () => {
     let multisig_control_instance = await MultisigControl.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
 
@@ -406,7 +403,7 @@ contract("Asset_Pool Function: withdraw", (accounts) => {
   });
 
 
-  it("should allow bridge to withdraw target asset", async () => {
+  it("should allow bridge to withdraw target asset (0031-ETHB-077)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -499,7 +496,7 @@ contract("Asset_Pool Function: withdraw", (accounts) => {
     );
   });
 
-  it("withdraw function should fail to run from any address but the current bridge", async () => {
+  it("withdraw function should fail to run from any address but the current bridge (0031-ETHB-078, 0031-ETHB-079, 0031-ETHB-080, 0031-ETHB-081)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
