@@ -69,7 +69,7 @@ function recover_signer_address(sig, msgHash) {
     return ethUtil.bufferToHex(sender);
 }
 
-async function add_signer(multisigControl_instance, new_signer, sender) {
+async function add_signer(multisigControl_instance, new_signer, sender, bad_sigs = false) {
     let nonce = new ethUtil.BN(crypto.randomBytes(32));
     let encoded_message = get_message_to_sign(
         ["address"],
@@ -80,6 +80,14 @@ async function add_signer(multisigControl_instance, new_signer, sender) {
     let encoded_hash = ethUtil.keccak256(encoded_message);
     let signature = ethUtil.ecsign(encoded_hash, private_keys[sender.toLowerCase()]);
     let sig_string = to_signature_string(signature);
+    if (bad_sigs) {
+        // replace 1 char with 0 id that char is not 0 already in which case change it to 1
+        if(sig_string[2] == "0") {
+          sig_string = "0x1" + sig_string.slice(3);
+        } else {
+          sig_string = "0x0" + sig_string.slice(3);
+        }    
+      }
 
     await multisigControl_instance.add_signer(new_signer, nonce, sig_string);
 }
@@ -340,6 +348,55 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
         await init_private_keys()
 
     });
+
+    it("set_threshold should fail of threshold = 0 (0030-ETHM-029)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message = get_message_to_sign(
+            ["uint16"],
+            [0],
+            nonce,
+            "set_threshold",
+            accounts[0]);
+        let encoded_hash = ethUtil.keccak256(encoded_message);
+
+        let signature_0 = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0 = to_signature_string(signature_0);
+
+        try {
+            await multisigControl_instance.set_threshold(0, nonce, sig_string_0);
+            assert.equal(true, false, "set threshold worked, shouldn't have")
+        } catch (e) { 
+            // assert e.message contains new threshold outside range
+            assert.equal(true, e.message.includes("threshold outside range"), "set threshold returned wrong error message: " + e.message)
+            
+        }
+    })
+
+    it("set_threshold should fail of threshold > 1000 (0030-ETHM-030)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message = get_message_to_sign(
+            ["uint16"],
+            [1001],
+            nonce,
+            "set_threshold",
+            accounts[0]);
+        let encoded_hash = ethUtil.keccak256(encoded_message);
+
+        let signature_0 = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0 = to_signature_string(signature_0);
+
+        try {
+            await multisigControl_instance.set_threshold(1001, nonce, sig_string_0);
+            assert.equal(true, false, "set threshold worked, shouldn't have")
+        } catch (e) { 
+            // assert e.message contains new threshold outside range
+            assert.equal(true, e.message.includes("threshold outside range"), "set threshold returned wrong error message: " + e.message)
+            
+        }
+    })
+
     it("set_threshold (0030-ETHM-027)", async () => {
         // set 2 signers
         let multisigControl_instance = await MultisigControl.deployed();
@@ -407,6 +464,19 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
             assert.equal(true, false, "set threshold worked, shouldn't have")
         }catch (e) {}
 
+        // fail to set due to bad signature - 0030-ETHM-028
+        try {
+
+            let bad_sig = sig_bundle_300;
+            if(bad_sig[2] == "0") {
+                bad_sig = "0x1" + bad_sig.slice(3);
+              } else {
+                bad_sig = "0x0" + bad_sig.slice(3);
+              }
+            await multisigControl_instance.set_threshold(300, nonce_300, bad_sig);
+            assert.equal(true, false, "set threshold worked, shouldn't have")
+        } catch (e) {}
+
         // set threshold to 300 (30%) with 2 signers
         await multisigControl_instance.set_threshold(300, nonce_300, sig_bundle_300);
 
@@ -446,6 +516,8 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
             "threshold should be 500, is: " + threshold
         );
     });
+
+    
 });
 
 //function add_signer(address new_signer, uint nonce, bytes memory signatures) public {
@@ -454,6 +526,18 @@ contract("MultisigControl -- Function: add_signer - 0030-ETHM-012", (accounts) =
         await init_private_keys()
 
     });
+
+    it("add_signer should fail with invalid signature - (0030-ETHM-032)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        try{
+            await add_signer(multisigControl_instance, accounts[1], accounts[0], true);
+            assert.equal(true, false, "add signer didn't fail, should have")
+        } catch (e) {
+            assert.equal(true, e.message.includes("bad signatures"), "add signer failed with wrong message")
+        }
+        
+    })
+
     it("add_signer (0030-ETHM-031)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -828,6 +912,37 @@ contract("MultisigControl -- Function: get_current_threshold - 0030-ETHM-019",  
     });
 });
 
+contract("MultisigControl -- Function: signers",  (accounts) => {
+    it("must show true for each signer that is currently valid (0030-ETHM-024, 0030-ETHM-025)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+
+        assert.equal(signer_count, 1, "signer count should be 1, is: " + signer_count);
+        let is_signer_0 = await multisigControl_instance.signers(accounts[0]);
+        assert.equal(is_signer_0, true, "account 0 is not a signer and should be");
+        let is_signer_1 = await multisigControl_instance.signers(accounts[1]);
+        assert.equal(is_signer_1, false, "account 1 is a signer and should not be");
+        // add signer 1
+        let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_2_signers = get_message_to_sign(
+            ["address"],
+            [accounts[1]],
+            nonce_2_signers,
+            "add_signer",
+            accounts[0]);
+        let encoded_hash_2_signers = ethUtil.keccak256(encoded_message_2_signers);
+
+        let signature_0_2_signers = ethUtil.ecsign(encoded_hash_2_signers, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0_2_signers = to_signature_string(signature_0_2_signers);
+
+        await multisigControl_instance.add_signer(accounts[1], nonce_2_signers, sig_string_0_2_signers);
+        
+        is_signer_1 = await multisigControl_instance.signers(accounts[1]);
+        assert.equal(is_signer_1, true, "account 1 is not a signer and should be");
+
+    })
+})
+
 //function is_valid_signer(address signer_address) public view returns(bool){
 contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accounts) => {
     it("previously unknown signer is valid after setting (0030-ETHM-045, 0030-ETHM-046, 0030-ETHM-051, 0030-ETHM-050, 0030-ETHM-054)", async () => {
@@ -869,7 +984,8 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
         );
 
     });
-    it("previously valid signer is invalid after setting as invalid - (0030-ETHM-016, 0030-ETHM-047, 0030-ETHM-052, 0030-ETHM-053)", async () => {
+
+    it("previously valid signer is invalid after setting as invalid - (0030-ETHM-016, 0030-ETHM-047, 0030-ETHM-052, 0030-ETHM-053, 0030-ETHM-026)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
         let encoded_message_2_signers = get_message_to_sign(
@@ -908,6 +1024,12 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
             false,
             "account 4 is a signer and should not be"
         );
+        is_signer_4 = await multisigControl_instance.signers(accounts[4]);
+        assert.equal(
+            is_signer_4,
+            false,
+            "account 4 is a signer and should not be"
+        )
     });
     it("unknown signers are invalid - 0030-ETHM-016", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
