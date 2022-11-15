@@ -567,7 +567,7 @@ contract("ERC20_Bridge_Logic Function: revoke_exempt_depositor", (accounts) => {
     expect(await bridge_logic_instance.is_exempt_depositor(accounts[2])).to.be.equal(false);
   })
 
-  it("any ETH address can call revoke_exempt_depositor to remove itself (own ETH address) from the exemption list - (0003-NP-LIMI-002, 0021-ETHB-049, 0021-ETHB-051)", async () => {
+  it("any ETH address can call revoke_exempt_depositor to remove itself (own ETH address) from the exemption list - (0003-NP-LIMI-002, 0031-ETHB-049, 0031-ETHB-051)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
 
