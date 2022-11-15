@@ -538,6 +538,16 @@ contract("MultisigControl -- Function: add_signer - 0030-ETHM-012", (accounts) =
         
     })
 
+    if("add_signer should fail if signer already exists - (0030-ETHM-033)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        try{
+            await add_signer(multisigControl_instance, accounts[0], accounts[0], false);
+            assert.equal(true, false, "add signer didn't fail, should have")
+        } catch (e) {
+            assert.equal(true, e.message.includes("signer already exists"), "add signer failed with wrong message")
+        }
+    })
+
     it("add_signer (0030-ETHM-031)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -630,7 +640,34 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
     beforeEach(async()=>{
 	await init_private_keys()
     });
-    it("remove signer - (0030-ETHM-013, 0030-ETHM-014, 0030-ETHM-034)", async () => {
+
+   it("remove_signer should fail if the signer doesn't exist - (0030-ETHM-036)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let nonce_valid = new ethUtil.BN(crypto.randomBytes(32));
+        let encoded_message_valid = get_message_to_sign(
+            ["address"],
+            [accounts[1]],
+            nonce_valid,
+            "remove_signer",
+            accounts[0]);
+        let encoded_hash_valid = ethUtil.keccak256(encoded_message_valid);
+        assert.equal(
+            await multisigControl_instance.is_valid_signer(accounts[1]),
+            false,
+            "accounts[1] is signer, shouldn't be"
+        );
+        let signature_0_valid = ethUtil.ecsign(encoded_hash_valid, private_keys[accounts[1].toLowerCase()]);
+        let sig_string_0_valid = to_signature_string(signature_0_valid);
+
+        try {
+            await multisigControl_instance.remove_signer(accounts[1], nonce_valid, sig_string_0_valid);
+            assert.fail("should have thrown");
+        } catch (e) {
+            assert.equal(true, e.message.includes("signer doesn't exist"), "wrong error");
+        }
+   })
+
+    it("remove signer - (0030-ETHM-013, 0030-ETHM-014, 0030-ETHM-034, 0030-ETHM-037)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
         assert.equal(
@@ -656,6 +693,21 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
 
         let signature_0_valid = ethUtil.ecsign(encoded_hash_valid, private_keys[accounts[0].toLowerCase()]);
         let sig_string_0_valid = to_signature_string(signature_0_valid);
+
+        let bad_sig = sig_string_0_valid;
+        // replace 1 char with 0 id that char is not 0 already in which case change it to 1
+        if(bad_sig[2] == "0") {
+            bad_sig = "0x1" + bad_sig.slice(3);
+        } else {
+            bad_sig = "0x0" + bad_sig.slice(3);
+        }  
+         
+        try {
+            await multisigControl_instance.remove_signer(accounts[0], nonce_valid, bad_sig);
+            assert.fail("should have thrown");
+        } catch (e) {
+            assert.equal(true, e.message.includes("bad signatures"), "wrong error");
+        }
 
         await multisigControl_instance.remove_signer(accounts[0], nonce_valid, sig_string_0_valid);
 
@@ -1043,6 +1095,100 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
 
 });
 
+contract("MultisigControl -- Function: burn_nonce", (accounts) => {
+
+    it("must fail is bad signatures (0030-ETHM-038)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let sender = accounts[0];
+
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));      
+
+        // create signature required by contract
+        let encoded_a = abi.rawEncode(["uint256", "string"], [nonce, "burn_nonce"]);
+        let encoded_message = abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+
+        let encoded_hash = ethUtil.keccak256(encoded_message);
+        let signature = ethUtil.ecsign(encoded_hash, private_keys[sender.toLowerCase()]);
+        let sig_string = to_signature_string(signature);
+        if(sig_string[2] == "0") {
+            sig_string = "0x1" + sig_string.slice(3);
+        } else {
+            sig_string = "0x0" + sig_string.slice(3);
+        }  
+        
+        try {
+            await multisigControl_instance.burn_nonce(nonce, sig_string, { from: accounts[0] });
+            assert.equal(true, false, "should have thrown")
+        } catch (e) { 
+            // assert e.message contains new threshold outside range
+            assert.equal(true, e.message.includes("bad signatures"), "wrong error")            
+        }
+        
+    })
+
+    it("must fail if nonce was redeemed (0030-ETHM-039)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let sender = accounts[0];
+
+        let initial_nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+        let initial_encoded_message = get_message_to_sign(
+            ["uint16"],
+            [1],
+            initial_nonce,
+            "set_threshold",
+            accounts[0]);
+
+        let initial_encoded_hash = ethUtil.keccak256(initial_encoded_message);
+        let initial_signature = ethUtil.ecsign(initial_encoded_hash, private_keys[sender.toLowerCase()]);
+        let initial_sig_string = to_signature_string(initial_signature);
+        
+        await multisigControl_instance.set_threshold(1, initial_nonce, initial_sig_string, { from: accounts[0] })
+        
+        let nonce = initial_nonce//new ethUtil.BN(crypto.randomBytes(32));
+        // create signature required by contract
+        let encoded_a = abi.rawEncode(["uint256", "string"], [nonce, "burn_nonce"]);
+        let encoded_message = abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+
+        let encoded_hash = ethUtil.keccak256(encoded_message);
+        let signature = ethUtil.ecsign(encoded_hash, private_keys[sender.toLowerCase()]);
+        let sig_string = to_signature_string(signature);
+       
+        try {
+            await multisigControl_instance.burn_nonce(nonce, sig_string, { from: accounts[0] });
+            assert.equal(true, false, "should have thrown")
+        } catch (e) { 
+            assert.equal(true, e.message.includes("nonce already used"), "wrong error")            
+        }
+
+    })
+
+    it("must fail if nonce is already burned (0030-ETHM-040)", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+        let sender = accounts[0];
+
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));      
+
+        // create signature required by contract
+        let encoded_a = abi.rawEncode(["uint256", "string"], [nonce, "burn_nonce"]);
+        let encoded_message = abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+
+        let encoded_hash = ethUtil.keccak256(encoded_message);
+        let signature = ethUtil.ecsign(encoded_hash, private_keys[sender.toLowerCase()]);
+        let sig_string = to_signature_string(signature);
+        await multisigControl_instance.burn_nonce(nonce, sig_string, { from: accounts[0] });
+        
+        try {
+            await multisigControl_instance.burn_nonce(nonce, sig_string, { from: accounts[0] });
+            assert.equal(true, false, "should have thrown")
+        } catch (e) { 
+            // assert e.message contains new threshold outside range
+            assert.equal(true, e.message.includes("nonce already used"), "wrong error")            
+        }
+    })
+
+})
+
 //function is_nonce_used(uint nonce) public view returns(bool){
     contract("MultisigControl -- Function: is_nonce_used", (accounts) => {
         beforeEach(async () => {
@@ -1099,7 +1245,7 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
             //sign message with private_keys[0]
             //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
             await multisigControl_instance.verify_signatures(sig_string, encoded_message_1, nonce_1, { from: accounts[0] });
-
+                
             assert.equal(
                 await multisigControl_instance.is_nonce_used(nonce_1),
                 true,
