@@ -397,7 +397,7 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
         }
     })
 
-    it("set_threshold (0030-ETHM-027)", async () => {
+    it("set_threshold (0030-ETHM-027, 0030-ETHM-048, 0030-ETHM-049)", async () => {
         // set 2 signers
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
@@ -667,7 +667,7 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
         }
    })
 
-    it("remove signer - (0030-ETHM-013, 0030-ETHM-014, 0030-ETHM-034, 0030-ETHM-037)", async () => {
+    it("remove signer - (0030-ETHM-013, 0030-ETHM-014, 0030-ETHM-034, 0030-ETHM-037, 0030-ETHM-035)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let signer_count = await multisigControl_instance.get_valid_signer_count();
         assert.equal(
@@ -706,6 +706,7 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
             await multisigControl_instance.remove_signer(accounts[0], nonce_valid, bad_sig);
             assert.fail("should have thrown");
         } catch (e) {
+            // 0030-ETHM-035
             assert.equal(true, e.message.includes("bad signatures"), "wrong error");
         }
 
@@ -1254,7 +1255,7 @@ contract("MultisigControl -- Function: burn_nonce", (accounts) => {
 
         })
 
-        it("burnt nonce should become used (0030-ETHM-037, 0030-ETHM-057)", async () => {
+        it("burnt nonce should become used (0030-ETHM-037, 0030-ETHM-057, 0030-ETHM-057)", async () => {
             let multisigControl_instance = await MultisigControl.deployed();
 
             //check that only private_keys[0] is the signer
