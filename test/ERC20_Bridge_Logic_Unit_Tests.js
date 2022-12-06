@@ -489,7 +489,7 @@ contract("ERC20_Bridge_Logic Function: set_asset_limits", (accounts) => {
   })
 
 
-  it("set_asset_limits should allow large deposit and withdrawal if creation + default_withdraw_delay <= block.timestamp (0031-ETHB-029)", async () => {
+  it("set_asset_limits should allow large deposit and withdrawal if creation + default_withdraw_delay <= block.timestamp (0031-ETHB-029, 0031-ETHB-026)", async () => {
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
     let asset_pool_instance = await ERC20_Asset_Pool.deployed();
@@ -1108,7 +1108,7 @@ contract("ERC20_Bridge_Logic Function: list_asset", (accounts) => {
 
   });
 
-  it("asset that was not listed is listed after running list_asset (0031-ETHB-020, 0031-ETHB-056, 0031-ETHB-060, 0031-ETHB-061, 0031-ETHB-062, 0031-ETHB-063)", async () => {
+  it("asset that was not listed is listed after running list_asset (0031-ETHB-020, 0031-ETHB-056, 0031-ETHB-060, 0031-ETHB-061, 0031-ETHB-062, 0031-ETHB-063, 0031-ETHB-019, 0031-ETHB-022)", async () => {
 
     let bridge_logic_instance = await ERC20_Bridge_Logic.deployed();
     let test_token_instance = await Base_Faucet_Token.deployed();
