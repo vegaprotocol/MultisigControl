@@ -1255,7 +1255,7 @@ contract("MultisigControl -- Function: burn_nonce", (accounts) => {
 
         })
 
-        it("burnt nonce should become used (0030-ETHM-037, 0030-ETHM-057, 0030-ETHM-057)", async () => {
+        it("burnt nonce should become used (0030-ETHM-037, 0030-ETHM-057, 0030-ETHM-056)", async () => {
             let multisigControl_instance = await MultisigControl.deployed();
 
             //check that only private_keys[0] is the signer
