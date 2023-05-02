@@ -19,6 +19,7 @@
     "bip39": "^3.0.4",
     "chai": "^4.3.6",
     "eth-gas-reporter": "^0.2.25",
+    "eth-scribble": "^0.6.15",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^6.2.1",
     "ethereumjs-wallet": "^0.6.5",
@@ -44,3 +45,4 @@
   },
   "homepage": "https://github.com/vegaprotocol/MultisigControl#readme"
 }
+
