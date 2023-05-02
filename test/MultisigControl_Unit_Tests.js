@@ -143,6 +143,61 @@ contract("MultisigControl -- Function: verify_signatures - (0030-ETHM-023, 0030-
         );
 
     });
+
+    it("verify_signatures - happy path 1 good signer, one bad signer (0069-VCBS-072", async () => {
+        let multisigControl_instance = await MultisigControl.deployed();
+
+        //check that only private_keys[0] is the signer
+        let is_signer_0 = await multisigControl_instance.is_valid_signer(accounts[0]);
+        let is_signer_1 = await multisigControl_instance.is_valid_signer(accounts[1]);
+        assert.equal(
+            is_signer_0,
+            true,
+            "account 0 is not a signer but should be"
+        );
+        assert.equal(
+            is_signer_1,
+            false,
+            "account 1 is a signer and should not be"
+        );
+
+        let signer_count = await multisigControl_instance.get_valid_signer_count();
+        assert.equal(
+            signer_count,
+            1,
+            "signer count should be 1, is: " + signer_count
+        );
+
+        let nonce = new ethUtil.BN(crypto.randomBytes(32));
+
+        //generate message
+        let encoded_message = crypto.randomBytes(32);
+
+        let encoded_hash = ethUtil.keccak256(abi.rawEncode(["bytes", "address"], [encoded_message, accounts[0]]));
+
+        let signature_0 = ethUtil.ecsign(encoded_hash, private_keys[accounts[0].toLowerCase()]);
+        let sig_string_0 = to_signature_string(signature_0);
+
+        let signature_1 = ethUtil.ecsign(encoded_hash, private_keys[accounts[1].toLowerCase()]);
+        let sig_string_1 = to_signature_string(signature_1);
+
+        let sig_bundle = sig_string_0 + sig_string_1.substr(2);
+
+        //sign message with private_keys[0]
+        //run: function verify_signatures(bytes memory signatures, bytes memory message, uint nonce) public returns(bool) {
+        let verify_receipt = await multisigControl_instance.verify_signatures.call(sig_bundle, encoded_message, nonce, { from: accounts[0] });
+
+        assert.equal(
+            verify_receipt,
+            true,
+            "signatures are bad, try again: "
+        );
+
+    });
+        
+
+
+
     it("fail to verify_signatures - bad signatures (0030-ETHM-043)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
 
