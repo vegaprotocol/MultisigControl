@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "BadBeaconNoImpl",
+  "sourceName": "contracts/oz_contracts/mocks/proxy/BadBeacon.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212202098d16d14b3b5ca1ebc8a48260e2cb87d2bb6f426cac903805a6ffbf1c585d264736f6c63430008090033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212202098d16d14b3b5ca1ebc8a48260e2cb87d2bb6f426cac903805a6ffbf1c585d264736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

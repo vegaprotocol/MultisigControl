@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity 0.8.9;
 
 import "./IMultisigControl.sol";
-import "./IERC20.sol";
+import "./oz_contracts/token/ERC20/IERC20.sol";
 
 /// @title ERC20 Asset Pool
 /// @author Vega Protocol
