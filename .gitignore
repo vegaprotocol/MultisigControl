@@ -16,6 +16,10 @@ lerna-debug.log*
 
 .idea/
 .infura
+./Mainnet_Fork_Test/node_modules/
+./Mainnet_Fork_Test/artifacts/
+./Mainnet_Fork_Test/cache/
+
 
 notes.txt
 
