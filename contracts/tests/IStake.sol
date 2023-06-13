@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.8;
+pragma solidity 0.8.20;
 
 /**
  * @dev Interface contains all of the events necessary for staking Vega token

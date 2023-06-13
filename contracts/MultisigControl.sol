@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity 0.8.20;
 
 import "./IMultisigControl.sol";
 
@@ -115,7 +115,7 @@ contract MultisigControl is IMultisigControl {
         assembly {
             offset := signatures.offset
         }
-        for (uint256 msg_idx = 0; msg_idx < signatures.length; msg_idx += 65) {
+        for (uint256 msg_idx = 0; msg_idx < signatures.length; ) {
             //recover address from that msg
             bytes32 r;
             bytes32 s;
@@ -147,11 +147,19 @@ contract MultisigControl is IMultisigControl {
 
             if (signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)) {
                 signers_temp[size] = recovered_address;
-                size++;
+                unchecked {
+                    size++;
+                }
+            }
+
+            unchecked {
+                msg_idx += 65;
             }
         }
 
-        used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
+        unchecked {
+            used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
+        }
         return used_nonces[nonce];
     }
 
@@ -160,9 +168,13 @@ contract MultisigControl is IMultisigControl {
         address signer,
         uint8 size
     ) private pure returns (bool) {
-        for (uint256 i; i < size; i++) {
+        for (uint256 i; i < size; ) {
             if (signers_temp[i] == signer) {
                 return true;
+            }
+
+            unchecked {
+                i++;
             }
         }
         return false;
