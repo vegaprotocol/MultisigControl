@@ -1,4 +1,4 @@
-pragma solidity 0.8.8;
+pragma solidity 0.8.20;
 
 /**
  * @dev Implementation of the {IERC20} interface.

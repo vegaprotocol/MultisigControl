@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity 0.8.20;
 
 import "./IERC20.sol";
 import "./IERC20_Bridge_Logic_Restricted.sol";
