@@ -115,7 +115,7 @@ contract MultisigControl is IMultisigControl {
         assembly {
             offset := signatures.offset
         }
-        for (uint256 msg_idx = 0; msg_idx < signatures.length;) {
+        for (uint256 msg_idx = 0; msg_idx < signatures.length; ) {
             //recover address from that msg
             bytes32 r;
             bytes32 s;
@@ -141,19 +141,25 @@ contract MultisigControl is IMultisigControl {
                 uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0,
                 "Malleable signature error"
             );
-	    if (v < 27) v += 27;
+            if (v < 27) v += 27;
 
             address recovered_address = ecrecover(message_hash, v, r, s);
 
             if (signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)) {
                 signers_temp[size] = recovered_address;
-                unchecked { size++; }
+                unchecked {
+                    size++;
+                }
             }
 
-	    unchecked { msg_idx += 65; }
-	}
+            unchecked {
+                msg_idx += 65;
+            }
+        }
 
-        unchecked { used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold; }
+        unchecked {
+            used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
+        }
         return used_nonces[nonce];
     }
 
@@ -162,12 +168,14 @@ contract MultisigControl is IMultisigControl {
         address signer,
         uint8 size
     ) private pure returns (bool) {
-        for (uint256 i; i < size;) {
+        for (uint256 i; i < size; ) {
             if (signers_temp[i] == signer) {
                 return true;
             }
 
-	    unchecked { i++; }
+            unchecked {
+                i++;
+            }
         }
         return false;
     }
