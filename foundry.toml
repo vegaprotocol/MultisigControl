@@ -1,0 +1,6 @@
+[profile.default]
+src = "contracts"
+libs = ["lib"]
+remappings = [
+  "@axelar-gmp-sdk-solidity/contracts/=lib/axelar-gmp-sdk-solidity/contracts/",
+]
