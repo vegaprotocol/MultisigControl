@@ -46,7 +46,7 @@ beforeEach(async()=>{
 
 //sender for MultisigControl itself is submitting user
 //sender for all consuming contracts is the address of that contract
-function get_message_to_sign(param_types, params, nonce, function_name, sender) {
+async function get_message_to_sign(param_types, params, nonce, function_name, sender) {
     params.push(nonce);
     param_types.push("uint256");
     params.push(function_name);
@@ -54,7 +54,11 @@ function get_message_to_sign(param_types, params, nonce, function_name, sender) 
     //var encoded_a = abi.rawEncode([ "address","uint256", "string"], [ wallet2, nonce, "add_signer" ]);
     let encoded_a = abi.rawEncode(param_types, params);
     //let encoded = abi.rawEncode(["bytes", "address"], [encoded_a, wallet1]);
-    return abi.rawEncode(["bytes", "address"], [encoded_a, sender]);
+    return abi.solidityPack(['bytes1', 'uint256', 'bytes'], [
+        0x19, 
+        await web3.eth.getChainId(),
+        abi.rawEncode(["bytes", "address"], [encoded_a, sender])
+  ])
 
 }
 
@@ -71,7 +75,7 @@ function recover_signer_address(sig, msgHash) {
 
 async function add_signer(multisigControl_instance, new_signer, sender, bad_sigs = false) {
     let nonce = new ethUtil.BN(crypto.randomBytes(32));
-    let encoded_message = get_message_to_sign(
+    let encoded_message = await get_message_to_sign(
         ["address"],
         [new_signer],
         nonce.toString(),
@@ -352,7 +356,7 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
     it("set_threshold should fail of threshold = 0 (0030-ETHM-029)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message = get_message_to_sign(
+        let encoded_message = await get_message_to_sign(
             ["uint16"],
             [0],
             nonce,
@@ -376,7 +380,7 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
     it("set_threshold should fail of threshold > 1000 (0030-ETHM-030)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let nonce = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message = get_message_to_sign(
+        let encoded_message = await get_message_to_sign(
             ["uint16"],
             [1001],
             nonce,
@@ -425,7 +429,7 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
 
         // sign with 1, should fail
         let nonce_300 = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_300 = get_message_to_sign(
+        let encoded_message_300 = await get_message_to_sign(
             ["uint16"],
             [300],
             nonce_300,
@@ -496,7 +500,7 @@ contract("MultisigControl -- Function: set_threshold", (accounts) => {
 
         // set threshold to 500 (50%) with 1 signer
         let nonce_500 = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_500 = get_message_to_sign(
+        let encoded_message_500 = await get_message_to_sign(
             ["uint16"],
             [500],
             nonce_500,
@@ -564,7 +568,7 @@ contract("MultisigControl -- Function: add_signer - 0030-ETHM-012", (accounts) =
         );
 
         let nonce_1_signer = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_1_signer = get_message_to_sign(
+        let encoded_message_1_signer = await get_message_to_sign(
             ["address"],
             [accounts[1]],
             nonce_1_signer,
@@ -602,7 +606,7 @@ contract("MultisigControl -- Function: add_signer - 0030-ETHM-012", (accounts) =
 
         //new signer can sign
         let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_2_signers = get_message_to_sign(
+        let encoded_message_2_signers = await get_message_to_sign(
             ["address"],
             [accounts[2]],
             nonce_2_signers,
@@ -644,7 +648,7 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
    it("remove_signer should fail if the signer doesn't exist - (0030-ETHM-036)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let nonce_valid = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_valid = get_message_to_sign(
+        let encoded_message_valid = await get_message_to_sign(
             ["address"],
             [accounts[1]],
             nonce_valid,
@@ -683,7 +687,7 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
         );
 
         let nonce_valid = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_valid = get_message_to_sign(
+        let encoded_message_valid = await get_message_to_sign(
             ["address"],
             [accounts[0]],
             nonce_valid,
@@ -727,7 +731,7 @@ contract("MultisigControl -- Function: remove_signer - 0030-ETHM-017",  (account
 
 
         let nonce_invalid = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_invalid = get_message_to_sign(
+        let encoded_message_invalid = await get_message_to_sign(
             ["address"],
             [accounts[0]],
             nonce_invalid,
@@ -830,7 +834,7 @@ contract("MultisigControl -- Function: get_valid_signer_count - 0030-ETHM-018", 
         );
 
         let nonce_1_signer = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_1_signer = get_message_to_sign(
+        let encoded_message_1_signer = await get_message_to_sign(
             ["address"],
             [accounts[1]],
             nonce_1_signer,
@@ -875,7 +879,7 @@ contract("MultisigControl -- Function: get_valid_signer_count - 0030-ETHM-018", 
 
         //new signer can sign
         let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_2_signers = get_message_to_sign(
+        let encoded_message_2_signers = await get_message_to_sign(
             ["address"],
             [accounts[1]],
             nonce_2_signers,
@@ -936,7 +940,7 @@ contract("MultisigControl -- Function: get_current_threshold - 0030-ETHM-019",  
 
         // set threshold to 300 (30%) with 1 signer
         let nonce_300 = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_300 = get_message_to_sign(
+        let encoded_message_300 = await get_message_to_sign(
             ["uint16"],
             [300],
             nonce_300,
@@ -977,7 +981,7 @@ contract("MultisigControl -- Function: signers",  (accounts) => {
         assert.equal(is_signer_1, false, "account 1 is a signer and should not be");
         // add signer 1
         let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_2_signers = get_message_to_sign(
+        let encoded_message_2_signers = await get_message_to_sign(
             ["address"],
             [accounts[1]],
             nonce_2_signers,
@@ -1008,7 +1012,7 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
         );
 
         let nonce_1_signer = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_1_signer = get_message_to_sign(
+        let encoded_message_1_signer = await get_message_to_sign(
             ["address"],
             [accounts[4]],
             nonce_1_signer,
@@ -1041,7 +1045,7 @@ contract("MultisigControl -- Function: is_valid_signer - 0030-ETHM-020",  (accou
     it("previously valid signer is invalid after setting as invalid - (0030-ETHM-016, 0030-ETHM-047, 0030-ETHM-052, 0030-ETHM-053, 0030-ETHM-026)", async () => {
         let multisigControl_instance = await MultisigControl.deployed();
         let nonce_2_signers = new ethUtil.BN(crypto.randomBytes(32));
-        let encoded_message_2_signers = get_message_to_sign(
+        let encoded_message_2_signers = await get_message_to_sign(
             ["address"],
             [accounts[4]],
             nonce_2_signers,
@@ -1133,7 +1137,7 @@ contract("MultisigControl -- Function: burn_nonce", (accounts) => {
 
         let initial_nonce = new ethUtil.BN(crypto.randomBytes(32));
 
-        let initial_encoded_message = get_message_to_sign(
+        let initial_encoded_message = await get_message_to_sign(
             ["uint16"],
             [1],
             initial_nonce,
