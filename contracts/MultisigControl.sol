@@ -107,8 +107,9 @@ contract MultisigControl is IMultisigControl {
         require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
 
-        uint8 size = 0;
-        address[] memory signers_temp = new address[](signer_count);
+        uint256 size = 0;
+        address[] memory signers_temp = new address[](signatures.length / 65);
+        uint256 min_signer_threshold = uint256(signer_count) * threshold;
 
         bytes32 message_hash = keccak256(abi.encodePacked(bytes1(0x19), block.chainid, abi.encode(message, msg.sender)));
         uint256 offset;
@@ -149,6 +150,10 @@ contract MultisigControl is IMultisigControl {
                 signers_temp[size] = recovered_address;
                 size++;
             }
+
+            if (size * 1000 > min_signer_threshold) {
+                break;
+            }
         }
 
         used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
@@ -158,7 +163,7 @@ contract MultisigControl is IMultisigControl {
     function has_signed(
         address[] memory signers_temp,
         address signer,
-        uint8 size
+        uint256 size
     ) private pure returns (bool) {
         for (uint256 i; i < size; i++) {
             if (signers_temp[i] == signer) {
