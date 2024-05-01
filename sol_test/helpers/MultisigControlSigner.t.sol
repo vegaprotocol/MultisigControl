@@ -20,6 +20,10 @@ contract MultisigControlSigningHelper is Test {
     return signatures;
   }
 
+  function sign(Vm.Wallet memory wallet, bytes memory args, address submitter) public view returns (bytes memory) {
+    return sign(wallet.privateKey, args, submitter);
+  }
+
   function sign(Vm.Wallet[] memory wallets, bytes memory args, address submitter) public view returns (bytes memory) {
     uint256[] memory privateKeys = new uint256[](wallets.length);
     for (uint256 i = 0; i < wallets.length; i++) {
