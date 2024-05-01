@@ -274,7 +274,6 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         }
 
         require(listed_tokens[asset_source], "asset not listed");
-        require(is_contract(asset_source), "asset_source must be contract");
 
         (bool success, bytes memory returndata) = asset_source.call(
             abi.encodeWithSignature(
