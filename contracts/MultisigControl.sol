@@ -110,7 +110,9 @@ contract MultisigControl is IMultisigControl {
         uint256 size = 0;
         address[] memory signers_temp = new address[](signatures.length / 65);
 
-        bytes32 message_hash = keccak256(abi.encodePacked(bytes1(0x19), block.chainid, abi.encode(message, msg.sender)));
+        bytes32 message_hash = keccak256(
+            abi.encodePacked(bytes1(0x19), block.chainid, abi.encode(message, msg.sender))
+        );
         uint256 offset;
         assembly {
             offset := signatures.offset

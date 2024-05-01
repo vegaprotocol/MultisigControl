@@ -264,16 +264,13 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
         bytes32 vega_public_key
     ) external override {
         require(!is_stopped, "bridge stopped");
-        
+
         // Cache SLOAD
         uint256 _limit = asset_deposit_lifetime_limit[asset_source];
 
         // Check limit first as that's the most likely branch, then check if exempt
         if (_limit < type(uint256).max && !exempt_depositors[msg.sender]) {
-            require(
-                user_lifetime_deposits[msg.sender][asset_source] + amount <= _limit,
-                "deposit over lifetime limit"
-            );
+            require(user_lifetime_deposits[msg.sender][asset_source] + amount <= _limit, "deposit over lifetime limit");
             user_lifetime_deposits[msg.sender][asset_source] += amount;
         }
 
