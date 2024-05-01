@@ -11,9 +11,11 @@ extra_output = ["abi", "devdoc", "userdoc", "storageLayout"]
 
 [rpc_endpoints]
 arbitrum_sepolia = "${ETH_RPC_URL}"
+arbitrum = "${ETH_RPC_URL}"
 
 [etherscan]
-arbitrum_sepolia = { url = "https://api.seplia.arbiscan.io/api", key = "${ETHERSCAN_API_KEY}", chain = 421614 }
+arbitrum_sepolia = { url = "https://api-sepolia.arbiscan.io/api", key = "${ETHERSCAN_API_KEY}", chain = 421614 }
+arbitrum = { url = "https://api.arbiscan.io/api", key = "${ETHERSCAN_API_KEY}", chain = 42161 }
 
 [fmt]
 tab_width = 2
