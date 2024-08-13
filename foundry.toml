@@ -1,0 +1,30 @@
+[profile.default]
+src = "contracts"
+libs = ["lib"]
+out = "out"
+test = "sol_test"
+remappings = [
+  "@axelar-gmp-sdk-solidity/contracts/=lib/axelar-gmp-sdk-solidity/contracts/",
+]
+
+extra_output = ["abi", "devdoc", "userdoc", "storageLayout"]
+
+[rpc_endpoints]
+arbitrum_sepolia = "${ETH_RPC_URL}"
+arbitrum = "${ETH_RPC_URL}"
+
+[etherscan]
+arbitrum_sepolia = { url = "https://api-sepolia.arbiscan.io/api", key = "${ETHERSCAN_API_KEY}", chain = 421614 }
+arbitrum = { url = "https://api.arbiscan.io/api", key = "${ETHERSCAN_API_KEY}", chain = 42161 }
+
+[fmt]
+tab_width = 2
+ignore = [
+  "contracts/tests/*",
+  "contracts/ERC20_Asset_Pool.sol",
+  "contracts/ERC20_Bridge_Logic_Restricted.sol",
+  "contracts/IERC20.sol",
+  "contracts/IERC20_Bridge_Logic_Restricted.sol",
+  "contracts/IMultisigControl.sol",
+  "contracts/MultisigControl.sol",
+]

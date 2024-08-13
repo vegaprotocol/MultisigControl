@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity ^0.8.8;
 
 import "./IMultisigControl.sol";
 import "./IERC20.sol";
@@ -82,7 +82,6 @@ contract ERC20_Asset_Pool {
         uint256 amount
     ) external {
         require(msg.sender == erc20_bridge_address, "msg.sender not authorized bridge");
-        require(is_contract(token_address), "token_address must be contract");
 
         (bool success, bytes memory returndata) = token_address.call(
             abi.encodeWithSignature("transfer(address,uint256)", target, amount)

@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity ^0.8.8;
 
 import "./IERC20.sol";
 import "./IERC20_Bridge_Logic_Restricted.sol";
@@ -33,7 +33,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     /// @notice This function lists the given ERC20 token contract as valid for deposit to this bridge
     /// @param asset_source Contract address for given ERC20 token
     /// @param vega_asset_id Vega-generated asset ID for internal use in Vega Core
-    /// @param lifetime_limit Initial lifetime deposit limit *RESTRICTION FEATURE*
+    /// @param lifetime_limit Initial lifetime deposit limit *RESTRICTION FEATURE*. Setting this to type(uint256).max will disable the per address deposit limit counter
     /// @param withdraw_threshold Amount at which the withdraw delay goes into effect *RESTRICTION FEATURE*
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
@@ -105,7 +105,7 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
 
     /// @notice This function sets the lifetime maximum deposit for a given asset
     /// @param asset_source Contract address for given ERC20 token
-    /// @param lifetime_limit Deposit limit for a given ethereum address
+    /// @param lifetime_limit Deposit limit for a given ethereum address. Setting this to type(uint256).max will disable the per address deposit limit counter
     /// @param threshold Withdraw size above which the withdraw delay goes into effect
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
@@ -265,16 +265,16 @@ contract ERC20_Bridge_Logic_Restricted is IERC20_Bridge_Logic_Restricted {
     ) external override {
         require(!is_stopped, "bridge stopped");
 
-        if (!exempt_depositors[msg.sender]) {
-            require(
-                user_lifetime_deposits[msg.sender][asset_source] + amount <= asset_deposit_lifetime_limit[asset_source],
-                "deposit over lifetime limit"
-            );
+        // Cache SLOAD
+        uint256 _limit = asset_deposit_lifetime_limit[asset_source];
+
+        // Check limit first as that's the most likely branch, then check if exempt
+        if (_limit < type(uint256).max && !exempt_depositors[msg.sender]) {
+            require(user_lifetime_deposits[msg.sender][asset_source] + amount <= _limit, "deposit over lifetime limit");
             user_lifetime_deposits[msg.sender][asset_source] += amount;
         }
 
         require(listed_tokens[asset_source], "asset not listed");
-        require(is_contract(asset_source), "asset_source must be contract");
 
         (bool success, bytes memory returndata) = asset_source.call(
             abi.encodeWithSignature(

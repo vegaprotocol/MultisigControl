@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity ^0.8.8;
 
 import "./IMultisigControl.sol";
 
@@ -93,7 +93,7 @@ contract MultisigControl is IMultisigControl {
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
     /// @notice message to hash to sign follows this pattern:
-    /// @notice abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address);
+    /// @notice abi.encodePacked(\x19, chainid, abi.encode( abi.encode(param1, param2, param3, ... , nonce, function_name_string), validating_contract_or_submitter_address));
     /// @notice Note that validating_contract_or_submitter_address is the submitting party. If on MultisigControl contract itself, it's the submitting ETH address
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
@@ -107,10 +107,12 @@ contract MultisigControl is IMultisigControl {
         require(signatures.length > 0, "must contain at least 1 sig");
         require(!used_nonces[nonce], "nonce already used");
 
-        uint8 size = 0;
-        address[] memory signers_temp = new address[](signer_count);
+        uint256 size = 0;
+        address[] memory signers_temp = new address[](signatures.length / 65);
 
-        bytes32 message_hash = keccak256(abi.encode(message, msg.sender));
+        bytes32 message_hash = keccak256(
+            abi.encodePacked(bytes1(0x19), block.chainid, abi.encode(message, msg.sender))
+        );
         uint256 offset;
         assembly {
             offset := signatures.offset
@@ -149,16 +151,20 @@ contract MultisigControl is IMultisigControl {
                 signers_temp[size] = recovered_address;
                 size++;
             }
+
+            if ((size * 1000) / uint256(signer_count) > threshold) {
+                break;
+            }
         }
 
-        used_nonces[nonce] = ((uint256(size) * 1000) / (uint256(signer_count))) > threshold;
+        used_nonces[nonce] = ((size * 1000) / uint256(signer_count)) > threshold;
         return used_nonces[nonce];
     }
 
     function has_signed(
         address[] memory signers_temp,
         address signer,
-        uint8 size
+        uint256 size
     ) private pure returns (bool) {
         for (uint256 i; i < size; i++) {
             if (signers_temp[i] == signer) {
