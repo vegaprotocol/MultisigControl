@@ -18,11 +18,12 @@ contract TestBase is Test {
 contract SetMultisigControl is TestBase {
   function test_failZeroAddress() public {
     vm.expectRevert();
-    ERC20_Asset_Pool assetPool = deployERC20AssetPool(address(0));
+    deployERC20AssetPool(address(0));
   }
 
   function test_failChangeToZeroAddress() public {
     MultisigControl multisigControl = deployMultisigControl();
     ERC20_Asset_Pool assetPool = deployERC20AssetPool(address(multisigControl));
+    assertEq(address(assetPool.multisig_control_address()), address(multisigControl));
   }
 }
