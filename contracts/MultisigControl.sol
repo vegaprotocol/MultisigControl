@@ -11,72 +11,72 @@ contract MultisigControl is IMultisigControl {
         // set initial threshold to 50%
         threshold = 500;
         signers[msg.sender] = true;
-        signer_count++;
+        signerCount++;
         emit SignerAdded(msg.sender, 0);
     }
 
     uint16 threshold;
-    uint8 signer_count;
+    uint8 signerCount;
     mapping(address => bool) public signers;
-    mapping(uint256 => bool) used_nonces;
+    mapping(uint256 => bool) usedNonces;
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
-    /// @param new_threshold New threshold value
+    /// @param newThreshold New threshold value
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev Emits ThresholdSet event
-    function set_threshold(
-        uint16 new_threshold,
+    function setThreshold(
+        uint16 newThreshold,
         uint256 nonce,
         bytes calldata signatures
     ) external override {
-        require(new_threshold < 1000 && new_threshold > 0, "new threshold outside range");
-        bytes memory message = abi.encode(new_threshold, nonce, "set_threshold");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
-        threshold = new_threshold;
-        emit ThresholdSet(new_threshold, nonce);
+        require(newThreshold < 1000 && newThreshold > 0, "new threshold outside range");
+        bytes memory message = abi.encode(newThreshold, nonce, "setThreshold");
+        require(verifySignatures(signatures, message, nonce), "bad signatures");
+        threshold = newThreshold;
+        emit ThresholdSet(newThreshold, nonce);
     }
 
     /// @notice Adds new valid signer and adjusts signer count.
-    /// @param new_signer New signer address
+    /// @param newSigner New signer address
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'SignerAdded' event
-    function add_signer(
-        address new_signer,
+    function addSigner(
+        address newSigner,
         uint256 nonce,
         bytes calldata signatures
     ) external override {
-        bytes memory message = abi.encode(new_signer, nonce, "add_signer");
-        require(!signers[new_signer], "signer already exists");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
-        signers[new_signer] = true;
-        signer_count++;
-        emit SignerAdded(new_signer, nonce);
+        bytes memory message = abi.encode(newSigner, nonce, "addSigner");
+        require(!signers[newSigner], "signer already exists");
+        require(verifySignatures(signatures, message, nonce), "bad signatures");
+        signers[newSigner] = true;
+        signerCount++;
+        emit SignerAdded(newSigner, nonce);
     }
 
     /// @notice Removes currently valid signer and adjusts signer count.
-    /// @param old_signer Address of signer to be removed.
+    /// @param oldSigner Address of signer to be removed.
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'SignerRemoved' event
-    function remove_signer(
-        address old_signer,
+    function removeSigner(
+        address oldSigner,
         uint256 nonce,
         bytes calldata signatures
     ) external override {
-        bytes memory message = abi.encode(old_signer, nonce, "remove_signer");
-        require(signers[old_signer], "signer doesn't exist");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
-        signers[old_signer] = false;
-        signer_count--;
-        emit SignerRemoved(old_signer, nonce);
+        bytes memory message = abi.encode(oldSigner, nonce, "removeSigner");
+        require(signers[oldSigner], "signer doesn't exist");
+        require(verifySignatures(signatures, message, nonce), "bad signatures");
+        signers[oldSigner] = false;
+        signerCount--;
+        emit SignerRemoved(oldSigner, nonce);
     }
 
     /// @notice Burn an nonce before it gets used by a user. Useful in case the validators needs to prevents a malicious user to do un-permitted action.
@@ -84,9 +84,9 @@ contract MultisigControl is IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'NonceBurnt' event
-    function burn_nonce(uint256 nonce, bytes calldata signatures) external override {
-        bytes memory message = abi.encode(nonce, "burn_nonce");
-        require(verify_signatures(signatures, message, nonce), "bad signatures");
+    function burnNonce(uint256 nonce, bytes calldata signatures) external override {
+        bytes memory message = abi.encode(nonce, "burnNonce");
+        require(verifySignatures(signatures, message, nonce), "bad signatures");
         emit NonceBurnt(nonce);
     }
 
@@ -98,19 +98,19 @@ contract MultisigControl is IMultisigControl {
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return Returns true if valid signatures are over the threshold
-    function verify_signatures(
+    function verifySignatures(
         bytes calldata signatures,
         bytes memory message,
         uint256 nonce
     ) public override returns (bool) {
         require(signatures.length % 65 == 0, "bad sig length");
         require(signatures.length > 0, "must contain at least 1 sig");
-        require(!used_nonces[nonce], "nonce already used");
+        require(!usedNonces[nonce], "nonce already used");
 
         uint256 size = 0;
-        address[] memory signers_temp = new address[](signatures.length / 65);
+        address[] memory signersTemp = new address[](signatures.length / 65);
 
-        bytes32 message_hash = keccak256(
+        bytes32 messageHash = keccak256(
             abi.encodePacked(bytes1(0x19), block.chainid, abi.encode(message, msg.sender))
         );
         uint256 offset;
@@ -145,23 +145,23 @@ contract MultisigControl is IMultisigControl {
             );
             if (v < 27) v += 27;
 
-            address recovered_address = ecrecover(message_hash, v, r, s);
+            address recoveredAddress = ecrecover(messageHash, v, r, s);
 
-            if (signers[recovered_address] && !has_signed(signers_temp, recovered_address, size)) {
-                signers_temp[size] = recovered_address;
+            if (signers[recoveredAddress] && !hasSigned(signersTemp, recoveredAddress, size)) {
+                signersTemp[size] = recoveredAddress;
                 size++;
             }
 
-            if ((size * 1000) / uint256(signer_count) > threshold) {
+            if ((size * 1000) / uint256(signerCount) > threshold) {
                 break;
             }
         }
 
-        used_nonces[nonce] = ((size * 1000) / uint256(signer_count)) > threshold;
-        return used_nonces[nonce];
+        usedNonces[nonce] = ((size * 1000) / uint256(signerCount)) > threshold;
+        return usedNonces[nonce];
     }
 
-    function has_signed(
+    function hasSigned(
         address[] memory signers_temp,
         address signer,
         uint256 size
@@ -175,25 +175,25 @@ contract MultisigControl is IMultisigControl {
     }
 
     /// @return Number of valid signers
-    function get_valid_signer_count() external view override returns (uint8) {
-        return signer_count;
+    function getValidSignerCount() external view override returns (uint8) {
+        return signerCount;
     }
 
     /// @return Current threshold
-    function get_current_threshold() external view override returns (uint16) {
+    function getCurrentThreshold() external view override returns (uint16) {
         return threshold;
     }
 
     /// @param signer_address target potential signer address
     /// @return true if address provided is valid signer
-    function is_valid_signer(address signer_address) external view override returns (bool) {
+    function isValidSigner(address signer_address) external view override returns (bool) {
         return signers[signer_address];
     }
 
     /// @param nonce Nonce to lookup
     /// @return true if nonce has been used
-    function is_nonce_used(uint256 nonce) external view override returns (bool) {
-        return used_nonces[nonce];
+    function isNonceUsed(uint256 nonce) external view override returns (bool) {
+        return usedNonces[nonce];
     }
 }
 

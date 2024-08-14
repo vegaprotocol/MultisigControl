@@ -5,16 +5,16 @@ import {Test, console2, Vm} from "forge-std/Test.sol";
 import {MultisigControlSigningHelper} from "./helpers/MultisigControlSigner.t.sol";
 
 import {MultisigControl} from "../contracts/MultisigControl.sol";
-import {ERC20_Asset_Pool} from "../contracts/ERC20_Asset_Pool.sol";
-import {ERC20_Bridge_Logic_Restricted} from "../contracts/ERC20_Bridge_Logic_Restricted.sol";
+import {ERC20AssetPool} from "../contracts/ERC20_Asset_Pool.sol";
+import {ERC20BridgeLogicRestricted} from "../contracts/ERC20_Bridge_Logic_Restricted.sol";
 import {SquidReceiver} from "../contracts/SquidReceiver.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TestBase is Test, MultisigControlSigningHelper {
   MultisigControl multisigControl;
-  ERC20_Asset_Pool assetPool;
-  ERC20_Bridge_Logic_Restricted bridge;
+  ERC20AssetPool assetPool;
+  ERC20BridgeLogicRestricted bridge;
 
   Vm.Wallet[] signers;
 
@@ -31,30 +31,30 @@ contract TestBase is Test, MultisigControlSigningHelper {
 
     vm.startPrank(signers[0].addr);
     multisigControl = new MultisigControl();
-    assetPool = new ERC20_Asset_Pool(address(multisigControl));
-    bridge = new ERC20_Bridge_Logic_Restricted(payable(address(assetPool)));
+    assetPool = new ERC20AssetPool(address(multisigControl));
+    bridge = new ERC20BridgeLogicRestricted(payable(address(assetPool)));
 
     // set threshold to 1
     uint256 n = nonce();
-    bytes memory setThresholdSignature = sign(signers[0].privateKey, abi.encode(1, n, "set_threshold"), signers[0].addr);
-    multisigControl.set_threshold(1, n, setThresholdSignature);
+    bytes memory setThresholdSignature = sign(signers[0].privateKey, abi.encode(1, n, "setThreshold"), signers[0].addr);
+    multisigControl.setThreshold(1, n, setThresholdSignature);
 
     // add signer 2
     n = nonce();
     bytes memory addSignerSignature =
-      sign(signers[0].privateKey, abi.encode(signers[1].addr, n, "add_signer"), signers[0].addr);
-    multisigControl.add_signer(signers[1].addr, n, addSignerSignature);
+      sign(signers[0].privateKey, abi.encode(signers[1].addr, n, "addSigner"), signers[0].addr);
+    multisigControl.addSigner(signers[1].addr, n, addSignerSignature);
 
     // add signer 3
     n = nonce();
-    addSignerSignature = sign(signers[0].privateKey, abi.encode(signers[2].addr, n, "add_signer"), signers[0].addr);
-    multisigControl.add_signer(signers[2].addr, n, addSignerSignature);
+    addSignerSignature = sign(signers[0].privateKey, abi.encode(signers[2].addr, n, "addSigner"), signers[0].addr);
+    multisigControl.addSigner(signers[2].addr, n, addSignerSignature);
 
     // set bridge address
     n = nonce();
     bytes memory setBridgeSignature =
-      sign(signers, abi.encode(address(bridge), n, "set_bridge_address"), address(assetPool));
-    assetPool.set_bridge_address(address(bridge), n, setBridgeSignature);
+      sign(signers, abi.encode(address(bridge), n, "setBridgeAddress"), address(assetPool));
+    assetPool.setBridgeAddress(address(bridge), n, setBridgeSignature);
     vm.stopPrank();
   }
 }
@@ -83,8 +83,8 @@ contract TestSquidReceive is TestBase {
 
     uint256 n = nonce();
     bytes memory listAssetSignature =
-      sign(signers, abi.encode(address(asset), bytes32("TST"), 0, 0, n, "list_asset"), address(bridge));
-    bridge.list_asset(address(asset), bytes32("TST"), 0, 0, n, listAssetSignature);
+      sign(signers, abi.encode(address(asset), bytes32("TST"), 0, 0, n, "listAsset"), address(bridge));
+    bridge.listAsset(address(asset), bytes32("TST"), 0, 0, n, listAssetSignature);
 
     squidReceiver.approve(asset);
 
@@ -138,8 +138,8 @@ contract TestSquidReceive is TestBase {
 
     uint256 n = nonce();
     bytes memory listAssetSignature =
-      sign(signers, abi.encode(address(asset), bytes32("TST"), 0, 0, n, "list_asset"), address(bridge));
-    bridge.list_asset(address(asset), bytes32("TST"), 0, 0, n, listAssetSignature);
+      sign(signers, abi.encode(address(asset), bytes32("TST"), 0, 0, n, "listAsset"), address(bridge));
+    bridge.listAsset(address(asset), bytes32("TST"), 0, 0, n, listAssetSignature);
 
     vm.startPrank(user.addr);
     asset.approve(address(squidReceiver), 1000);
@@ -166,8 +166,8 @@ contract TestSquidReceive is TestBase {
 
     uint256 n = nonce();
     bytes memory listAssetSignature =
-      sign(signers, abi.encode(address(asset), bytes32("TST"), 0, 0, n, "list_asset"), address(bridge));
-    bridge.list_asset(address(asset), bytes32("TST"), 0, 0, n, listAssetSignature);
+      sign(signers, abi.encode(address(asset), bytes32("TST"), 0, 0, n, "listAsset"), address(bridge));
+    bridge.listAsset(address(asset), bytes32("TST"), 0, 0, n, listAssetSignature);
 
     squidReceiver.approve(asset);
 
@@ -182,8 +182,8 @@ contract TestSquidReceive is TestBase {
     assertEq(asset.balanceOf(address(assetPool)), 1000);
 
     n = nonce();
-    bytes memory stopBridgeSignature = sign(signers, abi.encode(n, "global_stop"), address(bridge));
-    bridge.global_stop(n, stopBridgeSignature);
+    bytes memory stopBridgeSignature = sign(signers, abi.encode(n, "globalStop"), address(bridge));
+    bridge.globalStop(n, stopBridgeSignature);
 
     vm.startPrank(user.addr);
     asset.approve(address(squidReceiver), 1000);
