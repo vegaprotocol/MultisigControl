@@ -7,22 +7,22 @@ import "./IERC20.sol";
 /// @title ERC20 Asset Pool
 /// @author Vega Protocol
 /// @notice This contract is the target for all deposits to the ERC20 Bridge via ERC20_Bridge_Logic
-contract ERC20_Asset_Pool {
-    event Multisig_Control_Set(address indexed new_address);
-    event Bridge_Address_Set(address indexed new_address);
+contract ERC20AssetPool {
+    event MultisigControlSet(address indexed newAddress);
+    event BridgeAddressSet(address indexed newAddress);
 
     /// @return Current MultisigControl contract address
-    address public multisig_control_address;
+    address public multisigControlAddress;
 
     /// @return Current ERC20_Bridge_Logic contract address
-    address public erc20_bridge_address;
+    address public erc20BridgeAddress;
 
-    /// @param multisig_control The initial MultisigControl contract address
-    /// @notice Emits Multisig_Control_Set event
-    constructor(address multisig_control) {
-        require(multisig_control != address(0), "invalid MultisigControl address");
-        multisig_control_address = multisig_control;
-        emit Multisig_Control_Set(multisig_control);
+    /// @param multisigControl The initial MultisigControl contract address
+    /// @notice Emits MultisigControlSet event
+    constructor(address multisigControl) {
+        require(multisigControl != address(0), "invalid MultisigControl address");
+        multisigControlAddress = multisigControl;
+        emit MultisigControlSet(multisigControl);
     }
 
     /// @notice this contract is not intended to accept ether directly
@@ -30,48 +30,48 @@ contract ERC20_Asset_Pool {
         revert("this contract does not accept ETH");
     }
 
-    /// @param new_address The new MultisigControl contract address.
+    /// @param newAddress The new MultisigControl contract address.
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
-    /// @param signatures Vega-supplied signature bundle of a validator-signed set_multisig_control order
+    /// @param signatures Vega-supplied signature bundle of a validator-signed set_multisigControl order
     /// @notice See MultisigControl for more about signatures
-    /// @notice Emits Multisig_Control_Set event
-    function set_multisig_control(
-        address new_address,
+    /// @notice Emits MultisigControlSet event
+    function setMultisigControl(
+        address newAddress,
         uint256 nonce,
         bytes memory signatures
     ) external {
-        require(new_address != address(0), "invalid MultisigControl address");
-        require(is_contract(new_address), "new address must be contract");
+        require(newAddress != address(0), "invalid MultisigControl address");
+        require(is_contract(newAddress), "new address must be contract");
 
-        bytes memory message = abi.encode(new_address, nonce, "set_multisig_control");
+        bytes memory message = abi.encode(newAddress, nonce, "setMultisigControl");
         require(
-            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisigControlAddress).verifySignatures(signatures, message, nonce),
             "bad signatures"
         );
-        multisig_control_address = new_address;
-        emit Multisig_Control_Set(new_address);
+        multisigControlAddress = newAddress;
+        emit MultisigControlSet(newAddress);
     }
 
-    /// @param new_address The new ERC20_Bridge_Logic contract address.
+    /// @param newAddress The new ERC20_Bridge_Logic contract address.
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed set_bridge_address order
     /// @notice See MultisigControl for more about signatures
-    /// @notice Emits Bridge_Address_Set event
-    function set_bridge_address(
-        address new_address,
+    /// @notice Emits BridgeAddressSet event
+    function setBridgeAddress(
+        address newAddress,
         uint256 nonce,
         bytes memory signatures
     ) external {
-        bytes memory message = abi.encode(new_address, nonce, "set_bridge_address");
+        bytes memory message = abi.encode(newAddress, nonce, "setBridgeAddress");
         require(
-            IMultisigControl(multisig_control_address).verify_signatures(signatures, message, nonce),
+            IMultisigControl(multisigControlAddress).verifySignatures(signatures, message, nonce),
             "bad signatures"
         );
-        erc20_bridge_address = new_address;
-        emit Bridge_Address_Set(new_address);
+        erc20BridgeAddress = newAddress;
+        emit BridgeAddressSet(newAddress);
     }
 
-    /// @notice This function can only be run by the current "multisig_control_address" and, if available, will send the target tokens to the target
+    /// @notice This function can only be run by the current "multisigControlAddress" and, if available, will send the target tokens to the target
     /// @param token_address Contract address of the ERC20 token to be withdrawn
     /// @param target Target Ethereum address that the ERC20 tokens will be sent to
     /// @param amount Amount of ERC20 tokens to withdraw
@@ -81,7 +81,7 @@ contract ERC20_Asset_Pool {
         address target,
         uint256 amount
     ) external {
-        require(msg.sender == erc20_bridge_address, "msg.sender not authorized bridge");
+        require(msg.sender == erc20BridgeAddress, "msg.sender not authorized bridge");
 
         (bool success, bytes memory returndata) = token_address.call(
             abi.encodeWithSignature("transfer(address,uint256)", target, amount)

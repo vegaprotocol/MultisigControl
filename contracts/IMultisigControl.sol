@@ -7,46 +7,46 @@ pragma solidity ^0.8.8;
 /// @notice To do this, the Vega validators sign a MultisigControl order to construct a signature bundle. Any interested party can then take that signature bundle and pay the gas to run the command on Ethereum
 abstract contract IMultisigControl {
     /***************************EVENTS****************************/
-    event SignerAdded(address new_signer, uint256 nonce);
-    event SignerRemoved(address old_signer, uint256 nonce);
-    event ThresholdSet(uint16 new_threshold, uint256 nonce);
+    event SignerAdded(address newSigner, uint256 nonce);
+    event SignerRemoved(address oldSigner, uint256 nonce);
+    event ThresholdSet(uint16 newThreshold, uint256 nonce);
     event NonceBurnt(uint256 nonce);
 
     /**************************FUNCTIONS*********************/
     /// @notice Sets threshold of signatures that must be met before function is executed.
-    /// @param new_threshold New threshold value
+    /// @param newThreshold New threshold value
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @notice Ethereum has no decimals, threshold is % * 10 so 50% == 500 100% == 1000
     /// @notice signatures are OK if they are >= threshold count of total valid signers
     /// @dev MUST emit ThresholdSet event
-    function set_threshold(
-        uint16 new_threshold,
+    function setThreshold(
+        uint16 newThreshold,
         uint256 nonce,
         bytes calldata signatures
     ) external virtual;
 
     /// @notice Adds new valid signer and adjusts signer count.
-    /// @param new_signer New signer address
+    /// @param newSigner New signer address
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit 'SignerAdded' event
-    function add_signer(
-        address new_signer,
+    function addSigner(
+        address newSigner,
         uint256 nonce,
         bytes calldata signatures
     ) external virtual;
 
     /// @notice Removes currently valid signer and adjusts signer count.
-    /// @param old_signer Address of signer to be removed.
+    /// @param oldSigner Address of signer to be removed.
     /// @param nonce Vega-assigned single-use number that provides replay attack protection
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev MUST emit 'SignerRemoved' event
-    function remove_signer(
-        address old_signer,
+    function removeSigner(
+        address oldSigner,
         uint256 nonce,
         bytes calldata signatures
     ) external virtual;
@@ -56,7 +56,7 @@ abstract contract IMultisigControl {
     /// @param signatures Vega-supplied signature bundle of a validator-signed order
     /// @notice See MultisigControl for more about signatures
     /// @dev Emits 'NonceBurnt' event
-    function burn_nonce(uint256 nonce, bytes calldata signatures) external virtual;
+    function burnNonce(uint256 nonce, bytes calldata signatures) external virtual;
 
     /// @notice Verifies a signature bundle and returns true only if the threshold of valid signers is met,
     /// @notice this is a function that any function controlled by Vega MUST call to be securely controlled by the Vega network
@@ -66,7 +66,7 @@ abstract contract IMultisigControl {
     /// @notice if function on bridge that then calls Multisig, then it's the address of that contract
     /// @notice Note also the embedded encoding, this is required to verify what function/contract the function call goes to
     /// @return MUST return true if valid signatures are over the threshold
-    function verify_signatures(
+    function verifySignatures(
         bytes calldata signatures,
         bytes memory message,
         uint256 nonce
@@ -74,18 +74,18 @@ abstract contract IMultisigControl {
 
     /**********************VIEWS*********************/
     /// @return Number of valid signers
-    function get_valid_signer_count() external view virtual returns (uint8);
+    function getValidSignerCount() external view virtual returns (uint8);
 
     /// @return Current threshold
-    function get_current_threshold() external view virtual returns (uint16);
+    function getCurrentThreshold() external view virtual returns (uint16);
 
     /// @param signer_address target potential signer address
     /// @return true if address provided is valid signer
-    function is_valid_signer(address signer_address) external view virtual returns (bool);
+    function isValidSigner(address signer_address) external view virtual returns (bool);
 
     /// @param nonce Nonce to lookup
     /// @return true if nonce has been used
-    function is_nonce_used(uint256 nonce) external view virtual returns (bool);
+    function isNonceUsed(uint256 nonce) external view virtual returns (bool);
 }
 
 /**

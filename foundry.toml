@@ -3,6 +3,9 @@ src = "contracts"
 libs = ["lib"]
 out = "out"
 test = "sol_test"
+solc_version = "0.8.26"
+via-ir = true
+
 remappings = [
   "@axelar-gmp-sdk-solidity/contracts/=lib/axelar-gmp-sdk-solidity/contracts/",
 ]
