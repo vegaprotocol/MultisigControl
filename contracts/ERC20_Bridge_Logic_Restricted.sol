@@ -14,9 +14,9 @@ contract ERC20BridgeLogicRestricted is IERC20BridgeLogicRestricted {
     address payable public erc20AssetPoolAddress;
     // asset address => is listed
     mapping(address => bool) listedTokens;
-    mapping(bytes32 => address) vegaAssetIdsToSource;
+    mapping(bytes32 => address) public vegaAssetIdsToSource;
     // assetSource => Vega asset ID
-    mapping(address => bytes32) assetSourceToVegaAssetId;
+    mapping(address => bytes32) public assetSourceToVegaAssetId;
 
     /// @param erc20AssetPool Initial Asset Pool contract address
     constructor(address payable erc20AssetPool) {
